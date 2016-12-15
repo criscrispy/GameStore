@@ -16,10 +16,10 @@
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+
+import os
+import sys
+sys.path.insert(0, os.path.abspath('.'))
 
 # -- General configuration ------------------------------------------------
 
@@ -54,6 +54,11 @@ master_doc = 'index'
 # General information about the project.
 project = 'wsdproject'
 copyright = '2016, Jaan Tollander de Balsch'
+authors = [
+    'Jaan Tollander de Balsch',
+    'Julia Sulina',
+    'Mekbib Awono',
+]
 author = 'Jaan Tollander de Balsch'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -78,8 +83,8 @@ language = None
 # today = ''
 #
 # Else, today_fmt is used as the format for a strftime call.
-#
-# today_fmt = '%B %d, %Y'
+
+today_fmt = '%Y-%m-%d'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -122,17 +127,16 @@ todo_include_todos = False
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-#
-html_theme = 'alabaster'
+try:
+    import sphinx_rtd_theme
+    html_theme = "sphinx_rtd_theme"
+    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+    html_theme_options = {}
+except ImportError(sphinx_rtd_theme):
+    # Fallback to alabaster
+    html_theme = 'alabaster'
+    html_theme_options = {}
 
-# Theme options are theme-specific and customize the look and feel of a theme
-# further.  For a list of options available for each theme, see the
-# documentation.
-#
-# html_theme_options = {}
-
-# Add any paths that contain custom themes here, relative to this directory.
-# html_theme_path = []
 
 # The name for this set of Sphinx documents.
 # "<project> v<release> documentation" by default.
@@ -145,14 +149,14 @@ html_theme = 'alabaster'
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-#
-# html_logo = None
+
+html_logo = None
 
 # The name of an image file (relative to this directory) to use as a favicon of
 # the docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-#
-# html_favicon = None
+
+html_favicon = None
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
