@@ -30,12 +30,19 @@ Awono               | Mekbib     | <mekbib.awono@aalto.fi>
 
 
 ### Plans
+
 - Python 3.5
 - Django
+- Bootstrap
+- Font Awesome 
+- JQuery
 
-#### Functionality
+### Project structure
+Plan to implement project in structure inspired from [layout](http://www.revsys.com/blog/2014/nov/21/recommended-django-project-layout/)
 
-##### Authentication functionality
+### Functionality
+
+#### Authentication functionality
 (using django.contrib.auth)
 
 - Register
@@ -43,15 +50,15 @@ Awono               | Mekbib     | <mekbib.awono@aalto.fi>
 - Logout
 - Email validation (django.core.mail)
 
-##### Authorisation functionality
-Implement two user groups and ACL.
+#### Authorisation functionality
+Implement two user groups and basic ACL.(using django.contrib.auth)
 
 Group: **developers**
 
 Permissions:
 
-- add games to own inventory
-- see list of game sales
+- add/modify/delete games in own inventory
+- see list of game sales statistics
 
 
 Group: **players**
@@ -60,13 +67,33 @@ Permissions:
 
 - buy games
 - play games only if bought
+- see game list bought
 - see game high scores
 - record their score to high scores
 
-##### Game/service interaction:
+#### User/service interaction functionality use-cases:
+Developer
+
+- add/modify/delete game
+- see list of own games 
+- see games sales statistics
+
+Player
+
+- buy game 
+- play game 
+- see list of purchased games / games to buy
+- see game high scores
+- add own high score
+
+#### Game/service interaction functionality:
+
+Javascript (_window.postMessage_) message exchange between game and service on events:
+ SCORE, SAVE, LOAD_REQUEST, LOAD, ERROR, SETTING (analogous to [description](https://plus.cs.hut.fi/wsd/2016-2017/project/description/))
 
 
-#### Models:
+
+### Models:
 
 **User:**
 default django model
@@ -74,75 +101,71 @@ default django model
 **Game:**
 
     publisher - user foreign key
-    
     title
-    
     code
-    
     price
-    
     url - link to game location
 
 
 **Scores:**
 
     game - game foreign key
-
     player - user foreign key
-
     score
-
     public - boolean show in scoreboard or not
 
 
 **Game_sales:**
 
     buyer - user foreign key
-    
     game - bought game foreign key
-    
     buying_date
 
 
 **Game_inventory:**(might be unnecessary)
 
     owner - developer user foreign key
-    
     games - games published by user
 
 
 **Play_ground:**(might be unnecessary)
 
     player - player user foreign key
-    
     games - games bought by user
 
-**Messages**: used for game/service interaction, format similar to one in [description](https://plus.cs.hut.fi/wsd/2016-2017/project/description/), exact protocol will be documented on development stage )
+**Messages**: used for game/service interaction, format similar to one in [description](https://plus.cs.hut.fi/wsd/2016-2017/project/description/), exact protocol will be documented on development stage
 
-    messageType - 
-    
+    messageType - SCORE, SAVE, LOAD_REQUEST, LOAD, ERROR, SETTING
     ...
 
 
-#### Views:
+### Views:
+
 - Login/Register
-- Player game selection view
+- Player game selection view (bought games and games to buy)
 - Player high scores view
 - Player play game view
+- Player buy game view
 - Player menu
 - Developer game list view
 - Developer add/modify game view
 - Developer sale statistics view
 - Developer menu
 
-Priorities:
-
+###Priorities:
+1. Mandatory Requirements
+2. other features
 
 ### Schedule
 - Group registration - 14.12.2016 midnight
 - Project Plan - 21.12.2016 midnight
+- Models
+- Views
+- Templates
+- [Heroku](https://www.heroku.com/) environment setup and deployment
 - Final submission - 19.2.2017 midnight (end of period III)
 - Project demonstrations
+
 
 ### Documentation
 - [Sphinx](http://www.sphinx-doc.org/en/latest/)
