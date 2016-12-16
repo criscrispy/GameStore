@@ -1,3 +1,3 @@
-from .base import *
+from wsdproject.settings.base import *
 
 DEBUG = True

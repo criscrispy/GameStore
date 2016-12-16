@@ -1,6 +1,7 @@
 ### Project
 .idea
 bower_components/
+*.sqlite3
 
 
 # Created by .ignore support plugin (hsz.mobi)
