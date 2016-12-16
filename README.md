@@ -27,10 +27,11 @@ Awono               | Mekbib     | <mekbib.awono@aalto.fi>
 - GitLab / Niksula
 
 ### Goals
-
+Project aim is to implement functioning web application, reasonably covered with tests and corresponding to the course requirements. 
 
 ### Plans
 
+Technologies/frameworks
 - Python 3.5
 - Django
 - Bootstrap
@@ -38,11 +39,11 @@ Awono               | Mekbib     | <mekbib.awono@aalto.fi>
 - JQuery
 
 ### Project structure
-Plan to implement project in structure inspired from [layout](http://www.revsys.com/blog/2014/nov/21/recommended-django-project-layout/)
+Plan to develop the project in structure inspired from [layout](http://www.revsys.com/blog/2014/nov/21/recommended-django-project-layout/) suitable for Django application.
 
 ### Functionality
 
-#### Authentication functionality
+#### **Authentication functionality**
 (using django.contrib.auth)
 
 - Register
@@ -50,15 +51,15 @@ Plan to implement project in structure inspired from [layout](http://www.revsys.
 - Logout
 - Email validation (django.core.mail)
 
-#### Authorisation functionality
-Implement two user groups and basic ACL.(using django.contrib.auth)
+#### **Authorisation functionality**
+Implementation of two user groups and basic ACL(using django.contrib.auth).
 
 Group: **developers**
 
 Permissions:
 
 - add/modify/delete games in own inventory
-- see list of game sales statistics
+- see list of games and sales statistics
 
 
 Group: **players**
@@ -69,24 +70,25 @@ Permissions:
 - play games only if bought
 - see game list bought
 - see game high scores
-- record their score to high scores
+- record own score to high scores
 
-#### User/service interaction functionality use-cases:
+#### **User/service interaction functionality use-cases:**
 Developer
 
 - add/modify/delete game
 - see list of own games 
-- see games sales statistics
+- see games sales statistics 
 
 Player
 
-- buy game 
-- play game 
-- see list of purchased games / games to buy
+- buy a game - functionality includes using mock payment service
+- play a game - run the game from service, messages between service and game
+- see list of purchased games / games to buy - selectable items with links to details
+- see game details
 - see game high scores
-- add own high score
+- add own high score - choose if high score is shown in the public list 
 
-#### Game/service interaction functionality:
+#### **Game/service interaction functionality:**
 
 Javascript (_window.postMessage_) message exchange between game and service on events:
  SCORE, SAVE, LOAD_REQUEST, LOAD, ERROR, SETTING (analogous to [description](https://plus.cs.hut.fi/wsd/2016-2017/project/description/))
@@ -95,8 +97,7 @@ Javascript (_window.postMessage_) message exchange between game and service on e
 
 ### Models:
 
-**User:**
-default django model
+**User:** default django model
 
 **Game:**
 
@@ -152,17 +153,22 @@ default django model
 - Developer sale statistics view
 - Developer menu
 
-###Priorities:
+### Priorities:
 1. Mandatory Requirements
-2. other features
+2. Other features
 
 ### Schedule
+
+Planning to use iterative development strategy, developing components in models - view - templates order. Adding tests for each component before/after creation.  
+
 - Group registration - 14.12.2016 midnight
 - Project Plan - 21.12.2016 midnight
-- Models
-- Views
-- Templates
-- [Heroku](https://www.heroku.com/) environment setup and deployment
+- Tests - 17.2.2017
+- Models - 10.1.2017 (goal stable models version)
+- Views - 17.2.2017
+- Templates - 17.2.2017
+- Code polishing - 17.2.2017
+- [Heroku](https://www.heroku.com/) environment setup and deployment 1.2.2017
 - Final submission - 19.2.2017 midnight (end of period III)
 - Project demonstrations
 
