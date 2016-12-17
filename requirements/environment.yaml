@@ -1,0 +1,13 @@
+name: django35
+#channels:
+#  - conda-forge
+dependencies:
+  - python=3.5
+  - django
+  - sphinx
+  - sphinx_rtd_theme
+  - nose
+  - hypothesis
+  - pip:
+    - django-registration-redux
+    - sphinxcontrib-napoleon

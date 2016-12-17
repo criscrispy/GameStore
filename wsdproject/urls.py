@@ -16,10 +16,8 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
-from gamestore import views
-
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
     url(r'^admin/', admin.site.urls),
-    url(r'^gamestore/', include('gamestore.urls')),
+    url(r'^accounts/', include('registration.backends.default.urls')),
+    url(r'^', include('gamestore.urls')),
 ]

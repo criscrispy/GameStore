@@ -18,3 +18,9 @@ To deactivate use
 ```bash
 deactivate
 ```
+
+## Anaconda
+```bash
+conda env create -f environment.yaml
+source activate django35
+```

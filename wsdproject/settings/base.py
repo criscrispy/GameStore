@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 PREREQ_APPS = [
+    'registration',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -121,3 +122,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# Registration
+# https://django-registration-redux.readthedocs.io/en/latest/quickstart.html
+ACCOUNT_ACTIVATION_DAYS = 3
+REGISTRATION_AUTO_LOGIN = True

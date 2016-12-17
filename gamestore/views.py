@@ -5,6 +5,7 @@ from django.shortcuts import render
 
 def index(request):
     """
+    Index page for gamestore.
 
     Args:
         request:
