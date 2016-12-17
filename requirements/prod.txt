@@ -1,3 +1,4 @@
 # Project Dependencies
 django
 django-registration-redux
+django-bootstrap3

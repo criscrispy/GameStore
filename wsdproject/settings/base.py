@@ -32,13 +32,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 PREREQ_APPS = [
-    'registration',
     'django.contrib.admin',
+    'registration',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'bootstrap3',
 ]
 
 PROJECT_APPS = [
