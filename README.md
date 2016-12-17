@@ -44,7 +44,7 @@ Plan to develop the project in structure inspired from [layout](http://www.revsy
 ### Functionality
 
 #### **Authentication functionality**
-(using django.contrib.auth)
+(using django-registration-redux with customized views)
 
 - Register
 - Login
@@ -159,14 +159,17 @@ Javascript (_window.postMessage_) message exchange between game and service on e
 
 ### Schedule
 
-Planning to use iterative development strategy, developing components in models - view - templates order. Adding tests for each component before/after creation.  
+Planning to use iterative development strategy, developing components in models - view - templates order. Adding tests for each component before/after creation.  Following list contains deadlines for each task. 
 
 - Group registration - 14.12.2016 midnight
 - Project Plan - 21.12.2016 midnight
 - Tests - 17.2.2017
+- Authentication - 10.1.2017
+- Authorization group rights - 17.2.2017
 - Models - 10.1.2017 (goal stable models version)
 - Views - 17.2.2017
 - Templates - 17.2.2017
+- Game/service interaction - 17.2.2017
 - Code polishing - 17.2.2017
 - [Heroku](https://www.heroku.com/) environment setup and deployment 1.2.2017
 - Final submission - 19.2.2017 midnight (end of period III)
