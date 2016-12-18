@@ -24,26 +24,58 @@
   </head>
   <body>
     <!-- Header -->
+    {% comment %}
     <header>
 
     </header>
+    {% endcomment %}
 
     <!-- Navigation bar -->
     <nav class="navbar navbar-default navbar-static-top">
         <div class="container">
+            <!-- Header -->
             <div class="navbar-header">
+                <!-- Responds to minimizing with a dropdown menu -->
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </button>
+
+                <!-- Logo / Brand -->
                 <a class="navbar-brand" href="{% url 'index' %}">Game Store</a>
             </div>
 
+            <!-- Nav -->
             <div id="navbar" class="navbar-collapse collapse">
+                <!-- Left -->
                 <ul class="nav navbar-nav">
-                    <li><a href="#">Search</a></li>
                 </ul>
+
+                <!-- Search -->
+                <!-- http://bootsnipp.com/snippets/featured/navbar-search-add-on-bs-3 -->
+                <div class="col-sm-6 col-md-6">
+                    <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit">{% bootstrap_icon 'search' %}</button>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+
+                <!-- Right -->
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="{% url 'auth_login' %}">{% bootstrap_icon 'log-in' %} Login</a></li>
-                    <li><a href="{% url 'registration_register' %}"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</a></li>
-                    <li><a href="{% url 'auth_logout' %}">{% bootstrap_icon 'log-out' %} Logout</a></li>
-                    <li><a href="#">{% bootstrap_icon 'user' %} User</a></li>
+                    <!-- Options based on if user is authenticated (logged in) -->
+                    {% if not user.is_authenticated %}
+                        <li><a href="{% url 'auth_login' %}">{% bootstrap_icon 'log-in' %} Login</a></li>
+                        <li><a href="{% url 'registration_register' %}"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</a></li>
+                    {% else %}
+                        <li><a href="{% url 'auth_logout' %}">{% bootstrap_icon 'log-out' %} Logout</a></li>
+                        <li><a href="#">{% bootstrap_icon 'user' %} User</a></li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -54,9 +86,17 @@
     {% block content %}{% endblock %}
     </div>
 
-    <!-- Footer -->
-    <footer>
-
+    <!-- Footer for social links, sponsors, etc -->
+    <footer class="footer">
+        <div class="container">
+            <div class="text-center center-block">
+                <a href="#" target="_blank"><i class="fa fa-facebook-square fa-3x social"></i></a>
+                <a href="#" target="_blank"><i class="fa fa-twitter-square fa-3x social"></i></a>
+                <a href="#" target="_blank"><i class="fa fa-google-plus-square fa-3x social"></i></a>
+                <a href="#" target="_blank"><i class="fa fa-envelope-square fa-3x social"></i></a>
+            <hr/>
+            </div>
+        </div>
     </footer>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
