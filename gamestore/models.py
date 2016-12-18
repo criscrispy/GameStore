@@ -1,3 +1,14 @@
 from django.db import models
 
-# Create your models here.
+
+class Game(models.Model):
+    """
+    TODO:
+        fields:
+            name
+            description
+            image
+            icon
+
+    """
+    pass
