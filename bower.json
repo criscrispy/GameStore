@@ -1,0 +1,25 @@
+{
+  "name": "wsdproject",
+  "authors": [
+    "Jaan Tollander de Balsch <jaan.tollander@aalto.fi>",
+    "Julia Sulina <julia.sulina@aalto.fi>",
+    "Mekbib Awono <mekbib.awono@aalto.fi>"
+  ],
+  "description": "Web Software Development Project",
+  "main": "gulpfile.js",
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "modernizr": "^3.3.1",
+    "font-awesome": "^4.7.0"
+  }
+}

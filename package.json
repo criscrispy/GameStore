@@ -1,0 +1,44 @@
+{
+  "name": "module-name",
+  "version": "0.0.1",
+  "description": "Web Software Development Project",
+  "author": "",
+  "contributors": [{
+    "name": "Jaan Tollander de Balsch",
+    "email": "<de.tollander@aalto.fi>"
+  }, {
+    "name": "Julia Sulina",
+    "email": "<julia.sulina@aalto.fi>"
+  }, {
+    "name": "Mekbib Awono",
+    "email": "<mekbib.awono@aalto.fi>"
+  }],
+  "scripts": {
+    "test": "",
+    "start": "",
+    "predeploy": "",
+    "postdeploy": "",
+    "prepublish": ""
+  },
+  "main": "gulpfile.js",
+  "repository": {
+  "type": "git",
+  "url": ""
+},
+  "bugs": {
+  "url": ""
+},
+  "keywords": [
+    "wsdproject"
+],
+  "dependencies": {},
+  "devDependencies": {},
+  "preferGlobal": true,
+  "private": true,
+  "publishConfig": {
+  "registry": ""
+},
+  "subdomain": "",
+  "analyze": true,
+  "license": "MIT"
+}

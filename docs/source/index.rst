@@ -3,8 +3,10 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to wsdproject's documentation!
-======================================
+Web Software Development Project - Game Store
+=============================================
 
 .. toctree::
    :maxdepth: 2
+
+   project_plan.rst

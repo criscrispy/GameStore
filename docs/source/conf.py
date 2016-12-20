@@ -53,13 +53,13 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'wsdproject'
-copyright = '2016, Jaan Tollander de Balsch'
 authors = [
     'Jaan Tollander de Balsch',
     'Julia Sulina',
     'Mekbib Awono',
 ]
-author = 'Jaan Tollander de Balsch'
+author = ', '.join(authors)
+copyright = '2016, Authors'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

@@ -2,6 +2,8 @@
 .idea
 bower_components/
 *.sqlite3
+*.hypothesis
+docs/build
 
 
 # Created by .ignore support plugin (hsz.mobi)

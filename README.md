@@ -33,10 +33,15 @@ Project aim is to implement functioning web application, reasonably covered with
 
 Technologies/frameworks
 - Python 3.5
+   - Logging (included in Python standard library)
 - Django
 - Bootstrap
 - Font Awesome 
 - JQuery
+- PostgreSQL
+- Unittests / django.test
+- Hypothesis (property based testing)
+
 
 ### Project structure
 Plan to develop the project in structure inspired from [layout](http://www.revsys.com/blog/2014/nov/21/recommended-django-project-layout/) suitable for Django application.
