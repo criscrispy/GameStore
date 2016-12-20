@@ -10,5 +10,7 @@ sphinxcontrib-napoleon
 nose
 coverage
 pytest
+pytest-django
+pytest-xdist
 hypothesis
 faker
