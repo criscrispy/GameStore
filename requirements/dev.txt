@@ -1,3 +1,5 @@
+-r common.txt
+
 ## Documentation
 docutils
 sphinx
@@ -7,4 +9,7 @@ sphinxcontrib-napoleon
 
 ## Testing
 nose
+coverage
+pytest
 hypothesis
+faker
