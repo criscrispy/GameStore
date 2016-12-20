@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+import yaml
+import logging.config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.abspath(__file__)
@@ -33,6 +35,11 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+PROJECT_APPS = [
+    'bootstrap3',
+    'gamestore',
+]
+
 PREREQ_APPS = [
     'django.contrib.admin',
     'registration',
@@ -43,12 +50,8 @@ PREREQ_APPS = [
     'django.contrib.staticfiles',
 ]
 
-PROJECT_APPS = [
-    'bootstrap3',
-    'gamestore',
-]
-
-INSTALLED_APPS = PREREQ_APPS + PROJECT_APPS
+# Project apps should be loaded before prereq apps!
+INSTALLED_APPS = PROJECT_APPS + PREREQ_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -129,10 +132,19 @@ STATIC_URL = '/static/'
 
 
 # Media (user uploads) files
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_DIR = 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, MEDIA_DIR)
 
 
 # Registration
 # https://django-registration-redux.readthedocs.io/en/latest/quickstart.html
 ACCOUNT_ACTIVATION_DAYS = 3
 REGISTRATION_AUTO_LOGIN = True
+
+
+# Setup logging config from `logging.yaml` file.
+LOGGING_CONFIG = None
+LOGGING_FILE = 'logging.yaml'
+with open(os.path.join(BASE_DIR, LOGGING_FILE), 'rt') as f:
+    LOGGING = yaml.safe_load(f.read())
+logging.config.dictConfig(LOGGING)

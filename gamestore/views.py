@@ -1,6 +1,11 @@
+import logging
+
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
-# Create your views here.
+
+# Get an instance of a logger
+logger = logging.getLogger('gamestore.views')
 
 
 def index(request):
@@ -16,6 +21,7 @@ def index(request):
     return render(request, 'gamestore/index.html', context)
 
 
+@login_required
 def profile(request):
     """
     User profile
