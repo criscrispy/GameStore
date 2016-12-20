@@ -1,7 +1,6 @@
 -r common.txt
 
 ## Documentation
-docutils
 sphinx
 sphinx_rtd_theme
 sphinxcontrib-napoleon
