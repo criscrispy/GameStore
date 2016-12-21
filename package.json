@@ -3,16 +3,20 @@
   "version": "0.0.1",
   "description": "Web Software Development Project",
   "author": "",
-  "contributors": [{
-    "name": "Jaan Tollander de Balsch",
-    "email": "<de.tollander@aalto.fi>"
-  }, {
-    "name": "Julia Sulina",
-    "email": "<julia.sulina@aalto.fi>"
-  }, {
-    "name": "Mekbib Awono",
-    "email": "<mekbib.awono@aalto.fi>"
-  }],
+  "contributors": [
+    {
+      "name": "Jaan Tollander de Balsch",
+      "email": "<de.tollander@aalto.fi>"
+    },
+    {
+      "name": "Julia Sulina",
+      "email": "<julia.sulina@aalto.fi>"
+    },
+    {
+      "name": "Mekbib Awono",
+      "email": "<mekbib.awono@aalto.fi>"
+    }
+  ],
   "scripts": {
     "test": "",
     "start": "",
@@ -22,22 +26,32 @@
   },
   "main": "gulpfile.js",
   "repository": {
-  "type": "git",
-  "url": ""
-},
+    "type": "git",
+    "url": ""
+  },
   "bugs": {
-  "url": ""
-},
+    "url": ""
+  },
   "keywords": [
     "wsdproject"
-],
+  ],
   "dependencies": {},
-  "devDependencies": {},
+  "devDependencies": {
+    "gulp": "~3.9.1",
+    "gulp-rename": "~1.2.2",
+    "gulp-concat": "~2.6.1",
+    "gulp-plumber": "~1.1.0",
+    "gulp-clean-css": "~2.3.2",
+    "gulp-sass": "~3.0.0",
+    "gulp-modify-css-urls": "~0.2.2",
+    "coffee-script": "~1.12.2",
+    "gulp-clean": "~0.3.2"
+  },
   "preferGlobal": true,
   "private": true,
   "publishConfig": {
-  "registry": ""
-},
+    "registry": ""
+  },
   "subdomain": "",
   "analyze": true,
   "license": "MIT"

@@ -17,7 +17,9 @@
     "test",
     "tests"
   ],
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
+    "bourbon": "^4.2.7",
     "bootstrap": "^3.3.7",
     "modernizr": "^3.3.1",
     "font-awesome": "^4.7.0"
