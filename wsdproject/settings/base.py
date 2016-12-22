@@ -38,6 +38,7 @@ ALLOWED_HOSTS = []
 PROJECT_APPS = [
     'bootstrap3',
     'gamestore',
+    'django_extensions',
 ]
 
 PREREQ_APPS = [
