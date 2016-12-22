@@ -7,6 +7,6 @@ Web Software Development Project - Game Store
 =============================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    project_plan.rst
