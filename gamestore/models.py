@@ -3,7 +3,7 @@ from django.core.validators import MinValueValidator
 from django.db import models
 
 
-class UserProfile(models.Model):
+class Profile(models.Model):
     """
     User profile.
     """
@@ -16,6 +16,7 @@ class Game(models.Model):
     Model for a game added into the gamestore.
     """
     publisher = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
+    # TODO: Unique title?
     title = models.CharField(max_length=30, blank=False)
     description = models.TextField("Description of the game.", blank=False)
     # TODO: category choices
@@ -38,7 +39,7 @@ class Score(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE, blank=False)
     player = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
     score = models.PositiveIntegerField("", blank=False)
-    # public = models.BooleanField(blank=False)
+    date = models.DateTimeField("", auto_created=True)
 
 
 class GameSale(models.Model):

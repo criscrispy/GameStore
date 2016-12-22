@@ -4,6 +4,7 @@ bower_components/
 *.sqlite3
 *.hypothesis
 docs/build
+media/
 
 
 # Created by .ignore support plugin (hsz.mobi)

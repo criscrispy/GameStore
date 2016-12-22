@@ -1,14 +1,12 @@
-import pytest
-from hypothesis.extra.django.models import models
-from hypothesis import given
-import hypothesis.strategies as st
-from django.contrib.auth.models import User
-from gamestore.models import Game, Score, GameSale
 import string
 
-from io import BytesIO
-from PIL import Image
+import hypothesis.strategies as st
+import pytest
+from django.contrib.auth.models import User
+from hypothesis import given
+from hypothesis.extra.django.models import models
 
+from gamestore.models import Game, Score
 
 # Allow pytest database access
 pytestmark = pytest.mark.django_db
@@ -20,22 +18,6 @@ pytestmark = pytest.mark.django_db
 # ----------
 # Strategies
 # ----------
-
-def create_test_image():
-    """
-    Test image creation adapted from
-
-    http://wildfish.com/blog/2014/02/27/generating-in-memory-image-for-tests-python/
-
-    Returns:
-        BytesIO: Test image
-    """
-    file = BytesIO()
-    image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
-    image.save(file, 'png')
-    file.name = 'test.png'
-    file.seek(0)
-    return file
 
 
 username_alphabet = string.ascii_letters + string.digits + "@.+-_"

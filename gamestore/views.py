@@ -24,7 +24,8 @@ def index(request):
 @login_required
 def profile(request):
     """
-    User profile
+    User profile.
+    https://stackoverflow.com/questions/9046533/creating-user-profile-pages-in-django
     """
     context = {}
     return render(request, 'accounts/profile.html', context)
