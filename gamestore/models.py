@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
 from django.db import models
@@ -39,13 +41,18 @@ class Score(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE, blank=False)
     player = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
     score = models.PositiveIntegerField("", blank=False)
-    date = models.DateTimeField("", auto_created=True)
+    # TODO: timezone support for datetime field
+    date = models.DateTimeField("", blank=False,
+                                default=datetime.datetime.utcnow)
 
 
 class GameSale(models.Model):
     """
     Model for individual game sale
     """
+    # TODO: user should only be able to buy the game once
     buyer = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
     game = models.ForeignKey(Game, on_delete=models.CASCADE, blank=False)
-    date = models.DateField("Date when game was bought", blank=False)
+    # TODO: timezone support for datetime field
+    date = models.DateTimeField("Date when game was bought",
+                                blank=False, default=datetime.datetime.utcnow)
