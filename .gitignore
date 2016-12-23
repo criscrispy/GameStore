@@ -5,6 +5,7 @@ bower_components/
 *.hypothesis
 docs/build
 media/
+*.pyc
 
 
 # Created by .ignore support plugin (hsz.mobi)

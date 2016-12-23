@@ -52,6 +52,6 @@ loggers:
 
 root:
   level: INFO
-  handlers: [console]  # [console, debug_file_handler, info_file_handler]
+  handlers: [console]
 
 ...

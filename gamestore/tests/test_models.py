@@ -1,7 +1,7 @@
 import string
 
-import hypothesis.strategies as st
 import pytest
+import hypothesis.strategies as st
 from django.contrib.auth.models import User
 from hypothesis import given
 from hypothesis.extra.django.models import models
@@ -37,8 +37,9 @@ game = models(
     category=st.text(max_size=30),
     price=st.floats(min_value=0.0, allow_nan=False, allow_infinity=False),
     url=st.just("https://en.wikipedia.org/wiki/Uniform_Resource_Locator"),
-    icon=st.just("gamestore/tests/images/profile_48_48.png"),
-    image=st.just("gamestore/tests/images/image_350_200.png"),
+    # TODO: In memory creation of images
+    # icon=st.just("gamestore/tests/images/profile_48_48.png"),
+    # image=st.just("gamestore/tests/images/image_350_200.png"),
 )
 
 score = models(

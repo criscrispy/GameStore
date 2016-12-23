@@ -1,57 +1,18 @@
-"""
-http://eli.thegreenplace.net/2014/02/15/programmatically-populating-a-django-database
-"""
-import os
-
-import random
 import logging
-
+import random
 from io import BytesIO
 
-from PIL import Image
 from django.contrib.auth.models import User
+from django.core.files import File
 from django.core.management.base import BaseCommand
 from django.db.utils import IntegrityError
 from faker import Faker
 
 from gamestore.models import Game, Score, GameSale, Profile
-from django.core.files import File
+from gamestore.tests.create_content import create_image
 
-
-# TODO: django-autofixture
 fake = Faker()
 logger = logging.getLogger(__name__)
-
-
-def create_image(name, width=50, height=50):
-    """
-    Test image creation adapted from
-
-    http://wildfish.com/blog/2014/02/27/generating-in-memory-image-for-tests-python/
-
-    Args:
-        name (str):
-        width (int):
-        height (int):
-
-    Returns:
-        BytesIO: Image as BytesIO object. It can be used in same fashion as
-            file object created by opening a file.
-            >>> file = open("image.png", 'r')
-
-    Todo:
-        formats: jpg, png, gif, svg
-        text in the figure
-    """
-    logger.info("")
-
-    ext = "png"
-    file = BytesIO()
-    image = Image.new('RGBA', size=(width, height), color=(128, 128, 128))
-    image.save(file, format=ext)
-    file.name = name + '.' + ext
-    file.seek(0)
-    return file
 
 
 def create_user(superuser=False):
@@ -177,6 +138,7 @@ def create_game_sale(user, game):
 
 def populate(user_amount, game_amount, sales_amount, scores_amount):
     image_game = create_image("image", width=128, height=128)
+    image_icon = create_image("image", width=48, height=48)
     image_profile = create_image("profile", width=128, height=128)
 
     users = []
@@ -192,7 +154,7 @@ def populate(user_amount, game_amount, sales_amount, scores_amount):
     if users:
         for i in range(game_amount):
             user = random.choice(users)
-            game = create_game(user, image=image_game)
+            game = create_game(user, icon=image_icon, image=image_game)
             games.append(game)
 
     if users and games:
@@ -219,8 +181,18 @@ def populate(user_amount, game_amount, sales_amount, scores_amount):
 
 class Command(BaseCommand):
     """
+    Manage.py command for populating database with models for testing. Usage
+
     Populates the database with data for testing. Uses *faker* for data
     generation.
+
+    .. code-block::
+
+       python manage.py populate_db
+
+    Resources:
+
+    .. [1] http://eli.thegreenplace.net/2014/02/15/programmatically-populating-a-django-database
     """
     args = '<amount>'
     help = 'Populates database with data for testing the website.'

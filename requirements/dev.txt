@@ -14,3 +14,4 @@ pytest-django
 pytest-xdist
 hypothesis
 faker
+svgwrite
