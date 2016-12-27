@@ -1,3 +1,6 @@
+{% extends "base.html" %}
+
+
 {% comment %}
 This templates is ment to be included in index.html to display a desription of
 a game.
@@ -10,7 +13,12 @@ Desription should include
 - ...
 
 {% endcomment %}
-<div>
+
+
+{% block content %}
+    <h1>DESCRIPTION OF A GAME : {{ game.title }}</h1>
+
+    <div>
     <p>
         {{ game.publisher.username }}
         {{ game.title }}
@@ -19,3 +27,5 @@ Desription should include
         {{ game.url }}
     </p>
 </div>
+{% endblock %}
+
