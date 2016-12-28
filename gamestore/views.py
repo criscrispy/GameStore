@@ -1,10 +1,12 @@
 import logging
 from django.contrib.auth.decorators import login_required
 from django.http.response import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 
 # Get an instance of a logger
+from gamestore.models import Game
+
 logger = logging.getLogger('gamestore.views')
 
 
@@ -36,16 +38,21 @@ def games(request):
 
 
 def game_detail(request, game_id):
-    game = {
-        'title': game_id,
-        'price': '0.99'
-    }
-
-    return render(request, "gamestore/game_description.html", {'game': game})
+    game = get_object_or_404(Game, pk=game_id)
+    # TODO delete 2 lines javascript testing
+    game.url = 'http://users.metropolia.fi/~nikolaid/game/index.html';
+    game.image = 'http://users.metropolia.fi/~nikolaid/game.png';
+    # TODO add logic to control if user is allowed to play or buy
+    play = True
+    buy = False
+    return render(request, "gamestore/game_description.html", {'game': game, 'play': play, 'buy': buy})
 
 
 def game_play(request, game_id):
-    return None
+    #TODO check user is allowed to play
+    game = get_object_or_404(Game, pk=game_id)
+    return render(request, "gamestore/game_description.html", {'game': game, 'start_game':True})
+
 
 
 def game_buy(request, game_id):
