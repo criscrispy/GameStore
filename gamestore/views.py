@@ -35,24 +35,24 @@ def games(request):
     return render(request, "gamestore/game.html", {})
 
 
-def game_detail(request, game_name):
+def game_detail(request, game_id):
     game = {
-        'title': game_name,
+        'title': game_id,
         'price': '0.99'
     }
 
     return render(request, "gamestore/game_description.html", {'game': game})
 
 
-def game_play(request, game_name):
+def game_play(request, game_id):
     return None
 
 
-def game_buy(request, game_name):
+def game_buy(request, game_id):
     return None
 
 
-def game_like(request, game_name):
+def game_like(request, game_id):
     return None
 
 

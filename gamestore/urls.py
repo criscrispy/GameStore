@@ -15,21 +15,21 @@ urlpatterns = [
     #   games the user bought
     url(r'^games/user/(?P<user_id>[0-9]{2,})', views.game_sale, name='games.sale'),
 
-    #   /games/supermario OR /games/1234 (only with ID)??
+    #   /games/1234 OR /games/supermario (only with ID)??
     #   the detail view of one of the games, one can play/buy/like from that view
-    url(r'^games/(?P<game_name>\w+)', views.game_detail, name='games.detail'),
+    url(r'^games/(?P<game_id>[0-9]{2,})', views.game_detail, name='games.detail'),
 
-    #   /games/supermario/play
+    #    /games/1234/play OR /games/supermario/play
     #   end point to register the scores of user when they perform the "play action"
-    url(r'^games/(?P<game>\w+)/play', views.game_play, name='games.play'),
+    url(r'^games/(?P<game_id>[0-9]{2,})/play', views.game_play, name='games.play'),
 
-    #   /games/supermario/buy
+    #   /games/1234/buy
     #   end point to buy a game : adds the game to user's bought-list
-    url(r'^games/(?P<game>\w+)/buy', views.game_buy, name='games.buy'),
+    url(r'^games/(?P<game_id>[0-9]{2,})/buy', views.game_buy, name='games.buy'),
 
     #   /games/supermario/like (add to favorites) ??
     #   end point to like a game : adds the game to user's liked-list
-    url(r'^games/(?P<game>\w+)/like', views.game_like, name='games.like'),
+    url(r'^games/(?P<game_id>[0-9]{2,})/like', views.game_like, name='games.like'),
 
     #   /categories
     #   shows the list of categories.
