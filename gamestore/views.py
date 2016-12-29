@@ -6,7 +6,7 @@ from .models import Game
 # Get an instance of a logger
 from gamestore.models import Game
 
-logger = logging.getLogger('gamestore.views')
+logger = logging.getLogger(__name__)
 
 
 def index(request):

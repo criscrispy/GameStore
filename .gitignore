@@ -6,6 +6,9 @@ bower_components/
 docs/build
 media/
 *.pyc
+*.test_images
+*.egg-info
+.tox
 
 
 # Created by .ignore support plugin (hsz.mobi)

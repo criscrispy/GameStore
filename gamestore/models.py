@@ -1,7 +1,7 @@
 import datetime
 
 from django.contrib.auth.models import User
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 
@@ -27,7 +27,8 @@ class Game(models.Model):
         "Price for the game. "
         "Value must be greater or equal to zero.",
         blank=False,
-        validators=[MinValueValidator(0.0, "Value must be positive.")]
+        validators=[MinValueValidator(0.0, "Value must be positive."),
+                    MaxValueValidator(100.0, "Value must be positive.")]
     )
     url = models.URLField("", blank=False)
     icon = models.ImageField("", upload_to="games")

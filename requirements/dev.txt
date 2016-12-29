@@ -1,17 +1,16 @@
 -r common.txt
 
-## Documentation
-sphinx
-sphinx_rtd_theme
-sphinxcontrib-napoleon
+virtualenv
+#virtualenvwrapper
 
 
 ## Testing
-nose
-coverage
 pytest
 pytest-django
 pytest-xdist
+pytest-cov
 hypothesis
+tox
+coverage
 faker
 svgwrite
