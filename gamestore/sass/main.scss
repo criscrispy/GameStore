@@ -22,6 +22,32 @@ body {
 }
 
 /* Background Image for index page */
-//body > .content {
-//  @include linear-gradient(#990000, #000000)
-//}
+/*
+body > .content {
+  @include linear-gradient(#990000, #000000)
+}
+*/
+
+/*
+ * styles for game list view
+*/
+
+.game-container {
+  margin-bottom: 40px;
+  padding: 0px 29px !important;
+
+  .game-grid{
+    border: 10px solid #491820;
+  }
+
+  .game-info{
+    height: 80px;
+    background: #491820;
+    padding: 10px;
+    color: #BFAC40;
+
+    a{
+      color: #BFAC40;
+    }
+  }
+}

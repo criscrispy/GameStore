@@ -1,6 +1,26 @@
 {% extends "base.html" %}
 {% block content %}
-        <div class="col-sm-12">
-            <h1>LIST OF GAMES</h1>
-        </div>
+    <div class="col-sm-12">
+        <h1>GAMES</h1>
+
+        {% for game in games %}
+            <div class="col-sm-3 game-container">
+
+                <div class="game-grid">
+                    {% with y=forloop.counter|stringformat:"s" %}
+                    {% with width="200"|add:y %}
+                       <img src="//www.fillmurray.com/200/{{ width }}">
+                    {% endwith %}
+                    {% endwith %}
+
+                    <div class="game-info">
+                        <p>{{ game.price }}</p>
+                        <strong><a href="{% url 'games.detail' game_id=game.id  %}">{{ game.title }}</a></strong>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+
 {% endblock %}

@@ -18,3 +18,7 @@ gulp.task "sass", ->
     .pipe cssmin()
     .pipe rename({extname: ".min.css"})
     .pipe gulp.dest("./gamestore/static/css")
+
+
+defaultTasks = [ 'sass'];
+gulp.task('default', defaultTasks);

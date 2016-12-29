@@ -13,23 +13,23 @@ urlpatterns = [
 
     #   /games/user/1234
     #   games the user bought
-    url(r'^games/user/(?P<user_id>[0-9]{2,})', views.game_sale, name='games.sale'),
+    url(r'^games/user/(?P<user_id>[0-9]{1,})', views.game_sale, name='games.sale'),
 
     #   /games/1234 OR /games/supermario (only with ID)??
     #   the detail view of one of the games, one can play/buy/like from that view
-    url(r'^games/(?P<game_id>[0-9]{2,})$', views.game_detail, name='games.detail'),
+    url(r'^games/(?P<game_id>[0-9]{1,})$', views.game_detail, name='games.detail'),
 
     #    /games/1234/play OR /games/supermario/play
     #   end point to register the scores of user when they perform the "play action"
-    url(r'^games/(?P<game_id>[0-9]{2,})/play$', views.game_play, name='games.play'),
+    url(r'^games/(?P<game_id>[0-9]{1,})/play$', views.game_play, name='games.play'),
 
     #   /games/1234/buy
     #   end point to buy a game : adds the game to user's bought-list
-    url(r'^games/(?P<game_id>[0-9]{2,})/buy', views.game_buy, name='games.buy'),
+    url(r'^games/(?P<game_id>[0-9]{1,})/buy', views.game_buy, name='games.buy'),
 
     #   /games/supermario/like (add to favorites) ??
     #   end point to like a game : adds the game to user's liked-list
-    url(r'^games/(?P<game_id>[0-9]{2,})/like', views.game_like, name='games.like'),
+    url(r'^games/(?P<game_id>[0-9]{1,})/like', views.game_like, name='games.like'),
 
     #   /categories
     #   shows the list of categories.
@@ -52,7 +52,7 @@ urlpatterns = [
 
     #   /history/1234
     #   history of userid=1234 interms of games they played
-    url(r'^history/(?P<user_id>[0-9]{2,})', views.user_history, name='user.history'),
+    url(r'^history/(?P<user_id>[0-9]{1,})', views.user_history, name='user.history'),
 
     #   /upload
     #   view to show the upload form
@@ -60,24 +60,24 @@ urlpatterns = [
 
     #   /uploads/1234
     #   games user 1234 uploaded
-    url(r'^uploads/(?P<user_id>[0-9]{2,})', views.uploads, name='games.uploads'),
+    url(r'^uploads/(?P<user_id>[0-9]{1,})', views.uploads, name='games.uploads'),
 
     #   /uploads/supermario OR /uploads/1234
     #   details of one of the uploaded games : visible to the uploader
-    url(r'^uploads/(?P<game_id>[0-9]{2,})', views.upload_detail, name='games.upload.detail'),
+    url(r'^uploads/(?P<game_id>[0-9]{1,})', views.upload_detail, name='games.upload.detail'),
 
     #   /uploads/supermario/stats OR /uploads/1234/stats
     #   view the stats of the uploaded game with gameId=1234
-    url(r'^uploads/(?P<game_id>[0-9]{2,})/stats', views.upload_stat, name='games.upload.stat'),
+    url(r'^uploads/(?P<game_id>[0-9]{1,})/stats', views.upload_stat, name='games.upload.stat'),
 
     #   /uploads/supermario/delete
     #   edit one of the uploaded games
     #   the post request could save the updated info
-    url(r'^uploads/(?P<game_id>[0-9]{2,})/edit', views.upload_edit, name='games.upload.edit'),
+    url(r'^uploads/(?P<game_id>[0-9]{1,})/edit', views.upload_edit, name='games.upload.edit'),
 
     #   /uploads/supermario/edit
     #   edit one of the uploaded games (change picture, name etc)
-    url(r'^uploads/(?P<game_id>[0-9]{2,})/delete', views.upload_delete, name='games.upload.delete'),
+    url(r'^uploads/(?P<game_id>[0-9]{1,})/delete', views.upload_delete, name='games.upload.delete'),
 
     #   /publishers
     #   /publishers?order=rating|created
@@ -86,7 +86,7 @@ urlpatterns = [
 
     #   /publishers/nintendo OR /publishers/12345
     #   details of one of the publishers, list of games they published etc
-    url(r'^publishers/(?P<user_id>[0-9]{2,})', views.publisher_detail, name='publisher.detail'),
+    url(r'^publishers/(?P<user_id>[0-9]{1,})', views.publisher_detail, name='publisher.detail'),
 
 
     #   /search

@@ -1,8 +1,7 @@
 import logging
 from django.contrib.auth.decorators import login_required
-from django.http.response import HttpResponse
 from django.shortcuts import render, get_object_or_404
-
+from .models import Game
 
 # Get an instance of a logger
 from gamestore.models import Game
@@ -34,7 +33,9 @@ def profile(request):
 
 
 def games(request):
-    return render(request, "gamestore/game.html", {})
+    games = Game.objects.all()[:50]
+    context = {'games': games}
+    return render(request, "gamestore/game.html", context)
 
 
 def game_detail(request, game_id):
@@ -52,7 +53,6 @@ def game_play(request, game_id):
     #TODO check user is allowed to play
     game = get_object_or_404(Game, pk=game_id)
     return render(request, "gamestore/game_description.html", {'game': game, 'start_game':True})
-
 
 
 def game_buy(request, game_id):
