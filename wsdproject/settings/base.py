@@ -145,7 +145,7 @@ REGISTRATION_AUTO_LOGIN = True
 
 # Setup logging config from `logging.yaml` file.
 LOGGING_CONFIG = None
-LOGGING_FILE = 'logging.yaml'
-with open(os.path.join(BASE_DIR, LOGGING_FILE), 'rt') as f:
-    LOGGING = yaml.safe_load(f.read())
+LOGGING_FILE = os.path.join(BASE_DIR, 'logging.yaml')
+with open(LOGGING_FILE, 'rt') as file:
+    LOGGING = yaml.safe_load(file.read())
 logging.config.dictConfig(LOGGING)

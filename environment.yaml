@@ -1,3 +1,11 @@
+# Configuration for conda environment.
+# http://conda.pydata.org/docs/
+#
+# Install with commands:
+#   conda env create -f environment.yaml
+#   source activate django35
+#
+
 name: django35
 channels:
   - conda-forge
