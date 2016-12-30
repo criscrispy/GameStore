@@ -17,18 +17,19 @@ class Game(models.Model):
     """
     Model for a game added into the gamestore.
     """
-    publisher = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
     # TODO: Unique title?
+    # TODO: category choices
+    # TODO: Price using django-money module?
+    # TODO: Validate image size
+    publisher = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
     title = models.CharField(max_length=30, blank=False)
     description = models.TextField("Description of the game.", blank=False)
-    # TODO: category choices
     category = models.CharField(max_length=30, default="miscellaneous")
-    price = models.FloatField(
-        "Price for the game. "
-        "Value must be greater or equal to zero.",
+    price = models.DecimalField(
+        "Price for the game. Value can be between 0 and 100.",
+        max_digits=4,
+        decimal_places=2,
         blank=False,
-        validators=[MinValueValidator(0.0, "Value must be positive."),
-                    MaxValueValidator(100.0, "Value must be positive.")]
     )
     url = models.URLField("", blank=False)
     icon = models.ImageField("", upload_to="games")

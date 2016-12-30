@@ -156,7 +156,7 @@ def create_game(user, icon=None, image=None):
         title=fake.text(30),
         description=fake.text(),
         category=fake.text(30),
-        price=fake.pyfloat(left_digits=2, right_digits=2, positive=True),
+        price=fake.pydecimal(left_digits=2, right_digits=2, positive=True),
         url=fake.url(),
     )
 

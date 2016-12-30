@@ -1,38 +1,29 @@
 import logging
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
-from .models import Game
 
-# Get an instance of a logger
 from gamestore.models import Game
 
 logger = logging.getLogger(__name__)
 
 
 def index(request):
-    """
-    Index page for gamestore.
-
-    TODO:
-        Get list of all games. Name, description and thumbnail should be shown
-        in the home page.
-
-    """
+    """Index page for gamestore."""
     context = {}
     return render(request, 'gamestore/index.html', context)
 
 
 @login_required
 def profile(request):
-    """
-    User profile.
-    https://stackoverflow.com/questions/9046533/creating-user-profile-pages-in-django
-    """
+    """User profile."""
+    # TODO: https://stackoverflow.com/questions/9046533/creating-user-profile-pages-in-django
     context = {}
     return render(request, 'accounts/profile.html', context)
 
 
 def games(request):
+    """Display games"""
     games = Game.objects.all()[:50]
     context = {'games': games}
     return render(request, "gamestore/game.html", context)
@@ -41,18 +32,20 @@ def games(request):
 def game_detail(request, game_id):
     game = get_object_or_404(Game, pk=game_id)
     # TODO delete 2 lines javascript testing
-    game.url = 'http://users.metropolia.fi/~nikolaid/game/index.html';
-    game.image = 'http://users.metropolia.fi/~nikolaid/game.png';
+    game.url = 'http://users.metropolia.fi/~nikolaid/game/index.html'
+    game.image = 'http://users.metropolia.fi/~nikolaid/game.png'
     # TODO add logic to control if user is allowed to play or buy
     play = True
     buy = False
-    return render(request, "gamestore/game_description.html", {'game': game, 'play': play, 'buy': buy})
+    return render(request, "gamestore/game_description.html",
+                  {'game': game, 'play': play, 'buy': buy})
 
 
 def game_play(request, game_id):
-    #TODO check user is allowed to play
+    # TODO check user is allowed to play
     game = get_object_or_404(Game, pk=game_id)
-    return render(request, "gamestore/game_description.html", {'game': game, 'start_game':True})
+    return render(request, "gamestore/game_description.html",
+                  {'game': game, 'start_game': True})
 
 
 def game_buy(request, game_id):
@@ -116,9 +109,9 @@ def publisher_detail(request, user_id):
         'user_id': user_id
     }
 
-    return render(request, "gamestore/publisher_detail.html", {'publisher': publisher})
+    return render(request, "gamestore/publisher_detail.html",
+                  {'publisher': publisher})
 
 
 def search(request, keyword):
     return None
-

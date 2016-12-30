@@ -10,3 +10,4 @@ Web Software Development Project - Game Store
    :maxdepth: 3
 
    project_plan.rst
+   development.rst

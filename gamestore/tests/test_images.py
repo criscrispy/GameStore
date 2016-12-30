@@ -7,7 +7,7 @@ import string
 from io import BytesIO, StringIO
 
 import hypothesis.strategies as st
-from hypothesis import given
+from hypothesis import given, settings
 
 from gamestore.tests.create_content import BITMAP, SVG, create_image
 
@@ -24,6 +24,11 @@ if SAVE_IMAGES:
 
 
 def save_image(image):
+    """
+
+    Args:
+        image (BytesIO|StringIO):
+    """
     if isinstance(image, BytesIO):
         mode = 'wb'
     elif isinstance(image, StringIO):
@@ -34,6 +39,7 @@ def save_image(image):
         shutil.copyfileobj(image, file)
 
 
+@settings(max_examples=10)
 @given(
     name=st.text(alphabet=string.ascii_letters, min_size=1, max_size=8),
     width=st.integers(min_value=1, max_value=1000),
