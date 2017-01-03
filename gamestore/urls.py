@@ -55,9 +55,6 @@ urlpatterns = [
     #   history of userid=1234 interms of games they played
     url(r'^history/(?P<user_id>[0-9]{1,})', views.user_history, name='user.history'),
 
-    #   /upload
-    #   view to show the upload form
-    url(r'^upload', views.upload, name='games.upload'),
 
     #   /uploads/1234
     #   games user 1234 uploaded
@@ -79,6 +76,11 @@ urlpatterns = [
     #   /uploads/supermario/edit
     #   edit one of the uploaded games (change picture, name etc)
     url(r'^uploads/(?P<game_id>[0-9]{1,})/delete', views.upload_delete, name='games.upload.delete'),
+
+    #   /upload
+    #   view to show the upload form
+    url(r'^upload', views.upload, name='games.upload'),
+
 
     #   /publishers
     #   /publishers?order=rating|created

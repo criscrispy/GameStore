@@ -75,10 +75,12 @@ def category_detail(request, category_name):
 
 
 def game_sale(request, user_id):
-    my_games = GameSale.objects.filter(buyer=user_id)
+    games_bought = GameSale.objects.filter(buyer=user_id)
+    games_published = Game.objects.filter(publisher=user_id)
 
     context = {
-        'game_sales': my_games
+        'game_sales': games_bought,
+        'game_uploads': games_published
     }
 
     return render(request, "gamestore/game_sale.html", context)
@@ -89,7 +91,13 @@ def user_history(request, user_id):
 
 
 def uploads(request, user_id):
-    return None
+    games_published = Game.objects.filter(publisher=user_id)
+
+    context = {
+        'games': games_published
+    }
+
+    return render(request, "gamestore/uploads.html", context)
 
 
 def upload(request):
