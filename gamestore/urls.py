@@ -31,13 +31,14 @@ urlpatterns = [
     #   end point to like a game : adds the game to user's liked-list
     url(r'^games/(?P<game_id>[0-9]{1,})/like', views.game_like, name='games.like'),
 
-    #   /categories
-    #   shows the list of categories.
-    url(r'^categories', views.categories, name='categories.list'),
 
     #   /categories/sport
     #   shows the list of games under given category
-    url(r'^categories/(?P<category>\w+)', views.category_detail, name='categories.detail'),
+    url(r'^categories/(?P<category_name>\w+)', views.category_detail, name='categories.detail'),
+
+    #   /categories
+    #   shows the list of categories.
+    url(r'^categories', views.categories, name='categories.list'),
 
 
     #   /profile

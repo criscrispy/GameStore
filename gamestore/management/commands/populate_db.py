@@ -1,10 +1,11 @@
 import random
+from random import randint
 
 from django.core.management.base import BaseCommand
 from django.db import IntegrityError
 
 from gamestore.tests.create_content import create_image, create_user, \
-    create_profile, create_game, create_score, create_game_sale
+    create_profile, create_game, create_score, create_game_sale, create_category
 
 
 def populate(user_amount, game_amount, sales_amount, scores_amount):
@@ -13,9 +14,15 @@ def populate(user_amount, game_amount, sales_amount, scores_amount):
     image_profile = create_image("profile", width=128, height=128)
 
     users = []
+    categories = []
     games = []
     sales = []
     sales_dict = {}
+    category_titles = ['3D', 'Action', 'Adventure', 'Alien', 'Arcade',
+                  'Card', 'Dress Up', 'Fantasy', 'Fighting', 'Flying', 'Football',
+                  'Golf', 'Holidays', 'Kids', 'Multiplayer', 'Pool', 'Puzzle',
+                  'Racing', 'Simulation', 'Sports', 'Strategy',
+                  'Winter', 'Word', 'Zombie']
 
     for i in range(user_amount):
         try:
@@ -27,9 +34,15 @@ def populate(user_amount, game_amount, sales_amount, scores_amount):
         users.append(user)
 
     if users:
+        for title in category_titles:
+            category = create_category(title)
+            categories.append(category)
+
+    if users and categories:
         for i in range(game_amount):
             user = random.choice(users)
-            game = create_game(user, icon=image_icon, image=image_game)
+            rand_category = categories[randint(0, len(category_titles)-1)]
+            game = create_game(user, rand_category, icon=image_icon, image=image_game)
             games.append(game)
 
     if users and games:
@@ -54,6 +67,9 @@ def populate(user_amount, game_amount, sales_amount, scores_amount):
             create_score(user, game)
 
 
+
+
+
 class Command(BaseCommand):
     """
     Manage.py command for populating database with models for testing. Usage
@@ -73,4 +89,4 @@ class Command(BaseCommand):
     help = 'Populates database with data for testing the website.'
 
     def handle(self, *args, **options):
-        populate(10, 10, 10, 10)
+        populate(10, 50, 10, 10)

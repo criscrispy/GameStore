@@ -1,8 +1,8 @@
 import datetime
 
 from django.contrib.auth.models import User
-from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.contrib import admin
 
 
 class Profile(models.Model):
@@ -11,6 +11,22 @@ class Profile(models.Model):
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
     image = models.ImageField("Profile image.", upload_to="profile")
+
+
+class Category(models.Model):
+    """
+    Model for categories
+    """
+
+    class Meta:
+        verbose_name = 'Category'
+        verbose_name_plural = 'Categories'
+
+    title = models.CharField(max_length=30, blank=False)
+    description = models.TextField("Description of the category.", blank=False)
+
+    def __str__(self):
+        return '%s' % (self.title)
 
 
 class Game(models.Model):
@@ -24,7 +40,7 @@ class Game(models.Model):
     publisher = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
     title = models.CharField(max_length=30, blank=False)
     description = models.TextField("Description of the game.", blank=False)
-    category = models.CharField(max_length=30, default="miscellaneous")
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=False)
     price = models.DecimalField(
         "Price for the game. Value can be between 0 and 100.",
         max_digits=4,
@@ -34,6 +50,8 @@ class Game(models.Model):
     url = models.URLField("", blank=False)
     icon = models.ImageField("", upload_to="games")
     image = models.ImageField("", upload_to="games")
+
+
 
 
 class Score(models.Model):
@@ -58,3 +76,4 @@ class GameSale(models.Model):
     # TODO: timezone support for datetime field
     date = models.DateTimeField("Date when game was bought",
                                 blank=False, default=datetime.datetime.utcnow)
+

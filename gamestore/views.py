@@ -3,7 +3,7 @@ import logging
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 
-from gamestore.models import Game
+from gamestore.models import Game, Category
 
 logger = logging.getLogger(__name__)
 
@@ -57,12 +57,18 @@ def game_like(request, game_id):
 
 
 def categories(request):
-    return render(request, "gamestore/categories.html", {})
+    categories = Category.objects.all()[:50]
+    context = {'categories': categories}
+    return render(request, "gamestore/categories.html", context)
 
 
 def category_detail(request, category_name):
+    category = Category.objects.filter(title=category_name)
+    games_in_category = Game.objects.filter(category_id=category)
+
     context = {
-        'category_name': category_name
+        'category_name': category_name,
+        'games': games_in_category
     }
 
     return render(request, "gamestore/category_detail.html", context)

@@ -1,0 +1,18 @@
+{% for game in games %}
+    <div class="col-sm-6 col-md-4 game-container">
+        <a href="{% url 'games.detail' game_id=game.id  %}">
+        <div class="game-grid">
+            {% with y=forloop.counter|stringformat:"s" %}
+            {% with width="200"|add:y %}
+               <img width="100%" src="//www.fillmurray.com/200/{{ width }}">
+            {% endwith %}
+            {% endwith %}
+
+            <div class="game-info">
+                <p>{{ game.price }}</p>
+                <strong>{{ game.title }}</strong>
+            </div>
+        </div>
+        </a>
+    </div>
+{% endfor %}

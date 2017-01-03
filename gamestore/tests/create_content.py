@@ -8,7 +8,7 @@ from django.core.files import File
 from django.db import IntegrityError
 from faker import Faker
 
-from gamestore.models import Profile, Game, Score, GameSale
+from gamestore.models import Profile, Game, Score, GameSale, Category
 
 BITMAP = ('jpeg', 'png', 'gif')
 SVG = ('svg',)
@@ -137,7 +137,7 @@ def create_profile(user, image):
     return profile
 
 
-def create_game(user, icon=None, image=None):
+def create_game(user, category, icon=None, image=None):
     """
     Create game.
 
@@ -155,7 +155,7 @@ def create_game(user, icon=None, image=None):
         publisher=user,
         title=fake.text(30),
         description=fake.text(),
-        category=fake.text(30),
+        category=category,
         price=fake.pydecimal(left_digits=2, right_digits=2, positive=True),
         url=fake.url(),
     )
@@ -209,3 +209,18 @@ def create_game_sale(user, game):
         game=game,
     )
     return game_sale
+
+
+def create_category(category_title):
+    """
+
+    Args:
+        category_title
+    :return:
+    """
+    logger.info("")
+    category = Category.objects.create(
+        title=category_title,
+        description=fake.text()
+    )
+    return category

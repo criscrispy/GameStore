@@ -1,4 +1,29 @@
 {% extends "base.html" %}
 {% block content %}
-    <h1>LIST OF CATEGORIES</h1>
+    <div class="col-sm-12">
+        <h1>Categories</h1>
+
+        {% for category in categories %}
+            <div class="col-sm-3 col-md-3 col-xs-6 game-container">
+                <a href="{% url 'categories.detail' category_name=category.title  %}">
+                <div class="game-grid">
+                    {% with y=forloop.counter|stringformat:"s" %}
+                    {% with width="200"|add:y %}
+                       <img width="100%" src="//www.placecage.com/200/{{ width }}">
+                    {% endwith %}
+                    {% endwith %}
+
+                    <div class="game-info">
+                        <p>{{ category.title }}</p>
+                        <strong>
+                            {{ category.description |truncatechars:25 }}
+                        </strong>
+                    </div>
+                </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+
+
 {% endblock %}

@@ -197,3 +197,5 @@ jspm_packages
 .yarn-integrity
 
 
+# migrations
+gamestore/migrations/
