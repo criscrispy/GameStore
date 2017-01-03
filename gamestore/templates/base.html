@@ -56,7 +56,7 @@
                     <li><a href="{% url 'categories.list' %}">Categories</a></li>
                     <li><a href="{% url 'publishers.list' %}">Publishers</a></li>
                     {% if user.is_authenticated %}
-                        <li><a href="{% url 'games.sale' user_id=1223 %}">My games</a></li>
+                        <li><a href="{% url 'games.sale' user_id=user.id %}">My games</a></li>
                     {% endif %}
                 </ul>
 

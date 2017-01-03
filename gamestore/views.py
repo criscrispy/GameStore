@@ -3,7 +3,7 @@ import logging
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 
-from gamestore.models import Game, Category
+from gamestore.models import Game, Category, GameSale
 
 logger = logging.getLogger(__name__)
 
@@ -75,7 +75,13 @@ def category_detail(request, category_name):
 
 
 def game_sale(request, user_id):
-    return render(request, "gamestore/game_sale.html", {})
+    my_games = GameSale.objects.filter(buyer=user_id)
+
+    context = {
+        'game_sales': my_games
+    }
+
+    return render(request, "gamestore/game_sale.html", context)
 
 
 def user_history(request, user_id):

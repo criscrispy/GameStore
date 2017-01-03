@@ -2,7 +2,6 @@ import datetime
 
 from django.contrib.auth.models import User
 from django.db import models
-from django.contrib import admin
 
 
 class Profile(models.Model):
@@ -50,8 +49,6 @@ class Game(models.Model):
     url = models.URLField("", blank=False)
     icon = models.ImageField("", upload_to="games")
     image = models.ImageField("", upload_to="games")
-
-
 
 
 class Score(models.Model):

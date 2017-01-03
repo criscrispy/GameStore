@@ -1,4 +1,32 @@
 {% extends "base.html" %}
+
+
 {% block content %}
-    <h1>List of games a user bought</h1>
+
+    <div class="col-sm-12">
+        <h3>My games</h3>
+
+        {% for game_sale in game_sales %}
+            <div class="col-sm-6 col-md-4 game-container">
+                <a href="{% url 'games.detail' game_id=game_sale.game.id  %}">
+                <div class="game-grid">
+                    {% with y=forloop.counter|stringformat:"s" %}
+                    {% with width="200"|add:y %}
+                       <img width="100%" src="//www.fillmurray.com/200/{{ width }}">
+                    {% endwith %}
+                    {% endwith %}
+
+                    <div class="game-info">
+                        <p>{{ game_sale.game.price }}</p>
+                        <strong>{{ game_sale.game.title }}</strong>
+                    </div>
+                </div>
+                </a>
+            </div>
+        {% empty %}
+            <strong>You have not bought any games yet. Go to <a href="{% url 'games.list' %}">Games</a></strong>
+        {% endfor %}
+
+    </div>
+
 {% endblock %}
