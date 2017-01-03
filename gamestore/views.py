@@ -44,6 +44,9 @@ def game_detail(request, game_id):
 def game_play(request, game_id):
     # TODO check user is allowed to play
     game = get_object_or_404(Game, pk=game_id)
+    # TODO delete 2 lines javascript testing
+    game.url = 'http://users.metropolia.fi/~nikolaid/game/index.html'
+    game.image = 'http://users.metropolia.fi/~nikolaid/game.png'
     return render(request, "gamestore/game_description.html",
                   {'game': game, 'start_game': True})
 
