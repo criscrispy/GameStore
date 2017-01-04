@@ -1,3 +1,7 @@
+"""
+Loading image to django model is adapted from:
+http://www.revsys.com/blog/2014/dec/03/loading-django-files-from-code/
+"""
 import logging
 import string
 from io import BytesIO, StringIO
@@ -12,8 +16,9 @@ from gamestore.models import Profile, Game, Score, GameSale, Category
 BITMAP = ('jpeg', 'png', 'gif')
 SVG = ('svg',)
 
-fake = Faker()
 logger = logging.getLogger(__name__)
+
+fake = Faker()
 
 username_alphabet = string.ascii_letters + string.digits + "@.+-_"
 password_alphabet = string.ascii_letters + string.digits + string.punctuation
@@ -90,13 +95,24 @@ def create_image(name, width=50, height=50, filetype='png', text=None):
     elif filetype in SVG:
         return _create_svg(name, width, height, text)
     else:
-        raise Exception('Filetype "{}" not in "{}"'.format(filetype, BITMAP + SVG))
+        raise Exception(
+            'Filetype "{}" not in "{}"'.format(filetype, BITMAP + SVG))
 
 
-def create_user(superuser=False):
+def create_user(username=fake.user_name(),
+                first_name=fake.first_name(),
+                last_name=fake.last_name(),
+                email=fake.email(),
+                password="password",
+                superuser=False):
     """
 
     Args:
+        username (str):
+        email (str):
+        password (str):
+        first_name (str):
+        last_name (str):
         superuser (boolean): Create superuser
 
     Returns:
@@ -104,18 +120,13 @@ def create_user(superuser=False):
     """
     logger.info("")
 
-    d = dict(
-        username=fake.user_name(),
-        first_name=fake.first_name(),
-        last_name=fake.last_name(),
-        email=fake.email(),
-        password="password321"
-    )
-
-    if not superuser:
-        return User.objects.create_user(**d)
+    if superuser:
+        _create_user = User.objects.create_superuser
     else:
-        return User.objects.create_superuser(**d)
+        _create_user = User.objects.create_user
+
+    return _create_user(username, email=email, password=password,
+                        first_name=first_name, last_name=last_name)
 
 
 def create_profile(user, image):
@@ -123,45 +134,47 @@ def create_profile(user, image):
     Create user profile.
 
     Args:
-        user:
-        image:
+        user (User):
+        image (BytesIO):
 
     Returns:
-
+        Profile:
     """
     logger.info({'user': user, 'image': image})
 
     profile = Profile.objects.create(user=user)
-    profile.image.save(image.name, image)
+    profile.image.save(image.name, File(image))
     return profile
 
 
-def create_game(user, category, icon=None, image=None):
+def create_game(user, category, title=fake.text(30), description=fake.text(),
+                price=fake.pydecimal(2, 2, True), url=fake.url(), icon=None,
+                image=None):
     """
     Create game.
 
     Args:
-        user (User): Instance of User model.
+        user (User):
+            Instance of User model.
+
         category (Category):
+        title (str):
+        description (str):
+
+        price (Decimal):
+            Positive decimal number with 2 right digits and 2 left digits.
+
+        url (str):
         image (BytesIO):
         icon (BytesIO):
 
     Returns:
         Game: Instance of Game model.
     """
-    logger.info({'user': user, 'category': category, 'icon': icon, 'image': image})
+    logger.info("")
 
-    game = Game.objects.create(
-        publisher=user,
-        title=fake.text(30),
-        description=fake.text(),
-        category=category,
-        price=fake.pydecimal(left_digits=2, right_digits=2, positive=True),
-        url=fake.url(),
-    )
-
-    # Images
-    # http://www.revsys.com/blog/2014/dec/03/loading-django-files-from-code/
+    game = Game.objects.create(publisher=user, category=category, title=title,
+                               description=description, price=price, url=url)
 
     if icon:
         game.icon.save(icon.name, File(icon))
@@ -172,23 +185,20 @@ def create_game(user, category, icon=None, image=None):
     return game
 
 
-def create_score(user, game):
+def create_score(user, game, score=fake.random_int(min=0)):
     """
 
     Args:
-        game:
-        user:
+        user (User):
+        game (Game):
+        score (int):
 
     Returns:
-
+        Score:
     """
-    logger.info({'user': user, 'game': game})
+    logger.info("")
 
-    score = Score.objects.create(
-        game=game,
-        player=user,
-        score=fake.random_int(min=0)
-    )
+    score = Score.objects.create( game=game, player=user, score=score)
     return score
 
 
@@ -196,34 +206,29 @@ def create_game_sale(user, game):
     """
 
     Args:
-        user:
-        game:
+        user (User):
+        game (Game):
 
     Returns:
-
+        GameSale:
     """
-    logger.info({'user': user, 'game': game})
+    logger.info("")
 
-    game_sale = GameSale.objects.create(
-        buyer=user,
-        game=game,
-    )
+    game_sale = GameSale.objects.create(buyer=user, game=game)
     return game_sale
 
 
-def create_category(category_title=fake.word()):
+def create_category(category_title=fake.word(), description=fake.text()):
     """
 
     Args:
-        category_title:
+        category_title (str):
+        description (str):
 
     Returns:
         Category:
     """
     logger.info("")
 
-    category = Category.objects.create(
-        title=category_title,
-        description=fake.text()
-    )
+    category = Category.objects.create(title=category_title, description=description)
     return category
