@@ -7,4 +7,3 @@ django-bootstrap3
 django-extensions
 Pillow
 PyYAML
-jsonfield

@@ -2,7 +2,7 @@ import datetime
 
 from django.contrib.auth.models import User
 from django.db import models
-import jsonfield
+from django.contrib.postgres.fields import JSONField
 
 class Profile(models.Model):
     """
@@ -78,3 +78,4 @@ class GameSale(models.Model):
 class GameSettings(models.Model):
     player = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
     game = models.ForeignKey(Game, on_delete=models.CASCADE, blank=False)
+    #settings = JSONField()
