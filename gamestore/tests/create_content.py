@@ -5,7 +5,6 @@ from io import BytesIO, StringIO
 from PIL import Image, ImageDraw
 from django.contrib.auth.models import User
 from django.core.files import File
-from django.db import IntegrityError
 from faker import Faker
 
 from gamestore.models import Profile, Game, Score, GameSale, Category
@@ -130,7 +129,7 @@ def create_profile(user, image):
     Returns:
 
     """
-    logger.info("")
+    logger.info({'user': user, 'image': image})
 
     profile = Profile.objects.create(user=user)
     profile.image.save(image.name, image)
@@ -143,13 +142,14 @@ def create_game(user, category, icon=None, image=None):
 
     Args:
         user (User): Instance of User model.
+        category (Category):
         image (BytesIO):
         icon (BytesIO):
 
     Returns:
         Game: Instance of Game model.
     """
-    logger.info("")
+    logger.info({'user': user, 'category': category, 'icon': icon, 'image': image})
 
     game = Game.objects.create(
         publisher=user,
@@ -182,7 +182,7 @@ def create_score(user, game):
     Returns:
 
     """
-    logger.info("")
+    logger.info({'user': user, 'game': game})
 
     score = Score.objects.create(
         game=game,
@@ -202,7 +202,7 @@ def create_game_sale(user, game):
     Returns:
 
     """
-    logger.info("")
+    logger.info({'user': user, 'game': game})
 
     game_sale = GameSale.objects.create(
         buyer=user,
@@ -211,14 +211,17 @@ def create_game_sale(user, game):
     return game_sale
 
 
-def create_category(category_title):
+def create_category(category_title=fake.word()):
     """
 
     Args:
-        category_title
-    :return:
+        category_title:
+
+    Returns:
+        Category:
     """
     logger.info("")
+
     category = Category.objects.create(
         title=category_title,
         description=fake.text()

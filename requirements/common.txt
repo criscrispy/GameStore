@@ -1,5 +1,5 @@
+## Project Dependencies
 # https://pip.pypa.io/en/stable/reference/pip_install/#requirements-file-format
-# Project Dependencies
 
 django
 django-registration-redux

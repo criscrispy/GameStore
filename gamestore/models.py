@@ -21,11 +21,11 @@ class Category(models.Model):
         verbose_name = 'Category'
         verbose_name_plural = 'Categories'
 
-    title = models.CharField(max_length=30, blank=False)
+    title = models.CharField(max_length=30, blank=False, unique=True)
     description = models.TextField("Description of the category.", blank=False)
 
     def __str__(self):
-        return '%s' % (self.title)
+        return str(self.title)
 
 
 class Game(models.Model):
