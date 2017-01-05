@@ -1,7 +1,6 @@
-import datetime
-
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
 
 
 class Profile(models.Model):
@@ -59,8 +58,7 @@ class Score(models.Model):
     player = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
     score = models.PositiveIntegerField("", blank=False)
     # TODO: timezone support for datetime field
-    date = models.DateTimeField("", blank=False,
-                                default=datetime.datetime.utcnow)
+    date = models.DateTimeField("", blank=False, default=timezone.now())
 
 
 class GameSale(models.Model):
@@ -72,5 +70,4 @@ class GameSale(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE, blank=False)
     # TODO: timezone support for datetime field
     date = models.DateTimeField("Date when game was bought",
-                                blank=False, default=datetime.datetime.utcnow)
-
+                                blank=False, default=timezone.now())

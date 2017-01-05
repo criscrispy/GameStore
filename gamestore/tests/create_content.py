@@ -85,18 +85,16 @@ def create_image(name, width=50, height=50, filetype='png', text=None):
     """
     # FIXME: Text size
     # TODO: Width and height units (cm, em, px, ...)
+
     logging.info("")
 
     if text is None:
         text = "{width}x{height}".format(width=width, height=height)
 
-    if filetype in BITMAP:
-        return _create_bitmap(name, width, height, filetype, text)
-    elif filetype in SVG:
+    if filetype in SVG:
         return _create_svg(name, width, height, text)
     else:
-        raise Exception(
-            'Filetype "{}" not in "{}"'.format(filetype, BITMAP + SVG))
+        return _create_bitmap(name, width, height, filetype, text)
 
 
 def create_user(username=fake.user_name(),
@@ -198,7 +196,7 @@ def create_score(user, game, score=fake.random_int(min=0)):
     """
     logger.info("")
 
-    score = Score.objects.create( game=game, player=user, score=score)
+    score = Score.objects.create(game=game, player=user, score=score)
     return score
 
 
@@ -230,5 +228,6 @@ def create_category(category_title=fake.word(), description=fake.text()):
     """
     logger.info("")
 
-    category = Category.objects.create(title=category_title, description=description)
+    category = Category.objects.create(title=category_title,
+                                       description=description)
     return category

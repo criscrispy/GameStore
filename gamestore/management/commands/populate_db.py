@@ -1,5 +1,4 @@
 import random
-from random import randint
 
 from django.core.management.base import BaseCommand
 from django.db import IntegrityError
@@ -18,11 +17,15 @@ def populate(user_amount, game_amount, sales_amount, scores_amount):
     games = []
     sales = []
     sales_dict = {}
-    category_titles = ['3D', 'Action', 'Adventure', 'Alien', 'Arcade',
-                  'Card', 'Dress Up', 'Fantasy', 'Fighting', 'Flying', 'Football',
-                  'Golf', 'Holidays', 'Kids', 'Multiplayer', 'Pool', 'Puzzle',
-                  'Racing', 'Simulation', 'Sports', 'Strategy',
-                  'Winter', 'Word', 'Zombie']
+    category_titles = [
+        '3D', 'Action', 'Adventure', 'Alien', 'Arcade',
+        'Card', 'Dress Up', 'Fantasy', 'Fighting', 'Flying',
+        'Football',
+        'Golf', 'Holidays', 'Kids', 'Multiplayer', 'Pool',
+        'Puzzle',
+        'Racing', 'Simulation', 'Sports', 'Strategy',
+        'Winter', 'Word', 'Zombie'
+    ]
 
     for i in range(user_amount):
         try:
@@ -41,8 +44,9 @@ def populate(user_amount, game_amount, sales_amount, scores_amount):
     if users and categories:
         for i in range(game_amount):
             user = random.choice(users)
-            rand_category = categories[randint(0, len(category_titles)-1)]
-            game = create_game(user, rand_category, icon=image_icon, image=image_game)
+            rand_category = random.choice(categories)
+            game = create_game(user, rand_category, icon=image_icon,
+                               image=image_game)
             games.append(game)
 
     if users and games:
@@ -65,9 +69,6 @@ def populate(user_amount, game_amount, sales_amount, scores_amount):
         for i in range(scores_amount):
             user, game = random.choice(sales)
             create_score(user, game)
-
-
-
 
 
 class Command(BaseCommand):
