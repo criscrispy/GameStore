@@ -3,11 +3,11 @@ Development
 
 Setup
 -----
-1) Install supported *Python interpreter* versions. If using Ubuntu you can use command
+1) Install supported *Python interpreter* versions with ``python-dev``. If using Ubuntu you can use command
 
   .. code-block:: bash
 
-     sudo apt-get install python3.5
+     sudo apt-get install python3.5 python3.5-dev
 
 2) Install *Virtualenv* for creating isolated Python environments.
 
@@ -28,6 +28,16 @@ Setup
   .. code-block:: bash
 
      deactivate
+
+3) Install Postgre SQL
+
+  .. code-block:: bash
+
+     sudo apt-get install postgresql postgresql-contrib
+
+  .. note::
+
+     TODO: Setup instructions
 
 
 Django Checklist
@@ -96,8 +106,20 @@ Testing
 - Coverage
 - pytest-cov
 
+- Tox is virtual environment manager that can be used to run tests against multiple python environments. Environments are specified in ``tox.ini``.
 
-- Tox
+  Test against all environments can be run with command
+
+  .. code-block:: bash
+
+     tox
+
+  Test against specific environment can be run with
+
+  .. code-block:: bash
+
+     tox -e py35
+
 - Setuptools
 
 

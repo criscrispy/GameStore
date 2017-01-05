@@ -7,3 +7,6 @@ django-bootstrap3
 django-extensions
 Pillow
 PyYAML
+
+# PostgreSQL
+psycopg2  # Requires `python3.5-dev` installed
