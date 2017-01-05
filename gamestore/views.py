@@ -31,27 +31,46 @@ def games(request):
 
 def game_detail(request, game_id):
     game = get_object_or_404(Game, pk=game_id)
-    # TODO delete 2 lines javascript testing
+    # TODO delete line javascript testing
+    js_test(game)
+    play = is_user_allowed_to_play(game, request)
+    context = {'game': game, 'play': play, 'buy': not play}
+    return render(request, "gamestore/game_description.html",
+                  context)
+
+
+@login_required
+def game_play(request, game_id):
+    game = get_object_or_404(Game, pk=game_id)
+    # TODO delete line javascript testing
+    js_test(game)
+    start_game = is_user_allowed_to_play(game, request)
+    context = {'game': game, 'start_game': start_game, 'buy': not start_game}
+    return render(request, "gamestore/game_description.html",
+                  context)
+
+def js_test(game):
     game.url = 'http://users.metropolia.fi/~nikolaid/game/index.html'
     game.image = 'http://users.metropolia.fi/~nikolaid/game.png'
-    # TODO add logic to control if user is allowed to play or buy
-    play = True
-    buy = False
-    return render(request, "gamestore/game_description.html",
-                  {'game': game, 'play': play, 'buy': buy})
 
 
-def game_play(request, game_id):
-    # TODO check user is allowed to play
-    game = get_object_or_404(Game, pk=game_id)
-    return render(request, "gamestore/game_description.html",
-                  {'game': game, 'start_game': True})
+def is_user_allowed_to_play(game, request):
+    play = False
+    user = request.user
+    if user.is_authenticated():
+        sale = GameSale.objects.filter(buyer=user, game=game).count()
+        play = sale > 0
+    return play
 
 
+@login_required
 def game_buy(request, game_id):
-    return None
+    game = get_object_or_404(Game, pk=game_id)
+    context = {'buyer':request.user, 'game': game}
+    return render(request, "gamestore/game_buy.html",
+                  context)
 
-
+@login_required
 def game_like(request, game_id):
     return None
 

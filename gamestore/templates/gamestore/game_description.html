@@ -21,34 +21,45 @@ Desription should include
 
 {% block content %}
 
-    {% if start_game == True %}
-        <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-lg-8 col-md-8 col-sm-8">
+    <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-lg-8 col-md-8 col-sm-8">
+        {% if start_game == True %}
             <iframe id="game_container" class="embed-responsive-item" src={{ game.url }} frameborder="0">
             </iframe>
+        {% else %}
+            <div><img class="img-responsive" src={{ game.image }}></div>
+        {% endif %}
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-2">
+    </div>
+    <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-lg-8 col-md-8 col-sm-8">
+        <div class="btn-group">
+            {% if buy %}
+                <a class="btn btn-primary" href="buy">Buy</a>
+            {% endif %}
+
+            {% if play %}
+                <a class="btn btn-primary" href="play">Play</a>
+            {% endif %}
+
+            {% if saved %}
+                <a class="btn btn-primary" href="play_saved">Play saved</a>
+            {% endif %}
         </div>
-    {% else %}
-        <div><img src={{ game.image }}></div>
-    {% endif %}
+        <div id="score"></div>
+        <h3>DESCRIPTION OF A GAME : {{ game.title }}</h3>
 
-    {% if buy %}
-        <a class="btn btn-primary" href="{{ game.id }}/buy">Buy</a>
-    {% endif %}
+        <div>
+            <p>
+                {{ game.publisher.username }}
+                {{ game.title }}
+                {{ game.price }}
 
-    {% if play %}
-        <a class="btn btn-primary" href="{{ game.id }}/play">Play</a>
-    {% endif %}
+                {{ game.description }}
+                {# TODO: embed url into the iframe #}
+                {{ game.url }}
+            </p>
+        </div>
 
-    <div id="score"></div>
-    <h3>DESCRIPTION OF A GAME : {{ game.title }}</h3>
-
-    <div>
-        <p>
-            {{ game.publisher.username }}
-            {{ game.title }}
-            {{ game.price }}
-            {# TODO: embed url into the iframe #}
-            {{ game.url }}
-        </p>
     </div>
 {% endblock %}
 
