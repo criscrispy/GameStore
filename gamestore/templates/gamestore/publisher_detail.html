@@ -1,4 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
-    <h1>List of Games uploaded by a given publisher</h1>
+    <a href="{% url 'publishers.list' %}">Publishers</a> > {{ user.first_name }} {{ user.last_name }}
+    <h4>Publisher profile:</h4>
+    <dl class="dl-horizontal">
+            <dt>Name</dt>
+            <dd>{{ user.first_name }} {{ user.last_name }}</dd>
+
+            <dt>Games uploaded</dt>
+            <dd>{{ games|length }}</dd>
+
+            <dt>Rating</dt>
+            <dd>4.5</dd>
+        </dl>
+
+    {% include "gamestore/games_list.html" with games=games %}
 {% endblock %}

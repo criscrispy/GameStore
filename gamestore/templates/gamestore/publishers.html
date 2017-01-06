@@ -1,4 +1,24 @@
 {% extends "base.html" %}
 {% block content %}
-    <h1>List of publishers</h1>
+    <h4>List of publishers</h4>
+
+    {% for user in publishers %}
+    <div class="col-sm-6 col-md-4 game-container">
+        <a href="{% url 'publisher.detail' user_id=user.id  %}">
+        <div class="game-grid">
+            {% with y=forloop.counter|stringformat:"s" %}
+            {% with width="200"|add:y %}
+               <img width="100%" src="//www.fillmurray.com/200/{{ width }}">
+            {% endwith %}
+            {% endwith %}
+
+            <div class="game-info">
+                <p>{{ user.first_name }} {{ user.last_name }}</p>
+            </div>
+        </div>
+        </a>
+    </div>
+{% empty %}
+    <strong>No games found</strong>
+{% endfor %}
 {% endblock %}

@@ -3,7 +3,7 @@
 
     <div class="col-sm-12">
         <h5><a href="{% url 'categories.list' %}">Categories</a> /  {{ category_name }}</h5>
-        <h3>Games in category : {{ category_name }}</h3>
+        <h4>Games in category : {{ category_name }}</h4>
 
         {% include "gamestore/games_list.html" with games=games %}
 

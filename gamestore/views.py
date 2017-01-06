@@ -1,9 +1,11 @@
 import logging
 
 from django.contrib.auth.decorators import login_required
+from django.http.response import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 
-from gamestore.models import Game, Category, GameSale
+from gamestore.forms import GameForm
+from gamestore.models import Game, Category, GameSale, Profile, User
 
 logger = logging.getLogger(__name__)
 
@@ -18,8 +20,13 @@ def index(request):
 def profile(request):
     """User profile."""
     # TODO: https://stackoverflow.com/questions/9046533/creating-user-profile-pages-in-django
-    context = {}
-    return render(request, 'accounts/profile.html', context)
+
+    user_profile = Profile.objects.filter(user=request.user.id)[0]
+    context = {
+        'user': request.user,
+        'profile': user_profile
+    }
+    return render(request, "accounts/profile.html", context)
 
 
 def games(request):
@@ -96,10 +103,12 @@ def category_detail(request, category_name):
 def game_sale(request, user_id):
     games_bought = GameSale.objects.filter(buyer=user_id)
     games_published = Game.objects.filter(publisher=user_id)
+    user_profile = Profile.objects.filter(user=user_id)[0]
 
     context = {
         'game_sales': games_bought,
-        'game_uploads': games_published
+        'game_uploads': games_published,
+        'profile': user_profile
     }
 
     return render(request, "gamestore/game_sale.html", context)
@@ -120,7 +129,17 @@ def uploads(request, user_id):
 
 
 def upload(request):
-    return None
+    # if user is not a developer/publisher, yet redirect to profile page where they can apply
+    if Profile.objects.filter(user=request.user.id)[0].developer_status != '2':
+        return profile(request)
+
+    if request.method == 'POST':
+        form = GameForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/upload', {'status': 'success'})
+
+    return render(request, "gamestore/upload_form.html", {'status': 'pending'})
 
 
 def upload_detail(request, game_id):
@@ -140,16 +159,30 @@ def upload_delete(request, game_id):
 
 
 def publishers(request):
-    return render(request, "gamestore/publishers.html", {})
+    publishers_list = User.objects.filter(profile__developer_status='2')
+
+    context = {
+        'publishers': publishers_list
+    }
+
+    return render(request, "gamestore/publishers.html", context)
 
 
 def publisher_detail(request, user_id):
-    publisher = {
-        'user_id': user_id
+    publishers_games = Game.objects.filter(publisher=user_id)
+    context = {
+        'games': publishers_games,
+        'user': request.user
     }
 
-    return render(request, "gamestore/publisher_detail.html",
-                  {'publisher': publisher})
+    return render(request, "gamestore/publisher_detail.html", context)
+
+
+def apply_developer(request, user_id):
+    user_profile = Profile.objects.filter(user=request.user.id)[0]
+    user_profile.developer_status = '1';
+    user_profile.save();
+    return profile(request)
 
 
 def search(request, keyword):

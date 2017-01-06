@@ -82,15 +82,18 @@ urlpatterns = [
     url(r'^upload', views.upload, name='games.upload'),
 
 
-    #   /publishers
-    #   /publishers?order=rating|created
-    #   list of publishers
-    url(r'^publishers', views.publishers, name='publishers.list'),
+    #   /apply/1234
+    #   apply to become a developer
+    url(r'^apply/(?P<user_id>[0-9]{1,})', views.apply_developer, name='publisher.apply'),
 
     #   /publishers/nintendo OR /publishers/12345
     #   details of one of the publishers, list of games they published etc
     url(r'^publishers/(?P<user_id>[0-9]{1,})', views.publisher_detail, name='publisher.detail'),
 
+    #   /publishers
+    #   /publishers?order=rating|created
+    #   list of publishers
+    url(r'^publishers', views.publishers, name='publishers.list'),
 
     #   /search
     url(r'search/(?P<keyword>\w+)', views.search, name='search')
