@@ -4,13 +4,6 @@ from django.shortcuts import render, get_object_or_404
 from gamestore.models import Game, GameSale, Profile
 
 
-def games(request):
-    """Display games"""
-    _games = Game.objects.all()[:50]
-    context = {'games': _games}
-    return render(request, "gamestore/game.html", context)
-
-
 def game_detail(request, game_id):
     """Details about the game"""
     game = get_object_or_404(Game, pk=game_id)

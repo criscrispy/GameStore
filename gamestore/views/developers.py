@@ -3,7 +3,7 @@ from django.shortcuts import render
 
 from gamestore.forms import GameForm
 from gamestore.models import Game, Profile
-from gamestore.views.base import profile
+from gamestore.views.accounts import profile
 
 
 def uploads(request, user_id):

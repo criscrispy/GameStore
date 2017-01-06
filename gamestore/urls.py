@@ -1,16 +1,18 @@
 from django.conf.urls import url
 
+import gamestore.views.accounts
+import gamestore.views.base
 from gamestore.views import base, players, developers
 
 
 urlpatterns = [
     url(r'^$', base.index, name='index'),
-    url(r'^accounts/profile', base.profile, name='profile'),
+    url(r'^accounts/profile', gamestore.views.accounts.profile, name='profile'),
 
     #   /games
     #   /games?order=rating|created|price|popularity
     #   shows list of games. could be landing page after login
-    url(r'^games$', players.games, name='games.list'),
+    url(r'^games$', gamestore.views.base.games, name='games.list'),
 
     #   /games/user/1234
     #   games the user bought

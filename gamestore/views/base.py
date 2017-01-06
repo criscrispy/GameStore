@@ -1,9 +1,9 @@
 import logging
 
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 
 from gamestore.models import Game, Category, Profile, User
+from gamestore.views.accounts import profile
 
 logger = logging.getLogger(__name__)
 
@@ -14,15 +14,11 @@ def index(request):
     return render(request, 'gamestore/index.html', context)
 
 
-@login_required
-def profile(request):
-    """User profile."""
-    user_profile = get_object_or_404(User, pk=request.user.id)
-    context = {
-        'user': request.user,
-        'profile': user_profile
-    }
-    return render(request, "accounts/profile.html", context)
+def games(request):
+    """Display games"""
+    _games = Game.objects.all()[:50]
+    context = {'games': _games}
+    return render(request, "gamestore/game.html", context)
 
 
 def categories(request):
