@@ -6,7 +6,17 @@ from gamestore.models import Game, GameSale, Profile
 
 
 def game_detail(request, game_id):
-    """Details about the game"""
+    """
+    Details about the game.
+
+    - game object
+        * Title
+        * Icon
+        * Image
+        * Description
+        * ...
+    - Buy / Play buttons
+    """
     game = get_object_or_404(Game, pk=game_id)
     # TODO delete line javascript testing
     js_test(game)
@@ -16,7 +26,18 @@ def game_detail(request, game_id):
 
 
 @login_required
+def game_buy(request, game_id):
+    """Allow player to buy a game if he has not already bought else redirect
+    to game_play."""
+    game = get_object_or_404(Game, pk=game_id)
+    context = {'buyer': request.user, 'game': game}
+    return render(request, "gamestore/game_buy.html", context)
+
+
+@login_required
 def game_play(request, game_id):
+    """Allow player to play a game if he has bought the game else redirect to
+    game_buy."""
     game = get_object_or_404(Game, pk=game_id)
     # TODO delete line javascript testing
     js_test(game)
@@ -26,16 +47,11 @@ def game_play(request, game_id):
 
 
 @login_required
-def game_buy(request, game_id):
-    game = get_object_or_404(Game, pk=game_id)
-    context = {'buyer': request.user, 'game': game}
-    return render(request, "gamestore/game_buy.html", context)
-
-
 def game_sale(request, user_id):
+    """Games that user has bought."""
     games_bought = GameSale.objects.filter(buyer=user_id)
     games_published = Game.objects.filter(publisher=user_id)
-    user_profile = Profile.objects.filter(user=user_id)[0]
+    user_profile = Profile.objects.get(user=user_id)  # TODO: exception handling
 
     context = {
         'game_sales': games_bought,
@@ -48,6 +64,7 @@ def game_sale(request, user_id):
 
 @login_required
 def game_like(request, game_id):
+    # TODO: This might be redundant
     return HttpResponse()
 
 

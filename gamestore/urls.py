@@ -2,6 +2,9 @@
 Urls
 ====
 
+Base
+----
+
 Index
   /index/
 
@@ -26,11 +29,26 @@ published etc
 Search
     /search/<query>
 
+
+Accounts
+--------
+
 History. History of userid=1234 in terms of games they played
     /history/1234
 
 Apply. Apply to become a developer
   /apply/1234
+
+
+Player
+------
+
+
+
+Developer
+---------
+
+
 
 """
 from django.conf.urls import url
