@@ -28,15 +28,64 @@ HttpResponse
     - Post
 """
 import pytest
+from faker import Faker
 
+fake = Faker()
 GET = 'GET'
 POST = 'POST'
+
+
+# -----------------------------------------------------------------------------
+# Base
+# -----------------------------------------------------------------------------
 
 
 def test_index(client):
     """Test index page."""
     response = client.get('/')
     assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_games(client):
+    """Test games page."""
+    response = client.get('/games')
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_categories(client):
+    url = '/categories'
+    response = client.get(url)
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_categories_detail(client):
+    game_id = fake.random_int(min=0)
+    url = '/categories/{game_id}'.format(game_id=game_id)
+    response = client.get(url)
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_publishers(client):
+    url = '/publishers'
+    response = client.get(url)
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_publisher_detail(client):
+    user_id = fake.random_int(min=0)
+    url = '/publishers/{user_id}'.format(user_id=user_id)
+    response = client.get(url)
+    assert response.status_code == 200
+
+
+# -----------------------------------------------------------------------------
+# Accounts
+# -----------------------------------------------------------------------------
 
 
 def test_profile_not_logged(client):
@@ -51,10 +100,9 @@ def test_profile_logged(admin_client):
     assert response.status_code == 200
 
 
-@pytest.mark.django_db
-def test_games(client):
-    response = client.get('/games')
-    assert response.status_code == 200
+# -----------------------------------------------------------------------------
+# Players
+# -----------------------------------------------------------------------------
 
 
 def test_game_detail():
@@ -69,29 +117,38 @@ def test_game_buy():
     assert True
 
 
-def test_categories():
-    assert True
-
-
-def test_categories_detail():
-    assert True
-
-
 def test_game_sale():
     assert True
+
+
+def test_game_like():
+    assert True
+
+
+# -----------------------------------------------------------------------------
+# Developers
+# -----------------------------------------------------------------------------
 
 
 def test_uploads():
     assert True
 
 
-def test_publishers():
+def test_upload():
     assert True
 
 
-def test_publisher_detail():
+def test_upload_detail():
     assert True
 
 
-def test_apply_developer():
+def test_upload_stat():
+    assert True
+
+
+def test_upload_edit():
+    assert True
+
+
+def test_upload_delete():
     assert True

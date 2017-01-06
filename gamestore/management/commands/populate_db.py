@@ -86,6 +86,7 @@ class Command(BaseCommand):
 
     .. [1] http://eli.thegreenplace.net/2014/02/15/programmatically-populating-a-django-database
     """
+    # TODO: Add arguments
     args = '<amount>'
     help = 'Populates database with data for testing the website.'
 

@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 
 from gamestore.models import Game, GameSale, Profile
@@ -47,7 +48,7 @@ def game_sale(request, user_id):
 
 @login_required
 def game_like(request, game_id):
-    return None
+    return HttpResponse()
 
 
 def js_test(game):

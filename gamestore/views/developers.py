@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 
 from gamestore.forms import GameForm
@@ -31,16 +31,16 @@ def upload(request):
 
 
 def upload_detail(request, game_id):
-    return None
+    return HttpResponse()
 
 
 def upload_stat(request, game_id):
-    return None
+    return HttpResponse()
 
 
 def upload_edit(request, game_id):
-    return None
+    return HttpResponse()
 
 
 def upload_delete(request, game_id):
-    return None
+    return HttpResponse()
