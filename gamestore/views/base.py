@@ -19,8 +19,10 @@ def index(request):
     Returns:
         HttpResponse:
     """
-    context = {}
-    return render(request, 'gamestore/index.html', context)
+    # context = {}
+    # return render(request, 'gamestore/index.html', context)
+
+    return games(request)
 
 
 def games(request):

@@ -9,7 +9,7 @@ from gamestore.models import Profile
 @login_required
 def profile(request):
     """User profile."""
-    user_profile = get_object_or_404(User, pk=request.user.id)
+    user_profile = get_object_or_404(Profile, user__id=request.user.id)
     context = {
         'user': request.user,
         'profile': user_profile
@@ -23,7 +23,7 @@ def user_history(request, user_id):
 
 def apply_developer(request, user_id):
     """Apply for developer status."""
-    user_profile = get_object_or_404(Profile, pk=request.user.id)
+    user_profile = get_object_or_404(Profile, user__id=request.user.id)
     user_profile.developer_status = '1'
     user_profile.save()
     return profile(request)
