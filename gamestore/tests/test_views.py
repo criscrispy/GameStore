@@ -27,14 +27,53 @@ HttpResponse
     - Get
     - Post
 """
+
+import hypothesis.strategies as st
 import pytest
 from faker import Faker
+from hypothesis import given
+from hypothesis import settings
+
+from gamestore.tests.create_content import create_profile, create_game, \
+    create_category, create_game_sale
+
+settings.register_profile('dev', settings(max_examples=10))
+# env = os.getenv(u'HYPOTHESIS_PROFILE', 'default')
+# settings.load_profile(env)
+settings.load_profile('dev')
+
 
 fake = Faker()
 GET = 'GET'
 POST = 'POST'
 
+STATUS_CODES = {
+    'HttpResponsePermanentRedirect': 301,
+    'HttpResponseRedirect': 302,
+    'HttpResponseNotModified': 304,
+    'HttpResponseBadRequest': 400,
+    'HttpResponseNotFound': 404,
+    'HttpResponseForbidden': 403,
+    'HttpResponseNotAllowed': 405,
+    'HttpResponseGone': 410,
+    'HttpResponseServerError': 500,
+}
+
 # TODO: urlencode
+
+# -----------------------------------------------------------------------------
+# Strategies
+# -----------------------------------------------------------------------------
+
+
+def user_id_strategy():
+    """Positive integer"""
+    return st.integers(min_value=0, max_value=10000)
+
+
+def game_id_strategy():
+    """Positive integer"""
+    return st.integers(min_value=0, max_value=10000)
 
 
 # -----------------------------------------------------------------------------
@@ -62,9 +101,9 @@ def test_categories(client):
     assert response.status_code == 200
 
 
+@given(game_id=game_id_strategy())
 @pytest.mark.django_db
-def test_categories_detail(client):
-    game_id = fake.random_int(min=0)
+def test_categories_detail(client, game_id):
     url = '/categories/{game_id}'.format(game_id=game_id)
     response = client.get(url)
     assert response.status_code == 200
@@ -77,10 +116,10 @@ def test_publishers(client):
     assert response.status_code == 200
 
 
+@given(game_id=game_id_strategy())
 @pytest.mark.django_db
-def test_publisher_detail(client):
-    user_id = fake.random_int(min=0)
-    url = '/publishers/{user_id}'.format(user_id=user_id)
+def test_publisher_detail(client, game_id):
+    url = '/publishers/{user_id}'.format(user_id=game_id)
     response = client.get(url)
     assert response.status_code == 200
 
@@ -90,15 +129,26 @@ def test_publisher_detail(client):
 # -----------------------------------------------------------------------------
 
 
-def test_profile_not_logged(client):
-    """Test profile when not logged in."""
-    response = client.get('/accounts/profile')
+def test_profile(client, admin_user):
+    """Test profile."""
+    url = '/accounts/profile'
+
+    # Not logged in
+    response = client.get(url)
     assert response.status_code == 302
 
+    # Login
+    client.login(username=admin_user.username, password='password')
 
-def test_profile_logged(admin_client):
-    """Test profile when loggen in."""
-    response = admin_client.get('/accounts/profile')
+    # Profile not configured
+    response = client.get(url)
+    assert response.status_code == 404
+
+    # Create profile
+    profile = create_profile(admin_user)
+
+    # Profile configured
+    response = client.get(url)
     assert response.status_code == 200
 
 
@@ -107,23 +157,101 @@ def test_profile_logged(admin_client):
 # -----------------------------------------------------------------------------
 
 
-def test_game_detail():
-    assert True
+@pytest.mark.django_db
+def test_game_detail(client, admin_user):
+    category = create_category()
+    game = create_game(admin_user, category)
+
+    # Requested game exists
+    url = '/games/{game_id}/'.format(game_id=game.id)
+    response = client.get(url)
+    assert response.status_code == 200
+
+    # Requested game does not exist
+    url = '/games/{game_id}/'.format(game_id=game.id + 1)
+    response = client.get(url)
+    assert response.status_code == 404
 
 
-def test_game_play():
-    assert True
+@pytest.mark.django_db
+def test_game_buy(client, admin_user):
+    category = create_category()
+    game = create_game(admin_user, category)
+
+    url = '/games/{game_id}/buy'
+
+    # Not logged in
+    response = client.get(url.format(game_id=game.id))
+    assert response.status_code == 302
+
+    # Login
+    client.login(username=admin_user.username, password='password')
+
+    # Requested game exists
+    response = client.get(url.format(game_id=game.id))
+    assert response.status_code == 200
+
+    # Requested game does not exist
+    response = client.get(url.format(game_id=game.id + 1))
+    assert response.status_code == 404
 
 
-def test_game_buy():
-    assert True
+@pytest.mark.django_db
+def test_game_play(client, admin_user):
+    category = create_category()
+    game = create_game(admin_user, category)
+
+    url = '/games/{game_id}/play'.format(game_id=game.id)
+
+    # Not logged in
+    response = client.get(url)
+    assert response.status_code == 302
+
+    # Login
+    client.login(username=admin_user.username, password='password')
+
+    # Game not bought
+    response = client.get(url)
+    assert response.status_code == 200
+
+    # Create game sale
+    create_game_sale(admin_user, game)
+
+    # Game bought
+    response = client.get(url)
+    assert response.status_code == 200
 
 
-def test_game_sale():
-    assert True
+@pytest.mark.django_db
+def test_game_sale(client, admin_user):
+    url = '/games/user/{user_id}'.format(user_id=admin_user.id)
+
+    # Not logged in
+    response = client.get(url)
+    assert response.status_code == 302
+
+    # Login
+    client.login(username=admin_user.username, password='password')
+
+    # Logged in, profile does not exist
+    response = client.get(url)
+    assert response.status_code == 404
+
+    # Create profile
+    profile = create_profile(admin_user)
+
+    # Logged in, profile does exists
+    response = client.get(url)
+    assert response.status_code == 200
+
+    # User id does not exist
+    url = '/games/user/{user_id}'.format(user_id=admin_user.id + 1)
+    response = client.get(url)
+    assert response.status_code == 404
 
 
-def test_game_like():
+@pytest.mark.skip
+def test_game_like(client):
     assert True
 
 
@@ -132,25 +260,72 @@ def test_game_like():
 # -----------------------------------------------------------------------------
 
 
-def test_uploads():
-    assert True
+@pytest.mark.django_db
+def test_uploads(client, admin_user):
+    category = create_category()
+    game = create_game(admin_user, category)
+
+    url = '/uploads/{user_id}'
+
+    # One game published
+    response = client.get(url.format(user_id=admin_user.id))
+    assert response.status_code == 200
+
+    # No games published / User does not exist
+    response = client.get(url.format(user_id=admin_user.id + 1))
+    assert response.status_code == 200
 
 
-def test_upload():
-    assert True
+@pytest.mark.django_db
+def test_upload(client, admin_user):
+    url = '/upload'
+
+    # Not logged in
+    response = client.get(url)
+    assert response.status_code == 302
+
+    # Login
+    client.login(username=admin_user.username, password='password')
+
+    # Logged in but profile not found
+    response = client.get(url)
+    assert response.status_code == 404
+
+    # Create profile
+    profile = create_profile(admin_user)
+    profile.developer_status = 1
+    profile.save()
+
+    # Profile found with developer status not allowing to upload
+    response = client.get(url)
+    assert response.status_code == 200
+
+    # Developer status
+    profile.developer_status = 2
+    profile.save()
+
+    # Profile found with developer status allowing to upload
+    response = client.get(url)
+    assert response.status_code == 200
+
+    # TODO: test POST forms: valid | invalid
 
 
+@pytest.mark.skip
 def test_upload_detail():
     assert True
 
 
+@pytest.mark.skip
 def test_upload_stat():
     assert True
 
 
+@pytest.mark.skip
 def test_upload_edit():
     assert True
 
 
+@pytest.mark.skip
 def test_upload_delete():
     assert True

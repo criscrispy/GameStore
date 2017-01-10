@@ -20,7 +20,8 @@ class Profile(models.Model):
         ('1', 'pending'),
         ('2', 'confirmed'),
     )
-    developer_status = models.CharField(max_length=1, default='0', choices=developer_status_choices)
+    developer_status = models.CharField(max_length=1, default='0',
+                                        choices=developer_status_choices)
 
     def __str__(self):
         return str(self.user.first_name + " " + self.user.last_name)

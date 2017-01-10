@@ -58,7 +58,7 @@ def _create_svg(name, width, height, text):
     return file
 
 
-def create_image(name, width=50, height=50, filetype='png', text=None):
+def create_image(name, width=48, height=48, filetype='png', text=None):
     """
     Creates in memory images for testing.
 
@@ -127,13 +127,13 @@ def create_user(username=fake.user_name(),
                         first_name=first_name, last_name=last_name)
 
 
-def create_profile(user, image):
+def create_profile(user, image=None):
     """
     Create user profile.
 
     Args:
         user (User):
-        image (BytesIO):
+        image (BytesIO, optional):
 
     Returns:
         Profile:
@@ -141,8 +141,28 @@ def create_profile(user, image):
     logger.info({'user': user, 'image': image})
 
     profile = Profile.objects.create(user=user)
-    profile.image.save(image.name, File(image))
+
+    if image is not None:
+        profile.image.save(image.name, File(image))
+
     return profile
+
+
+def create_category(category_title=fake.word(), description=fake.text()):
+    """
+
+    Args:
+        category_title (str):
+        description (str):
+
+    Returns:
+        Category:
+    """
+    logger.info("")
+
+    category = Category.objects.create(title=category_title,
+                                       description=description)
+    return category
 
 
 def create_game(user, category, title=fake.text(30), description=fake.text(),
@@ -214,20 +234,3 @@ def create_game_sale(user, game):
 
     game_sale = GameSale.objects.create(buyer=user, game=game)
     return game_sale
-
-
-def create_category(category_title=fake.word(), description=fake.text()):
-    """
-
-    Args:
-        category_title (str):
-        description (str):
-
-    Returns:
-        Category:
-    """
-    logger.info("")
-
-    category = Category.objects.create(title=category_title,
-                                       description=description)
-    return category

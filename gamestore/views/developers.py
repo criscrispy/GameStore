@@ -1,5 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 from gamestore.forms import GameForm
 from gamestore.models import Game, Profile
@@ -7,18 +8,38 @@ from gamestore.views.accounts import profile
 
 
 def uploads(request, user_id):
+    """
+
+    Args:
+        request:
+        user_id:
+
+    Returns:
+
+    """
     games_published = Game.objects.filter(publisher=user_id)
 
     context = {
         'games': games_published
     }
 
-    return render(request, "gamestore/uploads.html", context)
+    return render(request, 'gamestore/uploads.html', context)
 
 
+@login_required
 def upload(request):
-    # if user is not a developer/publisher, yet redirect to profile page where they can apply
-    if Profile.objects.filter(user=request.user.id)[0].developer_status != '2':
+    """
+
+    Args:
+        request:
+
+    Returns:
+
+    """
+    # if user is not a developer/publisher, yet redirect to profile page where
+    # they can apply
+    user_profile = get_object_or_404(Profile, user__id=request.user.id)
+    if user_profile.developer_status != '2':
         return profile(request)
 
     if request.method == 'POST':
