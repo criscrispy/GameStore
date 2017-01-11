@@ -4,12 +4,14 @@ http://www.revsys.com/blog/2014/dec/03/loading-django-files-from-code/
 """
 import logging
 import string
+from functools import partial
 from io import BytesIO, StringIO
 
 from PIL import Image, ImageDraw
 from django.contrib.auth.models import User
 from django.core.files import File
 from faker import Faker
+from typing import Callable
 
 from gamestore.models import Profile, Game, Score, GameSale, Category
 
@@ -22,6 +24,22 @@ fake = Faker()
 
 username_alphabet = string.ascii_letters + string.digits + "@.+-_"
 password_alphabet = string.ascii_letters + string.digits + string.punctuation
+
+
+def _call(arg):
+    """
+    Call arg if it is callable otherwise return.
+
+    Args:
+        arg(object|Callable[object]):
+
+    Returns:
+        object:
+    """
+    if callable(arg):
+        return arg()
+    else:
+        return arg
 
 
 def _create_bitmap(name, width, height, filetype, text):
@@ -97,20 +115,21 @@ def create_image(name, width=48, height=48, filetype='png', text=None):
         return _create_bitmap(name, width, height, filetype, text)
 
 
-def create_user(username=fake.user_name(),
-                first_name=fake.first_name(),
-                last_name=fake.last_name(),
-                email=fake.email(),
+def create_user(username=fake.user_name,
+                first_name=fake.first_name,
+                last_name=fake.last_name,
+                email=fake.email,
                 password="password",
                 superuser=False):
     """
+    Create user
 
     Args:
-        username (str):
-        email (str):
-        password (str):
-        first_name (str):
-        last_name (str):
+        username (str|Callable[str]):
+        email (str|Callable[str]):
+        password (str|Callable[str]):
+        first_name (str|Callable[str]):
+        last_name (str|Callable[str]):
         superuser (boolean): Create superuser
 
     Returns:
@@ -123,8 +142,11 @@ def create_user(username=fake.user_name(),
     else:
         _create_user = User.objects.create_user
 
-    return _create_user(username, email=email, password=password,
-                        first_name=first_name, last_name=last_name)
+    return _create_user(_call(username),
+                        email=_call(email),
+                        password=_call(password),
+                        first_name=_call(first_name),
+                        last_name=_call(last_name))
 
 
 def create_profile(user, image=None):
@@ -148,25 +170,33 @@ def create_profile(user, image=None):
     return profile
 
 
-def create_category(category_title=fake.word(), description=fake.text()):
+def create_category(category_title=fake.word,
+                    description=fake.text):
     """
+    Create category
 
     Args:
-        category_title (str):
-        description (str):
+        category_title (str|Callable[str]):
+        description (str|Callable[str]):
 
     Returns:
         Category:
     """
     logger.info("")
 
-    category = Category.objects.create(title=category_title,
-                                       description=description)
+    category = Category.objects.create(
+        title=_call(category_title),
+        description=_call(description),
+    )
     return category
 
 
-def create_game(user, category, title=fake.text(30), description=fake.text(),
-                price=fake.pydecimal(2, 2, True), url=fake.url(), icon=None,
+def create_game(user, category,
+                title=partial(fake.text, 30),
+                description=fake.text,
+                price=partial(fake.pydecimal, 2, 2, True),
+                url=fake.url,
+                icon=None,
                 image=None):
     """
     Create game.
@@ -176,23 +206,32 @@ def create_game(user, category, title=fake.text(30), description=fake.text(),
             Instance of User model.
 
         category (Category):
-        title (str):
-        description (str):
 
-        price (Decimal):
+        title (str|Callable[str]):
+            String of max length 30.
+
+        description (str|Callable[str]):
+
+        price (Decimal|Callable[Decimal]):
             Positive decimal number with 2 right digits and 2 left digits.
 
-        url (str):
-        image (BytesIO):
-        icon (BytesIO):
+        url (str|Callable[str]):
+        image (BytesIO, optional):
+        icon (BytesIO, optional):
 
     Returns:
         Game: Instance of Game model.
     """
     logger.info("")
 
-    game = Game.objects.create(publisher=user, category=category, title=title,
-                               description=description, price=price, url=url)
+    game = Game.objects.create(
+        publisher=_call(user),
+        category=_call(category),
+        title=_call(title),
+        description=_call(description),
+        price=_call(price),
+        url=_call(url),
+    )
 
     if icon:
         game.icon.save(icon.name, File(icon))
@@ -203,20 +242,25 @@ def create_game(user, category, title=fake.text(30), description=fake.text(),
     return game
 
 
-def create_score(user, game, score=fake.random_int(min=0)):
+def create_score(user, game,
+                 score=partial(fake.random_int, min=0)):
     """
 
     Args:
         user (User):
         game (Game):
-        score (int):
+        score (int|Callable[int]):
 
     Returns:
         Score:
     """
     logger.info("")
 
-    score = Score.objects.create(game=game, player=user, score=score)
+    score = Score.objects.create(
+        game=game,
+        player=user,
+        score=_call(score)
+    )
     return score
 
 
