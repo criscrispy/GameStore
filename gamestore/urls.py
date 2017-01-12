@@ -119,6 +119,15 @@ urlpatterns.extend([
     #   the detail view of one of the games, one can play/buy/like from that view
     url(r'^games/(?P<game_id>[0-9]{1,})/$', players.game_detail,
         name='games.detail'),
+
+    url(r'^games/(?P<game_id>[0-9]{1,})/score$', players.game_submit_score,
+        name='games.score'),
+
+    url(r'^games/(?P<game_id>[0-9]{1,})/state$', players.game_save_settings,
+        name='games.state'),
+
+    url(r'^games/(?P<game_id>[0-9]{1,})/get_state$', players.game_get_saved_state,
+        name='games.get_state'),
 ])
 
 
