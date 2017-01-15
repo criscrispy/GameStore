@@ -2,7 +2,7 @@
 import simplejson
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 
 from gamestore.models import Game, Profile
 from gamestore.service import *
@@ -62,7 +62,7 @@ def game_submit_score(request, game_id):
     score = check_received_data(request, 'gameScore')
     if score:
         save_game_score(request, game_id, score)
-    return game_detail(request, game_id)
+    return redirect('games.detail', game_id=game_id)
 
 
 @login_required
