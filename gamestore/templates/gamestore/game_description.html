@@ -61,7 +61,9 @@ Desription should include
                 {{ game.url }}
             </p>
         </div>
-
+        {% if scores %}
+            {% include "gamestore/highscores.html" with scores=scores %}
+        {% endif %}
     </div>
 {% endblock %}
 

@@ -1,15 +1,11 @@
-import json
 
 import simplejson
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 
-from gamestore.models import Game, GameSale, Profile, GameSettings, Score
-
-COULD_NOT_SAVE_SCORE = "Error: Could not save score"
-COULD_NOT_SAVE_STATE = "Error: Could not save state"
+from gamestore.models import Game, Profile
+from gamestore.service import *
 
 
 def game_detail(request, game_id):
@@ -22,6 +18,7 @@ def game_detail(request, game_id):
         * Image
         * Description
         * ...
+        * highscores
     - Buy / Play buttons
     """
     game = get_object_or_404(Game, pk=game_id)
@@ -29,11 +26,12 @@ def game_detail(request, game_id):
     js_test(game)
     user = request.user
     play = is_user_allowed_to_play(game, user)
+    scores = find_best_scores_for_game(game)
     try:
         last_saved = find_saved_state(game_id, request)
     except ObjectDoesNotExist:
         last_saved = False
-    context = {'game': game, 'play': play, 'buy': not play, 'saved': last_saved}
+    context = {'game': game, 'play': play, 'buy': not play, 'saved': last_saved, 'scores': scores}
     return render(request, "gamestore/game_description.html", context)
 
 
@@ -108,56 +106,3 @@ def game_get_saved_state(request, game_id):
         json = simplejson.dumps({'info': 'error - state not found'})
         return HttpResponse(json, mimetype='application/json')
 
-
-def js_test(game):
-    game.url = 'http://users.metropolia.fi/~nikolaid/game/index.html'
-    game.image = 'http://users.metropolia.fi/~nikolaid/game.png'
-
-
-def is_user_allowed_to_play(game, user):
-    play = False
-    if user.is_authenticated():
-        sale = GameSale.objects.filter(buyer=user, game=game).count()
-        play = sale > 0
-    return play
-
-
-def find_saved_state(game_id, request):
-    state = GameSettings.objects.get(game_id=game_id, player=request.user)
-    return state
-
-
-def validate_json(state):
-    # Todo escape javascript validate json
-    val_state = json.loads(state)
-    return json.dumps(state)
-
-
-def save_game_state(request, game_id, state):
-    try:
-        valid_state = validate_json(state)
-    except ValueError:
-        print(COULD_NOT_SAVE_STATE)
-    try:
-        state = find_saved_state(game_id, request)
-        state.settings = valid_state
-    except ObjectDoesNotExist:
-        state = GameSettings(game_id=game_id, player=request.user, settings=valid_state)
-    state.save()
-
-
-def save_game_score(request, game_id, score):
-    try:
-        int_score = int(score)
-        s = Score(game_id=game_id, player=request.user, score=int_score)
-        s.save()
-    except ValueError:
-        print(COULD_NOT_SAVE_SCORE)
-
-
-def check_received_data(request, key):
-    if request.method == 'POST':
-        if key in request.POST:
-            value = request.POST[key]
-            return value
-    return False
