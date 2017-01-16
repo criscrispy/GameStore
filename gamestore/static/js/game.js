@@ -21,27 +21,34 @@ $(document).ready(function () {
     });
 });
 
+function renderResponse(html) {
+    $("#response").html(html);
+}
+function postData(url, data) {
+    $.post(url, data, function (data) {
+        renderResponse(data);
+    });
+}
 function saveScore(score) {
     var data = {
         gameScore: score,
         csrfmiddlewaretoken: csrftoken
     };
-    $.post('score', data);
+    postData('score', data);
 }
 
 function saveState(gameState) {
     var data = {gameState: gameState, csrfmiddlewaretoken: csrftoken};
-    $.post('state', data);
+    postData('state', data);
 }
 
 function getState() {
     var data = {csrfmiddlewaretoken: csrftoken};
-    $.post('get_state', data, sendState);
-}
-
-function sendState(json) {
-    var message = {messageType:messageTypes.LOAD, gameState:json}
-    sendMessage(message)
+    $.post('get_state', data, function (data, status,settings) {
+            var message = {messageType: messageTypes.LOAD, gameState: data}
+            sendMessage(message)
+        }
+    )
 }
 
 function sendMessage(message) {

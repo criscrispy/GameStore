@@ -1,0 +1,24 @@
+{% if score %}
+<div class="alert alert-success">
+<p>
+    Good try!
+    Your score <b>{{ score }}</b> is saved!
+
+</p>
+    </div>
+    <a class="btn btn-primary" href="play">Play again</a>
+{% endif %}
+{% if state %}
+    <div class="alert alert-success">
+<p>
+    State of this game is saved!
+</p>
+    </div>
+    <a class="btn btn-primary" href="./">Play again</a>
+{% endif %}
+
+{% if error %}
+ <div class="alert alert-danger">
+ <p> {{ error }}</p>
+ </div>
+{% endif %}

@@ -1,8 +1,9 @@
-
 import simplejson
+import json
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
+from django.template.loader import render_to_string
 
 from gamestore.models import Game, Profile
 from gamestore.service import *
@@ -27,9 +28,9 @@ def game_detail(request, game_id):
     user = request.user
     play = is_user_allowed_to_play(game, user)
     scores = find_best_scores_for_game(game)
-    try:
+    if play:
         last_saved = find_saved_state(game_id, request)
-    except ObjectDoesNotExist:
+    else:
         last_saved = False
     context = {'game': game, 'play': play, 'buy': not play, 'saved': last_saved, 'scores': scores}
     return render(request, "gamestore/game_description.html", context)
@@ -60,17 +61,29 @@ def game_play(request, game_id):
 def game_submit_score(request, game_id):
     """Submit score for saving"""
     score = check_received_data(request, 'gameScore')
-    if score:
+    if not score:
+        response = {'error':"Error: score received from the game invalid"}
+    try:
         save_game_score(request, game_id, score)
-    return redirect('games.detail', game_id=game_id)
-
+        response = {'score': score}
+    except:
+        response = {'error':"Error: could not save score"}
+    finally:
+        return ajax_render_response(response)
 
 @login_required
 def game_save_settings(request, game_id):
     state = check_received_data(request, 'gameState')
-    if state:
+    if not state:
+        response = {'error': "Error: state received from the game invalid"}
+    try:
         save_game_state(request, game_id, state)
-    return game_detail(request, game_id)
+        response = {'state': state}
+    except:
+        response = {'error': "Error: could not save state"}
+    finally:
+        return ajax_render_response(response)
+
 
 
 @login_required
@@ -91,6 +104,7 @@ def game_sale(request, user_id):
 
 @login_required
 def game_like(request, game_id):
+
     # TODO: This might be redundant
     return HttpResponse()
 
@@ -99,10 +113,15 @@ def game_like(request, game_id):
 def game_get_saved_state(request, game_id):
     try:
         state = find_saved_state(game_id, request)
-        json = simplejson.dumps(state.settings)
-        return HttpResponse(json, mimetype='application/json')
+        json = validate_json(state.settings,'gameState')
+        return HttpResponse(json)
     except Exception as e:
-        # todo log(e)
+        error("game_get_saved_state", e)
         json = simplejson.dumps({'info': 'error - state not found'})
-        return HttpResponse(json, mimetype='application/json')
+        return HttpResponse(json)
 
+
+
+def ajax_render_response(response):
+    html = render_to_string('gamestore/game_ajax.html', response)
+    return HttpResponse(html)
