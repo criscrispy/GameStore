@@ -68,6 +68,8 @@ from gamestore.views import base, players, developers
 
 
 # Base views
+from gamestore.views import payments
+
 urlpatterns = [
     url(r'^$', base.index, name='index'),
     url(r'^games$', gamestore.views.base.games, name='games.list'),
@@ -93,7 +95,7 @@ urlpatterns.extend([
 urlpatterns.extend([
     #   /games/user/1234
     #   games the user bought
-    url(r'^games/user/(?P<user_id>[0-9]+)', players.game_sale,
+    url(r'^games/user/', players.game_sale,
         name='games.sale'),
 
     #    /games/1234/play OR /games/supermario/play
@@ -115,6 +117,22 @@ urlpatterns.extend([
     #   the detail view of one of the games, one can play/buy/like from that view
     url(r'^games/(?P<game_id>[0-9]+)/$', players.game_detail,
         name='games.detail'),
+
+    url(r'^games/(?P<game_id>[0-9]{1,})/score$', players.game_submit_score,
+        name='games.score'),
+
+    url(r'^games/(?P<game_id>[0-9]{1,})/state$', players.game_save_settings,
+        name='games.state'),
+
+    url(r'^games/(?P<game_id>[0-9]{1,})/get_state$', players.game_get_saved_state,
+        name='games.get_state'),
+])
+
+# Payments views
+urlpatterns.extend([
+    url(r'^payment/success', payments.success, name='payment.success'),
+    url(r'^payment/cancel', payments.cancel, name='payment.cancel'),
+    url(r'^payment/error', payments.error, name='payment.error'),
 ])
 
 # Developer views

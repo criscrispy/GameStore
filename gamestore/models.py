@@ -75,3 +75,9 @@ class GameSale(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE, blank=False)
     date = models.DateTimeField("Date when game was bought", blank=False,
                                 default=timezone.now)
+
+class GameSettings(models.Model):
+    player = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE, blank=False)
+    settings = models.CharField(default="", max_length=2000)
+    #todo settings = JSONField(default="")

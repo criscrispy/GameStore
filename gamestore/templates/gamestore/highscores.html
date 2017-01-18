@@ -1,4 +1,29 @@
-{% extends "base.html" %}
 {% comment %}
-
 {% endcomment %}
+<div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Score</th>
+            <th>Username</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in scores %}
+            <tr>
+                <td>{% if item.player == request.user %}
+                    <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                {% endif %}
+                </td>
+                <td>{{ item.score }}</td>
+                <td>{{ item.player.username }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td>no scores</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

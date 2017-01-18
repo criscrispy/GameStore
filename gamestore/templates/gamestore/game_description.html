@@ -21,45 +21,58 @@ Desription should include
 
 {% block content %}
 
-    <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-lg-8 col-md-8 col-sm-8">
-        {% if start_game == True %}
-            <iframe id="game_container" class="embed-responsive-item" src={{ game.url }} frameborder="0">
-            </iframe>
-        {% else %}
-            <div><img class="img-responsive" src={{ game.image }}></div>
+    <div class="row">
+
+    {% if start_game == True %}
+        <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-lg-8 col-md-8 col-sm-8">
+        <iframe id="game_container" {% if last_saved %} onload="sendState({{ last_saved }})" {% endif %} class="embed-responsive-item" src={{ game.url }} frameborder="0">
+        </iframe>
+    {% else %}
+        <div class="col-lg-9 col-md-9 col-sm-9">
+        <img class="img-responsive" src={{ game.image }}>
+
+    {% endif %}
+<div id="response">
+
+</div>
+<div>
+    <br/>
+    <div>
+        {% if buy %}
+            <a class="btn btn-primary" href="buy">Buy</a>
+        {% endif %}
+
+        {% if play %}
+            <a class="btn btn-primary" href="play">Play</a>
+        {% endif %}
+
+        {% if saved %}
+            <a class="btn btn-primary" href="get_state">Play saved</a>
         {% endif %}
     </div>
-    <div class="col-lg-2 col-md-2 col-sm-2">
+</div>
+
+
+<div>
+    {% csrf_token %}
+   <h4> {{ game.title }}</h4>
+    <dl class="dl-horizontal">
+        <dt>Publisher:</dt>
+        <dd>{{ game.publisher.username }}</dd>
+        <dt>Price:</dt>
+        <dd>{{ game.price }} &euro;</dd>
+        <dt>Description:</dt>
+        <dd>{{ game.description }}</dd>
+    </dl>
+
+</div>
+</div>
+
+{% if scores %}
+    <div class="col-lg-3 col-md-3 col-sm-3">
+        {% include "gamestore/highscores.html" with scores=scores %}
     </div>
-    <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-lg-8 col-md-8 col-sm-8">
-        <div class="btn-group">
-            {% if buy %}
-                <a class="btn btn-primary" href="buy">Buy</a>
-            {% endif %}
-
-            {% if play %}
-                <a class="btn btn-primary" href="play">Play</a>
-            {% endif %}
-
-            {% if saved %}
-                <a class="btn btn-primary" href="play_saved">Play saved</a>
-            {% endif %}
-        </div>
-        <div id="score"></div>
-        <h3>DESCRIPTION OF A GAME : {{ game.title }}</h3>
-
-        <div>
-            <p>
-                {{ game.publisher.username }}
-                {{ game.title }}
-                {{ game.price }}
-
-                {{ game.description }}
-                {# TODO: embed url into the iframe #}
-                {{ game.url }}
-            </p>
-        </div>
-
-    </div>
+{% endif %}
+</div>
 {% endblock %}
 
