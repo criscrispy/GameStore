@@ -25,7 +25,7 @@ Desription should include
 
     {% if start_game == True %}
         <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-lg-8 col-md-8 col-sm-8">
-        <iframe id="game_container" class="embed-responsive-item" src={{ game.url }} frameborder="0">
+        <iframe id="game_container" {% if last_saved %} onload="sendState({{ last_saved }})" {% endif %} class="embed-responsive-item" src={{ game.url }} frameborder="0">
         </iframe>
     {% else %}
         <div class="col-lg-9 col-md-9 col-sm-9">
@@ -47,7 +47,7 @@ Desription should include
         {% endif %}
 
         {% if saved %}
-            <a class="btn btn-primary" onclick="getState()">Play saved</a>
+            <a class="btn btn-primary" href="get_state">Play saved</a>
         {% endif %}
     </div>
 </div>

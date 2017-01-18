@@ -42,18 +42,14 @@ function saveState(gameState) {
     postData('state', data);
 }
 
-function getState() {
-    var data = {csrfmiddlewaretoken: csrftoken};
-    $.post('get_state', data, function (data, status,settings) {
-            var message = {messageType: messageTypes.LOAD, gameState: data}
-            sendMessage(message)
-        }
-    )
+function sendState(data) {
+    var message = {messageType: messageTypes.LOAD, gameState: data}
+    sendMessage(message)
 }
 
 function sendMessage(message) {
-    iframe = $("#game_container").contentWindow;
-    iframe.postMessage(message);
+    iframe = document.getElementById('game_container').contentWindow;
+    iframe.postMessage(message, "http://users.metropolia.fi/~nikolaid/game/index.html");
 }
 
 function adjustIframe(options) {

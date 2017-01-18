@@ -68,6 +68,8 @@ from gamestore.views import base, players, developers
 
 
 # Base views
+from gamestore.views import payments
+
 urlpatterns = [
     url(r'^$', base.index, name='index'),
     url(r'^games$', gamestore.views.base.games, name='games.list'),
@@ -80,7 +82,6 @@ urlpatterns = [
     url(r'search/(?P<keyword>\w+)', base.search, name='search')
 ]
 
-
 # Account views
 urlpatterns.extend([
     url(r'^accounts/profile', gamestore.views.accounts.profile, name='profile'),
@@ -92,12 +93,11 @@ urlpatterns.extend([
         name='publisher.apply'),
 ])
 
-
 # Player views
 urlpatterns.extend([
     #   /games/user/1234
     #   games the user bought
-    url(r'^games/user/(?P<user_id>[0-9]{1,})', players.game_sale,
+    url(r'^games/user/', players.game_sale,
         name='games.sale'),
 
     #    /games/1234/play OR /games/supermario/play
@@ -130,6 +130,12 @@ urlpatterns.extend([
         name='games.get_state'),
 ])
 
+# Payments views
+urlpatterns.extend([
+    url(r'^payment/success', payments.success, name='payment.success'),
+    url(r'^payment/cancel', payments.cancel, name='payment.cancel'),
+    url(r'^payment/error', payments.error, name='payment.error'),
+])
 
 # Developer views
 urlpatterns.extend([
