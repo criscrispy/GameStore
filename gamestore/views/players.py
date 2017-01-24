@@ -6,6 +6,7 @@ from django.template.loader import render_to_string
 
 from gamestore.models import Game, Profile
 from gamestore.service import *
+from gamestore.service import load_game_buy_context
 
 
 def game_detail(request, game_id):
@@ -41,11 +42,9 @@ def game_buy(request, game_id):
     """Allow player to buy a game if he has not already bought else redirect
     to game_detail."""
     game = get_object_or_404(Game, pk=game_id)
-    context = {
-        'buyer': request.user,
-        'game': game
-    }
-    return render(request, "gamestore/game_buy.html", context)
+    game.price=10
+    context = load_game_buy_context(game, request)
+    return render(request, "gamestore/game_buy.html", context, {'status': 'pending'})
 
 
 @login_required

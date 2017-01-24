@@ -1,9 +1,10 @@
 from logging import log, error, debug
 
-from gamestore.models import GameSettings, GameSale, Score
+from gamestore.models import GameSettings, GameSale, Score, GamePayments
 import json
 from django.core.exceptions import ObjectDoesNotExist
-
+import uuid
+from hashlib import md5
 COULD_NOT_SAVE_SCORE = "Error: Could not save score"
 COULD_NOT_SAVE_STATE = "Error: Could not save state"
 
@@ -11,7 +12,6 @@ COULD_NOT_SAVE_STATE = "Error: Could not save state"
 def js_test(game):
     """URLs with game for testing"""
     game.url = 'http://users.metropolia.fi/~nikolaid/game/index.html'
-    game.image = 'http://users.metropolia.fi/~nikolaid/game.png'
 
 
 def is_user_allowed_to_play(game, user):
@@ -20,7 +20,7 @@ def is_user_allowed_to_play(game, user):
     if user.is_authenticated():
         sale = GameSale.objects.filter(buyer=user, game=game).count()
         play = sale > 0
-    #TODO developer migth have right to play own game
+    # TODO developer migth have right to play own game
     return play
 
 
@@ -86,3 +86,44 @@ def find_best_scores_for_game(game):
                    .order_by('-score')
                    .filter(score__in=top_scores[:10]))
     return list(top_records[:10])
+
+
+def save_payment(pid, game, user):
+    try:
+        p = GamePayments(pid=pid, game=game, buyer=user)
+        p.save()
+    except Exception as e:
+        error(e)
+
+
+def load_game_buy_context(game, request):
+    service_url = 'http://localhost:8000'
+    sid = '57b91FDFa2Sy'
+    pid = generate_pid()
+    save_payment(pid, game, request.user)
+    checksum = calculate_checksum(game, pid, sid)
+    # checksum is the value that should be used in the payment request
+    context = {
+        'buyer': request.user,
+        'game': game,
+        'service_url': service_url,
+        'pid': pid,
+        'sid': sid,
+        'checksum': checksum
+    }
+    return context
+
+
+def generate_pid():
+    uid = uuid.uuid4()
+    pid = uid.hex[:6]
+    return pid
+
+
+def calculate_checksum(game, pid, sid):
+    secret_key = '873efc3f8f8ca2605de7a4101d3322ba'
+    checksumstr = "pid={}&sid={}&amount={}&token={}".format(pid, sid, game.price, secret_key)
+    # checksumstr is the string concatenated above
+    m = md5(checksumstr.encode("ascii"))
+    checksum = m.hexdigest()
+    return checksum

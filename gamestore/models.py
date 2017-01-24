@@ -76,9 +76,24 @@ class GameSale(models.Model):
     date = models.DateTimeField("Date when game was bought", blank=False,
                                 default=timezone.now)
 
+class GamePayments(models.Model):
+    """Model for saving data to communicate with payment API
+    :param pid: payment identifier passed to API"""
+    buyer = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE, blank=False)
+    pid = models.CharField(max_length=30, blank=False)
+    date = models.DateTimeField("Date when game was bought", blank=False,
+                                default=timezone.now)
+
 
 class GameSettings(models.Model):
+    """Model for saving game states, settings of the game are saved as json string"""
     player = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
     game = models.ForeignKey(Game, on_delete=models.CASCADE, blank=False)
     settings = models.CharField(default="", max_length=2000)
     # todo settings = JSONField(default="")
+
+class Configuration(models.Model):
+    """Model for app configuration"""
+    key = models.CharField(max_length=30, blank=False)
+    value = models.CharField(max_length=100, blank=False)

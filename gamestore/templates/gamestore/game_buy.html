@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <img class="img-responsive" src={{ game.image }}>
+{% include "gamestore/game_detail.html" with game=game %}
+<form action="http://payments.webcourse.niksula.hut.fi/pay/" method="POST">
+    <input type="hidden" name="pid" value={{ pid }} />
+    <input type="hidden" name="sid" value={{ sid }} />
+    <input type="hidden" name="success_url"
+            value="{{ service_url  }}/payment/success" />
+    <input type="hidden" name="cancel_url"
+            value="{{ service_url }}/payment/cancel" />
+    <input type="hidden" name="error_url"
+            value="{{ service_url }}/payment/error" />
+    <input type="hidden" name="checksum"
+            value="{{ checksum }}" />
+
+    <label for="id_amount">Amount</label>
+    <input disabled="disabled" type="text" id="id_amount" name="amount" value={{ game.price }} />
+    <input type="submit" value="Accept Payment"/>
+</form>
+{% endblock %}
