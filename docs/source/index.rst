@@ -7,7 +7,19 @@ Web Software Development Project - Game Store
 =============================================
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
 
-   project_plan.rst
-   development.rst
+   project_plan
+   development
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Gamestore API
+
+   gamestore/models
+   gamestore/forms
+   gamestore/urls
+   gamestore/views
+   gamestore/admin
+   gamestore/service
+   gamestore/indexes

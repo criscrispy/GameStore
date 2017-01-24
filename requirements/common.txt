@@ -8,6 +8,8 @@ django-extensions
 Pillow
 PyYAML
 
+simplejson
+
 ## Search engine
 django-haystack
 whoosh

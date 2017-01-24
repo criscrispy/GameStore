@@ -9,17 +9,16 @@ class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
     image = models.ImageField("Profile image.", upload_to="profile")
 
-    """
-    developer_status enum field :
-        basic_user=not_developer,
-        pending=user has applied to become a developer
-        confirmed=user is a developer
-    """
     developer_status_choices = (
         ('0', 'basic_user'),
         ('1', 'pending'),
         ('2', 'confirmed'),
     )
+    """
+    - basic_user=not_developer,
+    - pending=user has applied to become a developer
+    - confirmed=user is a developer
+    """
     developer_status = models.CharField(max_length=1, default='0',
                                         choices=developer_status_choices)
 

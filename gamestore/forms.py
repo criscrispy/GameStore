@@ -2,8 +2,10 @@ from django import forms
 from gamestore.models import Game
 
 
-class ProfileForm:
-    pass
+class ProfileForm(forms.ModelForm):
+    """Form for modifying ``User``'s details and ``Profile``."""
+    class Meta:
+        pass
 
 
 class GameForm(forms.ModelForm):

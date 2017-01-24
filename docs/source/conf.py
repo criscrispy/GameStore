@@ -19,7 +19,14 @@
 
 import os
 import sys
+
+import django
+
 sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath('../..'))
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "wsdproject.settings.dev")
+django.setup()
+
 
 # -- General configuration ------------------------------------------------
 
@@ -31,6 +38,7 @@ sys.path.insert(0, os.path.abspath('.'))
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'sphinx.ext.autodoc',
     'sphinx.ext.mathjax',
     'sphinx.ext.githubpages',
 ]

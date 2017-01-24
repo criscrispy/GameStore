@@ -5,7 +5,6 @@ http://www.revsys.com/blog/2014/dec/03/loading-django-files-from-code/
 import logging
 import string
 from functools import partial
-from typing import Callable
 
 from django.contrib.auth.models import User
 from django.core.files import File
@@ -26,7 +25,7 @@ def _call(arg):
     Call arg if it is callable otherwise return.
 
     Args:
-        arg(object|Callable[object]):
+        arg(object|callable[object]):
 
     Returns:
         object:
