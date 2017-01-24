@@ -111,8 +111,7 @@ def game_sale(request):
     user = request.user
     games_bought = GameSale.objects.filter(buyer=user)
     games_published = Game.objects.filter(publisher=user)
-    user_profile = get_object_or_404(Profile,
-                                     user=user)  # TODO: exception handling
+    user_profile = get_object_or_404(Profile, user=user)
 
     context = {
         'game_sales': games_bought,

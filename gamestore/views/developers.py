@@ -8,15 +8,7 @@ from gamestore.views.accounts import profile
 
 
 def uploads(request, user_id):
-    """
-
-    Args:
-        request:
-        user_id:
-
-    Returns:
-
-    """
+    """Uploads"""
     games_published = Game.objects.filter(publisher=user_id)
 
     context = {
@@ -28,14 +20,7 @@ def uploads(request, user_id):
 
 @login_required
 def upload(request):
-    """
-
-    Args:
-        request:
-
-    Returns:
-
-    """
+    """Upload"""
     # if user is not a developer/publisher, yet redirect to profile page where
     # they can apply
     user_profile = get_object_or_404(Profile, user__id=request.user.id)

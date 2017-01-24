@@ -29,7 +29,7 @@ def find_saved_state(game_id, request):
     return state
 
 
-def validate_json(state,string=False):
+def validate_json(state, string=False):
     # Todo escape javascript validate json
 
     val_state = json.loads(state)

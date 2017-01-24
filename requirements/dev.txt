@@ -13,17 +13,19 @@ pytest-django
 pytest-xdist
 pytest-cov
 pytest-capturelog
+
 hypothesis
 tox
 coverage
 pdbpp
 
 
-# Fake data creation
-faker
-imagefactory
-
-
 ## Browser Testing
 html5lib
 selenium
+pytest-selenium
+
+
+# Fake data creation
+faker
+imagefactory
