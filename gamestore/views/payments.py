@@ -8,12 +8,15 @@ from django.http import HttpResponse
 
 
 def success(request):
+    """Method to be called on payment success"""
     return HttpResponse()
 
 
 def cancel(request):
+    """Method to be called on payment cancel"""
     return HttpResponse()
 
 
 def error(request):
+    """Method to be called on payment error"""
     return HttpResponse()

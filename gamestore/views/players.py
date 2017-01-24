@@ -17,9 +17,8 @@ def game_detail(request, game_id):
         * Icon
         * Image
         * Description
-        * ...
-        * highscores
-        * likes
+        * Scoreboard
+        *
     - Buy / Play buttons
     """
     game = get_object_or_404(Game, id=game_id)
@@ -130,6 +129,7 @@ def game_like(request, game_id):
 
 @login_required
 def game_get_saved_state(request, game_id):
+    """Enable to play game from saved state"""
     try:
         state = find_saved_state(game_id, request)
         json = validate_json(state.settings, 'gameState')
