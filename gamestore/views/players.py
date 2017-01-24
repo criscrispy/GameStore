@@ -32,7 +32,8 @@ def game_detail(request, game_id):
         last_saved = find_saved_state(game_id, request)
     else:
         last_saved = False
-    context = {'game': game, 'play': play, 'buy': not play, 'saved': last_saved, 'scores': scores}
+    context = {'game': game, 'play': play, 'buy': not play, 'saved': last_saved,
+               'scores': scores}
     return render(request, "gamestore/game_description.html", context)
 
 
@@ -54,6 +55,7 @@ def game_play(request, game_id):
     game_buy."""
     context = load_game_context(game_id, request)
     return render(request, "gamestore/game_description.html", context)
+
 
 @login_required
 def game_play_saved(request, game_id, last_saved):
@@ -78,14 +80,15 @@ def game_submit_score(request, game_id):
     """Submit score for saving"""
     score = check_received_data(request, 'gameScore')
     if not score:
-        response = {'error':"Error: score received from the game invalid"}
+        response = {'error': "Error: score received from the game invalid"}
     try:
         save_game_score(request, game_id, score)
         response = {'score': score}
     except:
-        response = {'error':"Error: could not save score"}
+        response = {'error': "Error: could not save score"}
     finally:
         return ajax_render_response(response)
+
 
 @login_required
 def game_save_settings(request, game_id):
@@ -102,14 +105,14 @@ def game_save_settings(request, game_id):
         return ajax_render_response(response)
 
 
-
 @login_required
 def game_sale(request):
     """Games that user has bought."""
     user = request.user
     games_bought = GameSale.objects.filter(buyer=user)
     games_published = Game.objects.filter(publisher=user)
-    user_profile = get_object_or_404(Profile, user=user)  # TODO: exception handling
+    user_profile = get_object_or_404(Profile,
+                                     user=user)  # TODO: exception handling
 
     context = {
         'game_sales': games_bought,
@@ -122,23 +125,20 @@ def game_sale(request):
 
 @login_required
 def game_like(request, game_id):
-
     # TODO: This might be redundant
     return HttpResponse()
 
 
 @login_required
 def game_get_saved_state(request, game_id):
-
     try:
         state = find_saved_state(game_id, request)
-        json = validate_json(state.settings,'gameState')
+        json = validate_json(state.settings, 'gameState')
         return game_play_saved(request, game_id, json)
     except Exception as e:
         error("game_get_saved_state", e)
         json = simplejson.dumps({'info': 'error - state not found'})
         return HttpResponse(json)
-
 
 
 def ajax_render_response(response):

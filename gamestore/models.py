@@ -50,7 +50,8 @@ class Game(models.Model):
     title = models.CharField(max_length=30, blank=False)
     description = models.TextField("Description of the game.", blank=False)
     publisher = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=False)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE,
+                                 blank=False)
     price = models.DecimalField(
         "Price for the game. Value can be between 0 and 100.",
         max_digits=4, decimal_places=2, blank=False,
@@ -76,8 +77,9 @@ class GameSale(models.Model):
     date = models.DateTimeField("Date when game was bought", blank=False,
                                 default=timezone.now)
 
+
 class GameSettings(models.Model):
     player = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
     game = models.ForeignKey(Game, on_delete=models.CASCADE, blank=False)
     settings = models.CharField(default="", max_length=2000)
-    #todo settings = JSONField(default="")
+    # todo settings = JSONField(default="")

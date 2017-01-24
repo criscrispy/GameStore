@@ -3,14 +3,15 @@ import random
 from django.core.management.base import BaseCommand
 from django.db import IntegrityError
 
-from gamestore.tests.create_content import create_image, create_user, \
+from imagefactory import create_image
+from gamestore.tests.create_content import create_user, \
     create_profile, create_game, create_score, create_game_sale, create_category
 
 
 def populate(user_amount, game_amount, sales_amount, scores_amount):
-    image_game = create_image("image", width=128, height=128)
-    image_icon = create_image("icon", width=48, height=48)
-    image_profile = create_image("profile", width=128, height=128)
+    image_game = create_image(name="image", width=128, height=128)
+    image_icon = create_image(name="icon", width=48, height=48)
+    image_profile = create_image(name="profile", width=128, height=128)
 
     users = []
     categories = []

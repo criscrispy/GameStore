@@ -1,6 +1,7 @@
 import pytest
+from imagefactory import create_image
 
-from gamestore.tests.create_content import create_image, create_user, \
+from gamestore.tests.create_content import create_user, \
     create_profile, create_game, create_score, create_game_sale, create_category
 
 # Allow pytest database access

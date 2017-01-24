@@ -7,6 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 COULD_NOT_SAVE_SCORE = "Error: Could not save score"
 COULD_NOT_SAVE_STATE = "Error: Could not save state"
 
+
 def js_test(game):
     game.url = 'http://users.metropolia.fi/~nikolaid/game/index.html'
     game.image = 'http://users.metropolia.fi/~nikolaid/game.png'

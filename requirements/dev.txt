@@ -16,9 +16,12 @@ pytest-capturelog
 hypothesis
 tox
 coverage
-faker
-svgwrite
 pdbpp
+
+
+# Fake data creation
+faker
+imagefactory
 
 
 ## Browser Testing

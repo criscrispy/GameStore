@@ -55,7 +55,7 @@ from django.conf.urls import url, include
 
 import gamestore.views.accounts
 import gamestore.views.base
-from gamestore.views import base, players, developers
+from gamestore.views import base, players, developers, payments
 
 #   /profile
 #   url(r'^', views., name=''),
@@ -66,9 +66,6 @@ from gamestore.views import base, players, developers
 #   /user/123/edit
 #   url(r'^', views., name=''),
 
-
-# Base views
-from gamestore.views import payments
 
 urlpatterns = [
     url(r'^$', base.index, name='index'),
