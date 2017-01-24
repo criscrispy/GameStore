@@ -1,6 +1,7 @@
 ## Development requirements
 
 -r common.txt
+-r docs.txt
 
 virtualenv
 #virtualenvwrapper
@@ -18,3 +19,8 @@ coverage
 faker
 svgwrite
 pdbpp
+
+
+## Browser Testing
+html5lib
+selenium

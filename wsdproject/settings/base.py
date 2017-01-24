@@ -39,6 +39,7 @@ PROJECT_APPS = [
     'bootstrap3',
     'gamestore',
     'django_extensions',
+    'haystack',
 ]
 
 PREREQ_APPS = [
@@ -149,3 +150,12 @@ LOGGING_FILE = os.path.join(BASE_DIR, 'logging.yaml')
 with open(LOGGING_FILE, 'rt') as file:
     LOGGING = yaml.safe_load(file.read())
 logging.config.dictConfig(LOGGING)
+
+
+# Search Engine
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
+    },
+}

@@ -13,6 +13,7 @@ disable_existing_loggers: False
 formatters:
   simple:
     format: "%(asctime)s - %(levelname)-8s - %(name)-12s - %(funcName)s: %(message)s"
+
   plain:
     format: "%(asctime)s - %(levelname)s <%(funcName)s> %(message)s"
 
@@ -24,29 +25,29 @@ handlers:
     level: INFO
     stream: "ext://sys.stdout"
 
-  debug_file_handler:
-    class: "logging.handlers.RotatingFileHandler"
-    formatter: plain
-    filename: "debug.log"
-    level: DEBUG
-    maxBytes: 10485760  # 10 MB
-    backupCount: 20
-    encoding: "utf8"
-
-  info_file_handler:
-    class: "logging.handlers.RotatingFileHandler"
-    formatter: plain
-    filename: "info.log"
-    level: INFO
-    maxBytes: 10485760  # 10 MB
-    backupCount: 20
-    encoding: "utf8"
+#  debug_file_handler:
+#    class: "logging.handlers.RotatingFileHandler"
+#    formatter: plain
+#    filename: "debug.log"
+#    level: DEBUG
+#    maxBytes: 10485760  # 10 MB
+#    backupCount: 20
+#    encoding: "utf8"
+#
+#  info_file_handler:
+#    class: "logging.handlers.RotatingFileHandler"
+#    formatter: plain
+#    filename: "info.log"
+#    level: INFO
+#    maxBytes: 10485760  # 10 MB
+#    backupCount: 20
+#    encoding: "utf8"
 
 
 loggers:
-  gamestore.views:
+  gamestore:
     level: INFO
-    handlers: [console, debug_file_handler, info_file_handler]
+    handlers: [console]
     propagate: no
 
 

@@ -1,0 +1,20 @@
+## Gitlab Continuous Integration Configuration
+# https://docs.gitlab.com/ce/ci/yaml/
+# https://docs.gitlab.com/ce/ci/examples/test-and-deploy-python-application-to-heroku.html
+# https://dezoito.github.io/2016/05/11/django-gitlab-continuous-integration-phantomjs.html
+# https://www.youtube.com/watch?v=BMPN2jzz9mM
+
+# TODO: GitLab pages configuration: https://gitlab.com/pages/sphinx
+image: python:3.5
+
+test:
+  script:
+  - apt-get update -qy
+  - apt-get install -y python-dev python-pip
+  - pip install -r requirements/dev.txt
+  - pytest
+  allow_failure: true
+
+#pages:
+#  image: alpine
+#  script:

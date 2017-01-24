@@ -51,7 +51,7 @@ Developer
 
 
 """
-from django.conf.urls import url
+from django.conf.urls import url, include
 
 import gamestore.views.accounts
 import gamestore.views.base
@@ -77,8 +77,13 @@ urlpatterns = [
     url(r'^publishers/(?P<user_id>[0-9]+)', base.publisher_detail,
         name='publisher.detail'),
     url(r'^publishers', base.publishers, name='publishers.list'),
-    url(r'search/(?P<keyword>\w+)', base.search, name='search')
 ]
+
+# Search
+urlpatterns.extend([
+    url(r'^search/(?P<keyword>\w+)', base.search, name='search'),
+    url(r'^search/', include('haystack.urls')),
+])
 
 # Account views
 urlpatterns.extend([

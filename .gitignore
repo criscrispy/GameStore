@@ -195,7 +195,3 @@ jspm_packages
 
 # Yarn Integrity file
 .yarn-integrity
-
-
-# migrations
-gamestore/migrations/

@@ -2,10 +2,12 @@ import logging
 
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render
+from haystack.query import SearchQuerySet
 
 from gamestore.models import Game, Category, User
 
 logger = logging.getLogger(__name__)
+# TODO: Search
 # TODO: Pagination
 
 
@@ -21,24 +23,28 @@ def index(request):
     """
     # context = {}
     # return render(request, 'gamestore/index.html', context)
+    logger.info("")
 
     return games(request)
 
 
 def games(request):
     """Display all games"""
+    logger.info("")
     context = {'games': Game.objects.all()[:50]}
     return render(request, "gamestore/game.html", context)
 
 
 def categories(request):
     """Show all categories."""
+    logger.info("")
     context = {'categories': Category.objects.all()[:50]}
     return render(request, "gamestore/categories.html", context)
 
 
 def category_detail(request, category_name):
     """Show all games under some category."""
+    logger.info("")
     category = Category.objects.filter(title=category_name)
     games_in_category = Game.objects.filter(category_id=category)
 
@@ -52,6 +58,7 @@ def category_detail(request, category_name):
 
 def publishers(request):
     """Show all publishers"""
+    logger.info("")
     publishers_list = User.objects.filter(profile__developer_status='2')
 
     context = {
@@ -63,6 +70,7 @@ def publishers(request):
 
 def publisher_detail(request, user_id):
     """Show all games under some publisher."""
+    logger.info("")
     publishers_games = Game.objects.filter(publisher=user_id)
     context = {
         'games': publishers_games,
@@ -72,13 +80,13 @@ def publisher_detail(request, user_id):
     return render(request, "gamestore/publisher_detail.html", context)
 
 
-def search(request, keyword):
+def search(request):
     """
     Search for games using keyword. Searchable fields are
 
-    - Game_title
-    - Publisher
-    - Category
+    - game.title
+    - game.publisher
+    - game.category
 
     Args:
         request (HttpRequest):
@@ -87,8 +95,8 @@ def search(request, keyword):
     Returns:
         HttpResponse:
     """
-    if request.method == 'GET':
-        pass
-    elif request.method == 'POST':
-        pass
-    return HttpResponse()
+    games_query = SearchQuerySet().autocomplete(
+        content_auto=request.POST.get('search_text', '')
+    )
+    context = {'query': games_query}
+    return render(request, 'gamestore/search.html', context)

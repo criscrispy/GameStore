@@ -8,5 +8,10 @@ django-extensions
 Pillow
 PyYAML
 
-# PostgreSQL
-psycopg2  # Requires `python3.5-dev` installed
+## Search engine
+django-haystack
+whoosh
+
+## PostgreSQL
+# Requires `python3.5-dev` installed
+psycopg2
