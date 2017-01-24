@@ -146,10 +146,21 @@ REGISTRATION_AUTO_LOGIN = True
 
 # Setup logging config from `logging.yaml` file.
 LOGGING_CONFIG = None
-LOGGING_FILE = os.path.join(BASE_DIR, 'logging.yaml')
+LOGGING_FILE = os.path.join(BASE_DIR, 'logging.yaml')  # logging config file
+LOG_DIR = os.path.join(BASE_DIR, '.logs')  # Directory to save log files
+
 with open(LOGGING_FILE, 'rt') as file:
-    LOGGING = yaml.safe_load(file.read())
-logging.config.dictConfig(LOGGING)
+    LOGGING_DICT = yaml.safe_load(file.read())
+
+if not os.path.exists(LOG_DIR):
+    os.mkdir(LOG_DIR)
+
+for name in LOGGING_DICT['handlers']:
+    handler = LOGGING_DICT['handlers'][name]
+    if 'filename' in handler:
+        handler['filename'] = os.path.join(LOG_DIR, handler['filename'])
+
+logging.config.dictConfig(LOGGING_DICT)
 
 
 # Search Engine

@@ -9,6 +9,7 @@ media/
 *.test_images
 *.egg-info
 .tox
+*.logs
 
 
 # Created by .ignore support plugin (hsz.mobi)

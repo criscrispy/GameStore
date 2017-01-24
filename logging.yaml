@@ -25,34 +25,34 @@ handlers:
     level: INFO
     stream: "ext://sys.stdout"
 
-#  debug_file_handler:
-#    class: "logging.handlers.RotatingFileHandler"
-#    formatter: plain
-#    filename: "debug.log"
-#    level: DEBUG
-#    maxBytes: 10485760  # 10 MB
-#    backupCount: 20
-#    encoding: "utf8"
-#
-#  info_file_handler:
-#    class: "logging.handlers.RotatingFileHandler"
-#    formatter: plain
-#    filename: "info.log"
-#    level: INFO
-#    maxBytes: 10485760  # 10 MB
-#    backupCount: 20
-#    encoding: "utf8"
+  debug_file_handler:
+    class: "logging.handlers.RotatingFileHandler"
+    formatter: plain
+    filename: "debug.log"
+    level: DEBUG
+    maxBytes: 10485760  # 10 MB
+    backupCount: 20
+    encoding: "utf8"
+
+  info_file_handler:
+    class: "logging.handlers.RotatingFileHandler"
+    formatter: plain
+    filename: "info.log"
+    level: INFO
+    maxBytes: 10485760  # 10 MB
+    backupCount: 20
+    encoding: "utf8"
 
 
 loggers:
   gamestore:
     level: INFO
-    handlers: [console]
+    handlers: [console, info_file_handler, debug_file_handler]
     propagate: no
 
 
 root:
   level: INFO
-  handlers: [console]
+  handlers: [console, info_file_handler, debug_file_handler]
 
 ...
