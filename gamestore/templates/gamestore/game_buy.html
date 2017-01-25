@@ -4,7 +4,7 @@
 
     <img class="img-responsive" src={{ game.image }}>
 {% include "gamestore/game_detail.html" with game=game %}
-<form action="http://payments.webcourse.niksula.hut.fi/pay/" method="POST">
+<form class="form-inline" action="http://payments.webcourse.niksula.hut.fi/pay/" method="POST">
     <input type="hidden" name="pid" value={{ pid }} />
     <input type="hidden" name="sid" value={{ sid }} />
     <input type="hidden" name="success_url"
@@ -17,7 +17,11 @@
             value="{{ checksum }}" />
 
     <label for="id_amount">Amount</label>
-    <input disabled="disabled" type="text" id="id_amount" name="amount" value={{ game.price }} />
-    <input type="submit" value="Accept Payment"/>
+    <div class="input-group" >
+    <input class="form-control" type="text" id="id_amount" name="amount" value={{ game.price }} readonly/>
+    <div class="input-group-addon">&euro;</div>
+        </div>
+    <input class="btn btn-primary" type="submit" value="Accept Payment"/>
+
 </form>
 {% endblock %}

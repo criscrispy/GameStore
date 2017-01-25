@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h4>Thank you for buying {{ game.title }}! </h4>
+    <img class="img-responsive" src={{ game.image }}>
+
+    {% include "gamestore/game_detail.html" with game=game %}
+
+    <a class="btn btn-primary" href="/games/{{ game.id }}/play">Play now</a>
+{% endblock %}

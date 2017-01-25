@@ -2,9 +2,10 @@ from logging import log, error, debug
 
 from gamestore.models import GameSettings, GameSale, Score, GamePayments
 import json
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 import uuid
 from hashlib import md5
+
 COULD_NOT_SAVE_SCORE = "Error: Could not save score"
 COULD_NOT_SAVE_STATE = "Error: Could not save state"
 
@@ -116,14 +117,56 @@ def load_game_buy_context(game, request):
 
 def generate_pid():
     uid = uuid.uuid4()
-    pid = uid.hex[:6]
+    pid = uid.hex[:8]
     return pid
 
 
 def calculate_checksum(game, pid, sid):
     secret_key = '873efc3f8f8ca2605de7a4101d3322ba'
     checksumstr = "pid={}&sid={}&amount={}&token={}".format(pid, sid, game.price, secret_key)
-    # checksumstr is the string concatenated above
     m = md5(checksumstr.encode("ascii"))
     checksum = m.hexdigest()
     return checksum
+
+
+def save_game_sale(user,game):
+    game_sale = GameSale(user=user, game=game)
+    game_sale.save()
+
+
+def validate_payment_feedback_parameters(request, expected_result):
+    if request.method is not 'GET':
+        return False
+    pid = request.GET['pid']
+    if not pid or not pid.isalnum() or len(pid) != 8:
+        raise ValidationError("pid invalid format")
+    result = request.GET['result']
+    if not result or result != expected_result:
+        raise ValidationError("result invalid format")
+    checksum = request.GET['checksum']
+    if not checksum or not checksum.isalnum() or len(checksum) != 16:
+        raise ValidationError("checksum invalid format")
+    return pid, checksum
+
+
+def find_game_by_pid(pid):
+    p = GamePayments.objects.get(pid=pid)
+    return p
+
+
+def validate_user(request, user):
+    if request.user.id is not user.id or request.user.username is not user.username:
+        raise ValidationError("user invalid")
+
+
+def validate_payment_feedback(request, expected_result):
+    valid = validate_payment_feedback_parameters(request, expected_result)
+    if valid:
+        record = find_game_by_pid()
+        validate_user(request, record.buyer)
+        return record.game
+
+
+def remove_payment(user, pid):
+    payment = GamePayments.objects.get(pid=pid, buyer=user)
+    payment.delete()
