@@ -138,8 +138,13 @@ urlpatterns.extend([
 
 # Payments views
 urlpatterns.extend([
+    # payment API response page for succeded payment
     url(r'^payment/success', payments.success, name='payment.success'),
+
+    # payment API response page for cancelled payment
     url(r'^payment/cancel', payments.cancel, name='payment.cancel'),
+
+    # payment API response page for payment error
     url(r'^payment/error', payments.error, name='payment.error'),
 ])
 

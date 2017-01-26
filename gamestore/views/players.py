@@ -4,10 +4,8 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
 
-from gamestore.models import Game, Profile
+from gamestore.models import Profile
 from gamestore.service import *
-from gamestore.service import load_game_buy_context
-
 
 def game_detail(request, game_id):
     """
@@ -34,7 +32,7 @@ def game_detail(request, game_id):
         last_saved = False
     context = {'game': game, 'play': play, 'buy': not play, 'saved': last_saved,
                'scores': scores}
-    return render(request, "gamestore/game_description.html", context)
+    return render(request, GAME_DESCRIPTION_HTML, context)
 
 
 @login_required
@@ -43,7 +41,7 @@ def game_buy(request, game_id):
     to game_detail."""
     game = get_object_or_404(Game, pk=game_id)
     context = load_game_buy_context(game, request)
-    return render(request, "gamestore/game_buy.html", context, {'status': 'pending'})
+    return render(request, GAME_BUY_HTML, context)
 
 
 @login_required
@@ -51,7 +49,7 @@ def game_play(request, game_id):
     """Allow player to play a game if he has bought the game else redirect to
     game_buy."""
     context = load_game_context(game_id, request)
-    return render(request, "gamestore/game_description.html", context)
+    return render(request, GAME_DESCRIPTION_HTML, context)
 
 
 @login_required
@@ -60,7 +58,7 @@ def game_play_saved(request, game_id, last_saved):
     context = load_game_context(game_id, request)
     if context['start_game']:
         context['last_saved'] = last_saved
-    return render(request, "gamestore/game_description.html", context)
+    return render(request, GAME_DESCRIPTION_HTML, context)
 
 
 def load_game_context(game_id, request):
@@ -75,14 +73,14 @@ def load_game_context(game_id, request):
 @login_required
 def game_submit_score(request, game_id):
     """Submit score for saving"""
-    score = check_received_data(request, 'gameScore')
+    score = check_received_data(request, GAME_SCORE)
     if not score:
-        response = {'error': "Error: score received from the game invalid"}
+        response = {ERROR: GAME_SCORE_INVALID}
     try:
         save_game_score(request, game_id, score)
         response = {'score': score}
     except:
-        response = {'error': "Error: could not save score"}
+        response = {ERROR: COULD_NOT_SAVE_SCORE}
     finally:
         return ajax_render_response(response)
 
@@ -90,14 +88,14 @@ def game_submit_score(request, game_id):
 @login_required
 def game_save_settings(request, game_id):
     """Save state of the game as json"""
-    state = check_received_data(request, 'gameState')
+    state = check_received_data(request, GAME_STATE)
     if not state:
-        response = {'error': "Error: state received from the game invalid"}
+        response = {ERROR: GAME_STATE_INVALID}
     try:
         save_game_state(request, game_id, state)
         response = {'state': state}
     except:
-        response = {'error': "Error: could not save state"}
+        response = {ERROR: COULD_NOT_SAVE_STATE}
     finally:
         return ajax_render_response(response)
 
@@ -130,7 +128,7 @@ def game_get_saved_state(request, game_id):
     """Enable to play game from saved state"""
     try:
         state = find_saved_state(game_id, request)
-        json = validate_json(state.settings, 'gameState')
+        json = validate_json(state.settings, GAME_STATE)
         return game_play_saved(request, game_id, json)
     except Exception as e:
         error("game_get_saved_state", e)
@@ -140,5 +138,5 @@ def game_get_saved_state(request, game_id):
 
 def ajax_render_response(response):
     """Render html response to ajax calls from js"""
-    html = render_to_string('gamestore/game_ajax.html', response)
+    html = render_to_string(GAME_AJAX_HTML, response)
     return HttpResponse(html)

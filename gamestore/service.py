@@ -8,8 +8,6 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from gamestore.constants import *
 from gamestore.models import GameSettings, GameSale, Score, GamePayments, Game
 
-CHECKSUM_RESPONSE_FORMAT = "pid={}&ref={}&result={}&token={}"
-
 
 def js_test(game):
     """URLs with game for testing"""
@@ -31,7 +29,7 @@ def is_user_allowed_to_play(game, user):
 
 
 def find_saved_state(game_id, request):
-    """Find game state provided :param game_id for the user of request."""
+    """Find game state provided :param game_id: for the user of request."""
     try:
         state = GameSettings.objects.get(game_id=game_id, player=request.user)
     except ObjectDoesNotExist:
@@ -74,24 +72,24 @@ def save_game_score(request, game_id, score):
 
 
 def check_received_data(request, key):
-    """Check that request method is POST and if request contains :param key return it's value."""
-    if request.method == 'POST':
+    """Check that request method is POST and if request contains :param key: return it's value."""
+    if request.method == METHOD_POST:
         if key in request.POST:
             value = request.POST[key]
             return value
     return False
 
 
-def find_best_scores_for_game(game):
-    """Find 10 best scores to populate scoreboard of the :param game"""
+def find_best_scores_for_game(game, number=10):
+    """Find :param number: best scores to populate scoreboard of the :param game: """
     top_scores = (Score.objects.filter(game=game)
                   .order_by('-score')
                   .values_list('score', flat=True)
                   .distinct())
     top_records = (Score.objects.filter(game=game)
                    .order_by('-score')
-                   .filter(score__in=top_scores[:10]))
-    return list(top_records[:10])
+                   .filter(score__in=top_scores[:number]))
+    return list(top_records[:number])
 
 
 def load_game_buy_context(game, request):
@@ -150,25 +148,25 @@ def validate_payment_feedback(request, expected_result):
     if checksum == checksum_new:
         return record.game, pid
     else:
-        raise ValidationError("Validation error: Checksum wrong")
+        raise ValidationError(CHECKSUM_WRONG)
 
 
 def validate_payment_feedback_parameters(request, expected_result):
     """Validate that all needed payment feedback parameters are present in GET request and satisfy expected format"""
-    if request.method != 'GET':
-        return ValidationError("GET request expected")
+    if request.method != METHOD_GET:
+        return ValidationError(GET_REQUEST_EXPECTED)
     pid = request.GET[PID]
-    if not pid or not pid.isalnum() or len(pid) != 8:
+    if not pid or not pid.isalnum() or len(pid) != PID_LENGHT:
         raise ValidationError(PID_INVALID_FORMAT)
     result = request.GET[RESULT]
     if not result or result != expected_result:
         raise ValidationError(RESULT_INVALID_FORMAT)
     checksum = request.GET[CHECKSUM]
-    if not checksum or not checksum.isalnum() or len(checksum) != 32:
+    if not checksum or not checksum.isalnum() or len(checksum) != CHECKSUM_LENGHT:
         raise ValidationError(CHECKSUM_INVALID_FORMAT)
-    ref = request.GET['ref']
+    ref = request.GET[REF]
     if not ref or not ref.isalnum():
-        raise ValidationError("Validation error: ref field invalid format")
+        raise ValidationError(REF_INVALID_FORMAT)
     return pid, checksum, ref
 
 
@@ -178,13 +176,13 @@ def find_payment_by_pid(pid):
         p = GamePayments.objects.get(pid=pid)
     except ObjectDoesNotExist:
         error("No payment were found with pid: %s" % pid)
-        raise ValidationError("Validation error: No payment with this identifier was found")
+        raise ValidationError(PID_WAS_NOT_FOUND)
     else:
         return p
 
 
 def validate_user(request, user):
-    """Make sure that request user and :param user are same user"""
+    """Make sure that request user and :param user: are same user"""
     if request.user.id != user.id or request.user.username != user.username:
         raise ValidationError(USER_INVALID)
 
