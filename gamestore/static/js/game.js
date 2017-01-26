@@ -7,11 +7,11 @@ var messageTypes = {
     SETTING: "SETTING"
 };
 
-var csrftoken = $("input[name=csrfmiddlewaretoken]").val();
-
 $(document).ready(function () {
-    game_url = $("#game_container").attr('src')
+
+    /* Listen to post messages */
     $(window).on('message', function (event) {
+        var game_url = $("#game_container").attr('src');
         if (game_url.indexOf(event.originalEvent.origin) != 0) {
             return;
         }
@@ -30,6 +30,7 @@ function postData(url, data) {
     });
 }
 function saveScore(score) {
+    var csrftoken = $("input[name=csrfmiddlewaretoken]").val();
     var data = {
         gameScore: score,
         csrfmiddlewaretoken: csrftoken
@@ -38,18 +39,20 @@ function saveScore(score) {
 }
 
 function saveState(gameState) {
+    var csrftoken = $("input[name=csrfmiddlewaretoken]").val();
     var data = {gameState: gameState, csrfmiddlewaretoken: csrftoken};
     postData('state', data);
 }
 
 function sendState(data) {
-    var message = {messageType: messageTypes.LOAD, gameState: data}
-    sendMessage(message)
+    var message = {messageType: messageTypes.LOAD, gameState: data};
+    sendMessage(message);
 }
 
 function sendMessage(message) {
+    var game_url = $("#game_container").attr('src');
     iframe = document.getElementById('game_container').contentWindow;
-    iframe.postMessage(message, "http://users.metropolia.fi/~nikolaid/game/index.html");
+    iframe.postMessage(message, game_url);
 }
 
 function adjustIframe(options) {
