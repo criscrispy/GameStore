@@ -1,13 +1,14 @@
-from logging import log, error, debug
-
-from gamestore.models import GameSettings, GameSale, Score, GamePayments
 import json
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
 import uuid
 from hashlib import md5
+from logging import error, debug
 
-COULD_NOT_SAVE_SCORE = "Error: Could not save score"
-COULD_NOT_SAVE_STATE = "Error: Could not save state"
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
+
+from gamestore.constants import *
+from gamestore.models import GameSettings, GameSale, Score, GamePayments, Game
+
+CHECKSUM_RESPONSE_FORMAT = "pid={}&ref={}&result={}&token={}"
 
 
 def js_test(game):
@@ -16,12 +17,16 @@ def js_test(game):
 
 
 def is_user_allowed_to_play(game, user):
-    """Check if user has right to play a game"""
+    """
+    Check if user has right to play a game, right is granted if:
+    - user bought a game
+    - user published a game
+    """
     play = False
     if user.is_authenticated():
         sale = GameSale.objects.filter(buyer=user, game=game).count()
-        play = sale > 0
-    # TODO developer migth have right to play own game
+        dev = Game.objects.filter(publisher=user, id=game.id).count()
+        play = sale > 0 or dev > 0
     return play
 
 
@@ -89,20 +94,13 @@ def find_best_scores_for_game(game):
     return list(top_records[:10])
 
 
-def save_payment(pid, game, user):
-    try:
-        p = GamePayments(pid=pid, game=game, buyer=user)
-        p.save()
-    except Exception as e:
-        error(e)
-
-
 def load_game_buy_context(game, request):
-    service_url = 'http://localhost:8000'
-    sid = '57b91FDFa2Sy'
+    """Prepare context for game buying view, load parameters needed by payment API"""
+    service_url = get_service_url()
+    sid = get_payment_sid()
     pid = generate_pid()
     save_payment(pid, game, request.user)
-    checksum = calculate_checksum(game, pid, sid)
+    checksum = calculate_request_checksum(game, pid, sid)
     # checksum is the value that should be used in the payment request
     context = {
         'buyer': request.user,
@@ -116,57 +114,125 @@ def load_game_buy_context(game, request):
 
 
 def generate_pid():
+    """Generate payment identifier"""
     uid = uuid.uuid4()
     pid = uid.hex[:8]
     return pid
 
 
-def calculate_checksum(game, pid, sid):
-    secret_key = '873efc3f8f8ca2605de7a4101d3322ba'
-    checksumstr = "pid={}&sid={}&amount={}&token={}".format(pid, sid, game.price, secret_key)
-    m = md5(checksumstr.encode("ascii"))
+def calculate_request_checksum(game, pid, sid):
+    """Calculate checksum of payment details to pass to payment API"""
+    secret_key = get_payment_secret()
+    checksum_string = CHECKSUM_REQUEST_FORMAT.format(pid, sid, game.price, secret_key)
+    return calculate_checksum(checksum_string)
+
+
+def calculate_response_checksum(pid, ref, result):
+    """Calculate checksum of payment details returned from payment API"""
+    secret_key = get_payment_secret()
+    checksum_string = CHECKSUM_RESPONSE_FORMAT.format(pid, ref, result, secret_key)
+    return calculate_checksum(checksum_string)
+
+
+def calculate_checksum(checksum_string):
+    """Calculate md5 hex"""
+    m = md5(checksum_string.encode(ASCII))
     checksum = m.hexdigest()
     return checksum
 
 
-def save_game_sale(user,game):
-    game_sale = GameSale(user=user, game=game)
-    game_sale.save()
+def validate_payment_feedback(request, expected_result):
+    """Validate feedback received from payment API"""
+    pid, checksum, ref = validate_payment_feedback_parameters(request, expected_result)
+    record = find_payment_by_pid(pid)
+    validate_user(request, record.buyer)
+    checksum_new = calculate_response_checksum(pid, ref, expected_result)
+    if checksum == checksum_new:
+        return record.game, pid
+    else:
+        raise ValidationError("Validation error: Checksum wrong")
 
 
 def validate_payment_feedback_parameters(request, expected_result):
-    if request.method is not 'GET':
-        return False
-    pid = request.GET['pid']
+    """Validate that all needed payment feedback parameters are present in GET request and satisfy expected format"""
+    if request.method != 'GET':
+        return ValidationError("GET request expected")
+    pid = request.GET[PID]
     if not pid or not pid.isalnum() or len(pid) != 8:
-        raise ValidationError("pid invalid format")
-    result = request.GET['result']
+        raise ValidationError(PID_INVALID_FORMAT)
+    result = request.GET[RESULT]
     if not result or result != expected_result:
-        raise ValidationError("result invalid format")
-    checksum = request.GET['checksum']
-    if not checksum or not checksum.isalnum() or len(checksum) != 16:
-        raise ValidationError("checksum invalid format")
-    return pid, checksum
+        raise ValidationError(RESULT_INVALID_FORMAT)
+    checksum = request.GET[CHECKSUM]
+    if not checksum or not checksum.isalnum() or len(checksum) != 32:
+        raise ValidationError(CHECKSUM_INVALID_FORMAT)
+    ref = request.GET['ref']
+    if not ref or not ref.isalnum():
+        raise ValidationError("Validation error: ref field invalid format")
+    return pid, checksum, ref
 
 
-def find_game_by_pid(pid):
-    p = GamePayments.objects.get(pid=pid)
-    return p
+def find_payment_by_pid(pid):
+    """Find payment details entry by payment identifier"""
+    try:
+        p = GamePayments.objects.get(pid=pid)
+    except ObjectDoesNotExist:
+        error("No payment were found with pid: %s" % pid)
+        raise ValidationError("Validation error: No payment with this identifier was found")
+    else:
+        return p
 
 
 def validate_user(request, user):
-    if request.user.id is not user.id or request.user.username is not user.username:
-        raise ValidationError("user invalid")
+    """Make sure that request user and :param user are same user"""
+    if request.user.id != user.id or request.user.username != user.username:
+        raise ValidationError(USER_INVALID)
 
 
-def validate_payment_feedback(request, expected_result):
-    valid = validate_payment_feedback_parameters(request, expected_result)
-    if valid:
-        record = find_game_by_pid()
-        validate_user(request, record.buyer)
-        return record.game
+def remove_payment(game, user, pid):
+    try:
+        payment = GamePayments.objects.get(game=game, pid=pid, buyer=user)
+    except ObjectDoesNotExist:
+        debug("No payment were found with pid: %s and user: %s" % (pid, user.username))
+    else:
+        payment.delete()
 
 
-def remove_payment(user, pid):
-    payment = GamePayments.objects.get(pid=pid, buyer=user)
-    payment.delete()
+def find_saved_payment(game, user):
+    payment = GamePayments.objects.get(game=game, buyer=user)
+
+    return payment
+
+
+def save_payment(pid, game, user):
+    """Create and save or update payment entry. """
+    try:
+        record = find_saved_payment(game, user)
+        record.pid = pid
+    except ObjectDoesNotExist:
+        debug("creating new game payment object")
+        record = GamePayments(pid=pid, game=game, buyer=user)
+    record.save()
+
+
+def save_game_sale(user, game):
+    """Save entry game sold"""
+    game_sale = GameSale(buyer=user, game=game)
+    game_sale.save()
+
+
+# TODO implement configuration
+
+def get_payment_sid():
+    """Get payment sid from configuration"""
+    return '57b91FDFa2Sy'
+
+
+def get_payment_secret():
+    """Get payment password from configuration"""
+    return '873efc3f8f8ca2605de7a4101d3322ba'
+
+
+def get_service_url():
+    """Get game service URL from configuration"""
+    return 'http://localhost:8000'

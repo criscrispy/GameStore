@@ -42,7 +42,6 @@ def game_buy(request, game_id):
     """Allow player to buy a game if he has not already bought else redirect
     to game_detail."""
     game = get_object_or_404(Game, pk=game_id)
-    game.price=10
     context = load_game_buy_context(game, request)
     return render(request, "gamestore/game_buy.html", context, {'status': 'pending'})
 

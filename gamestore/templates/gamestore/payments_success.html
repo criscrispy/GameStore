@@ -6,5 +6,5 @@
 
     {% include "gamestore/game_detail.html" with game=game %}
 
-    <a class="btn btn-primary" href="/games/{{ game.id }}/play">Play now</a>
+    <a class="btn btn-primary" href="/games/{{ game.id|stringformat:"i"}}/play">Play now</a>
 {% endblock %}
