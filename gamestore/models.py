@@ -1,26 +1,49 @@
+"""Gamestore Models
+
+Attributes:
+    DEVELOPER_STATUS_CHOICES:
+        - basic_user=not_developer,
+        - pending=user has applied to become a developer
+        - confirmed=user is a developer
+
+"""
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 from django.contrib.postgres.fields import JSONField
 
 
-class Profile(models.Model):
-    """User profile."""
-    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
-    image = models.ImageField("Profile image.", upload_to="profile")
+DEVELOPER_STATUS_CHOICES = (
+    ('0', 'basic_user'),
+    ('1', 'pending'),
+    ('2', 'confirmed'),
+)
 
-    developer_status_choices = (
-        ('0', 'basic_user'),
-        ('1', 'pending'),
-        ('2', 'confirmed'),
-    )
+
+class UserProfile(models.Model):
+    """User profile.
+
+    References:
+        - https://stackoverflow.com/questions/6085025/django-user-profile
+        - https://stackoverflow.com/questions/35030556/django-user-profile-in-1-9
+        - https://blog.khophi.co/extending-django-user-model-userprofile-like-a-pro/
+
+    Todo:
+        - Gender choices
+        - Picture constraints (size, ...)
+
     """
-    - basic_user=not_developer,
-    - pending=user has applied to become a developer
-    - confirmed=user is a developer
-    """
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    gender = models.CharField(default='', max_length=140, blank=True)
+    picture = models.ImageField("Profile picture.", upload_to="profiles",
+                                null=True, blank=True)
+    website = models.URLField(default='', blank=True)
+    bio = models.TextField(default='', blank=True)
+    city = models.CharField(max_length=100, default='', blank=True)
+    country = models.CharField(max_length=100, default='', blank=True)
+    organization = models.CharField(max_length=100, default='', blank=True)
     developer_status = models.CharField(max_length=1, default='0',
-                                        choices=developer_status_choices)
+                                        choices=DEVELOPER_STATUS_CHOICES)
 
     def __str__(self):
         return str(self.user.first_name + " " + self.user.last_name)
@@ -76,6 +99,7 @@ class GameSale(models.Model):
     date = models.DateTimeField("Date when game was bought", blank=False,
                                 default=timezone.now)
 
+
 class GamePayments(models.Model):
     """Model for saving data to communicate with payment API
     :param pid: payment identifier passed to API"""
@@ -92,6 +116,7 @@ class GameSettings(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE, blank=False)
     settings = models.CharField(default="", max_length=2000)
     # todo settings = JSONField(default="")
+
 
 class Configuration(models.Model):
     """Model for app configuration"""

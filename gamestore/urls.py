@@ -1,33 +1,29 @@
 """
-Urls
-====
-
 Base
 ----
 
 Index
-  /index/
+  ``/index/``
 
 Games. Shows list of games. Could be landing page after login.
-  /games/
-  /games?order=rating|created|price|popularity
+  ``/games/``
+  ``/games?order=rating|created|price|popularity``
 
 Categories. Shows list of categories.
-  /categories/
+  ``/categories/``
 
 Category_detail. Shows list of games under given category.
-  /categories/sport
+  ``/categories/sport``
 
 Publishers. List of publishers.
-  /publishers
-  /publishers?order=rating|created
+  ``/publishers``
+  ``/publishers?order=rating|created``
 
-Publisher_detail. Details of one of the publishers, list of games they
-published etc
-  /publishers/nintendo OR /publishers/12345
+Publisher_detail. Details of one of the publishers, list of games they published etc
+  ``/publishers/nintendo OR /publishers/12345``
 
 Search
-    /search/<query>
+  ``/search/<query>``
 
 
 Accounts

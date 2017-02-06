@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 from gamestore.forms import GameForm
-from gamestore.models import Game, Profile
+from gamestore.models import Game, UserProfile
 from gamestore.views.accounts import profile
 
 
@@ -23,7 +23,7 @@ def upload(request):
     """Upload"""
     # if user is not a developer/publisher, yet redirect to profile page where
     # they can apply
-    user_profile = get_object_or_404(Profile, user__id=request.user.id)
+    user_profile = get_object_or_404(UserProfile, user__id=request.user.id)
     if user_profile.developer_status != '2':
         return profile(request)
 

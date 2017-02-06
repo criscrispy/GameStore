@@ -4,15 +4,14 @@ from imagefactory import create_image
 from gamestore.tests.create_content import create_user, \
     create_profile, create_game, create_score, create_game_sale, create_category
 
-# Allow pytest database access
-pytestmark = pytest.mark.django_db
 
-
+@pytest.mark.django_db
 def test_user():
     user = create_user()
     assert True
 
 
+@pytest.mark.django_db
 def test_profile():
     user = create_user()
     image = create_image("profile", width=128, height=128)
@@ -20,6 +19,7 @@ def test_profile():
     assert True
 
 
+@pytest.mark.django_db
 def test_game():
     user = create_user()
     category = create_category()
@@ -29,6 +29,7 @@ def test_game():
     assert True
 
 
+@pytest.mark.django_db
 def test_score():
     user = create_user()
     category = create_category()
@@ -39,6 +40,7 @@ def test_score():
     assert True
 
 
+@pytest.mark.django_db
 def test_game_sale():
     user = create_user()
     category = create_category()

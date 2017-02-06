@@ -12,7 +12,6 @@ pytest
 pytest-django
 pytest-xdist
 pytest-cov
-pytest-capturelog
 
 hypothesis
 tox

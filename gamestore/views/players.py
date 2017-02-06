@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
 
-from gamestore.models import Profile
+from gamestore.models import UserProfile
 from gamestore.service import *
 
 def game_detail(request, game_id):
@@ -106,7 +106,7 @@ def game_sale(request):
     user = request.user
     games_bought = GameSale.objects.filter(buyer=user)
     games_published = Game.objects.filter(publisher=user)
-    user_profile = get_object_or_404(Profile, user=user)
+    user_profile = get_object_or_404(UserProfile, user=user)
 
     context = {
         'game_sales': games_bought,

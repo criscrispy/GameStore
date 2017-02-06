@@ -23,3 +23,4 @@ Web Software Development Project - Game Store
    gamestore/admin
    gamestore/service
    gamestore/indexes
+   gamestore/signals

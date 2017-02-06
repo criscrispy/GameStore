@@ -59,7 +59,7 @@ def category_detail(request, category_name):
 def publishers(request):
     """Show all publishers"""
     logger.info("")
-    publishers_list = User.objects.filter(profile__developer_status='2')
+    publishers_list = User.objects.filter(userprofile__developer_status='2')
 
     context = {
         'publishers': publishers_list

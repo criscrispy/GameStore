@@ -1,6 +1,12 @@
-"""
+"""Create fake content for testing the django application
+
 Loading image to django model is adapted from:
 http://www.revsys.com/blog/2014/dec/03/loading-django-files-from-code/
+
+Attributes:
+    USERNAME_ALPHABET:
+    PASSWORD_ALPHABET:
+
 """
 import logging
 import string
@@ -10,14 +16,13 @@ from django.contrib.auth.models import User
 from django.core.files import File
 from faker import Faker
 
-from gamestore.models import Profile, Game, Score, GameSale, Category
+from gamestore.models import UserProfile, Game, Score, GameSale, Category
+
+USERNAME_ALPHABET = string.ascii_letters + string.digits + "@.+-_"
+PASSWORD_ALPHABET = string.ascii_letters + string.digits + string.punctuation
 
 logger = logging.getLogger(__name__)
-
 fake = Faker()
-
-username_alphabet = string.ascii_letters + string.digits + "@.+-_"
-password_alphabet = string.ascii_letters + string.digits + string.punctuation
 
 
 def _call(arg):
@@ -79,16 +84,16 @@ def create_profile(user, image=None):
         image (BytesIO, optional):
 
     Returns:
-        Profile:
+        UserProfile:
     """
     logger.info({'user': user, 'image': image})
 
-    profile = Profile.objects.create(user=user)
+    user_profile = UserProfile.objects.create(user=user)
 
     if image is not None:
-        profile.image.save(image.name, File(image))
+        user_profile.picture.save(image.name, File(image))
 
-    return profile
+    return user_profile
 
 
 def create_category(category_title=fake.word,

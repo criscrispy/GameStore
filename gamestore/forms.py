@@ -1,11 +1,23 @@
+"""Gamestore Forms"""
 from django import forms
-from gamestore.models import Game
+from django.contrib.auth.models import User
+
+from gamestore.models import Game, UserProfile
 
 
-class ProfileForm(forms.ModelForm):
-    """Form for modifying ``User``'s details and ``Profile``."""
+class UserForm(forms.ModelForm):
+    """User form"""
     class Meta:
-        pass
+        model = User
+        fields = ['first_name', 'last_name', 'email']
+
+
+class UserProfileForm(forms.ModelForm):
+    """Profile form"""
+    class Meta:
+        model = UserProfile
+        fields = ['gender', 'picture', 'website', 'bio', 'city', 'country',
+                  'organization']
 
 
 class GameForm(forms.ModelForm):
