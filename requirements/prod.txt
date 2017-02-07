@@ -1,3 +1,4 @@
 ## Production requirements
 
 -r common.txt
+gunicorn
