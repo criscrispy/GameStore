@@ -31,7 +31,7 @@ SECRET_KEY = '*5wm+_=gsjd@l@cbvx)bv!^78f*v)cvm=5hgju_p7u%%v2#c90'
 # Configured in dev.py and prod.py
 # DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['fast-ridge-53625.herokuapp.com']
 
 
 # Application definition
