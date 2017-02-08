@@ -5,6 +5,7 @@ django
 django-registration-redux
 django-bootstrap3
 django-extensions
+django-imagekit
 Pillow
 PyYAML
 

@@ -11,7 +11,7 @@ from gamestore.tests.create_content import create_user, \
 def populate(user_amount, game_amount, sales_amount, scores_amount):
     image_game = create_image(name="image", width=128, height=128)
     image_icon = create_image(name="icon", width=48, height=48)
-    image_profile = create_image(name="profile", width=128, height=128)
+    # image_profile = create_image(name="profile", width=300, height=300)
 
     users = []
     categories = []
@@ -34,7 +34,7 @@ def populate(user_amount, game_amount, sales_amount, scores_amount):
         except IntegrityError:
             # Tries to create new user with existing username
             continue
-        create_profile(user, image=image_profile)
+        # create_profile(user, image=image_profile)
         users.append(user)
 
     if users:

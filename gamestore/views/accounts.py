@@ -1,27 +1,45 @@
-"""Gamestore Account Views"""
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.core.exceptions import PermissionDenied
-from django.forms import inlineformset_factory
-from django.http import HttpResponse
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+"""Gamestore Account Views
 
-from gamestore.forms import UserProfileForm
+Profile page should display
+
+User (auth) & UserProfile
+
+- picture
+- first_name
+- last_name
+- email
+- gender
+- website
+- bio
+- city
+- country
+- organization
+- developer status
+
+Buttons
+
+- Apply for developer
+- Edit information
+
+
+Todo:
+    - Display profile image
+    - Allow anyone to view profiles
+    - Profile edit is not redirecting correctly after submit
+
+"""
+from django.contrib.auth.decorators import login_required
+from django.db import transaction
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, render, redirect
+
+from gamestore.forms import UserProfileForm, UserForm
 from gamestore.models import UserProfile
 
 
 @login_required
 def profile(request):
-    """User profile view.
-
-    - Show user profile
-    - Change user profile
-
-    Todo:
-        - Display profile image
-
-    """
+    """Show User's profile view"""
     user_profile = get_object_or_404(UserProfile, user__id=request.user.id)
     context = {
         'user': request.user,
@@ -31,50 +49,40 @@ def profile(request):
 
 
 @login_required
-def edit_user(request, pk):
-    """Edit User Information"""
-    user = User.objects.get(pk=pk)
-    user_form = UserProfileForm(instance=user)
-
-    ProfileInlineFormset = inlineformset_factory(
-        User, UserProfile,
-        fields=('website', 'bio', 'city', 'country', 'organization')
-    )
-    formset = ProfileInlineFormset(instance=user)
-
-    if request.user.is_authenticated() and request.user.id == user.id:
-        if request.method == "POST":
-            user_form = UserProfileForm(request.POST, request.FILES,
-                                        instance=user)
-            formset = ProfileInlineFormset(request.POST, request.FILES,
-                                           instance=user)
-
-            if user_form.is_valid():
-                created_user = user_form.save(commit=False)
-                formset = ProfileInlineFormset(request.POST, request.FILES,
-                                               instance=created_user)
-
-                if formset.is_valid():
-                    created_user.save()
-                    formset.save()
-                    return HttpResponseRedirect('/accounts/profile/')
-
-        return render(request, "account/account_update.html", {
-            "noodle": pk,
-            "noodle_form": user_form,
-            "formset": formset,
-        })
+@transaction.atomic
+def profile_edit(request):
+    """Edit user profile information"""
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = UserProfileForm(request.POST,
+                                       instance=request.user.userprofile)
+        if user_form.is_valid() and profile_form.is_valid():
+            # Update was successful
+            user_form.save()
+            profile_form.save()
+            return redirect("/accounts/profile/")
+        else:
+            # Error
+            pass
     else:
-        raise PermissionDenied()
+        user_form = UserForm(instance=request.user)
+        profile_form = UserProfileForm(instance=request.user.userprofile)
+
+    return render(request, 'accounts/profile_edit.html', {
+        'user_form': user_form,
+        'profile_form': profile_form
+    })
 
 
-def user_history(request, user_id):
-    return HttpResponse()
-
-
-def apply_developer(request, user_id):
+@login_required()
+def apply_developer(request):
     """Apply for developer status."""
+    # TODO: replace with better implementation
     user_profile = get_object_or_404(UserProfile, user__id=request.user.id)
     user_profile.developer_status = '1'
     user_profile.save()
     return profile(request)
+
+
+def user_history(request, user_id):
+    return HttpResponse()

@@ -62,14 +62,14 @@ language = 'en'
 today_fmt = '%Y-%m-%d'
 
 pygments_style = 'sphinx'
-todo_include_todos = False
+todo_include_todos = True
 
 # -- Graphviz --------------------------------------------------------
 
-# extensions += ['sphinx.ext.graphviz']
-# graphviz_dot = 'dot'
-# graphviz_dot_args = []
-# graphviz_output_format = 'png'  # svg
+extensions += ['sphinx.ext.graphviz']
+graphviz_dot = 'dot'
+graphviz_dot_args = []
+graphviz_output_format = 'png'  # svg
 
 
 # -- Napoleon --------------------------------------------------------

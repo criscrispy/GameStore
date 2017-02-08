@@ -11,6 +11,7 @@ Web Software Development Project - Game Store
 
    project_plan
    development
+   graph
 
 .. toctree::
    :maxdepth: 2
@@ -23,4 +24,3 @@ Web Software Development Project - Game Store
    gamestore/admin
    gamestore/service
    gamestore/indexes
-   gamestore/signals

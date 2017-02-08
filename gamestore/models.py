@@ -6,12 +6,30 @@ Attributes:
         - pending=user has applied to become a developer
         - confirmed=user is a developer
 
+    GENDER_CHOICES:
+        - Other
+        - Male
+        - Female
+
+
+References:
+    Profile
+
+    - https://stackoverflow.com/questions/6085025/django-user-profile
+    - https://stackoverflow.com/questions/35030556/django-user-profile-in-1-9
+    - https://blog.khophi.co/extending-django-user-model-userprofile-like-a-pro/
+    - https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html
+    - http://bootsnipp.com/snippets/featured/simple-user-profile
+
 """
 from django.contrib.auth.models import User
+from django.core.files import File
 from django.db import models
 from django.utils import timezone
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 from django.contrib.postgres.fields import JSONField
-
+from imagefactory import create_image
 
 DEVELOPER_STATUS_CHOICES = (
     ('0', 'basic_user'),
@@ -19,26 +37,29 @@ DEVELOPER_STATUS_CHOICES = (
     ('2', 'confirmed'),
 )
 
+GENDER_CHOICES = (
+    ('other', 'Other'),
+    ('male', 'Male'),
+    ('female', 'Female'),
+)
+
 
 class UserProfile(models.Model):
     """User profile.
 
-    References:
-        - https://stackoverflow.com/questions/6085025/django-user-profile
-        - https://stackoverflow.com/questions/35030556/django-user-profile-in-1-9
-        - https://blog.khophi.co/extending-django-user-model-userprofile-like-a-pro/
-
     Todo:
-        - Gender choices
-        - Picture constraints (size, ...)
-
+        - Picture constraints (size, ...) -> django-imagekit
+        - Picture default url
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    gender = models.CharField(default='', max_length=140, blank=True)
+
     picture = models.ImageField("Profile picture.", upload_to="profiles",
                                 null=True, blank=True)
+
+    gender = models.CharField(default='', max_length=140, blank=True,
+                              choices=GENDER_CHOICES)
     website = models.URLField(default='', blank=True)
-    bio = models.TextField(default='', blank=True)
+    bio = models.TextField(default='', blank=True, max_length=500)
     city = models.CharField(max_length=100, default='', blank=True)
     country = models.CharField(max_length=100, default='', blank=True)
     organization = models.CharField(max_length=100, default='', blank=True)
@@ -47,6 +68,22 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return str(self.user.first_name + " " + self.user.last_name)
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    """Create `Profile` for every `User` that is created."""
+    if created:
+        user_profile = UserProfile.objects.create(user=instance)
+
+        # Create profile picture for every profile
+        # image = create_image(name="profile", width=300, height=300)
+        # user_profile.picture.save(image.name, File(image))
+
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.userprofile.save()
 
 
 class Category(models.Model):

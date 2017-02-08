@@ -34,8 +34,10 @@ from faker import Faker
 from hypothesis import given
 from hypothesis import settings
 
+from gamestore.models import UserProfile
 from gamestore.tests.create_content import create_profile, create_game, \
     create_category, create_game_sale
+from gamestore.views.accounts import apply_developer
 
 settings.register_profile('dev', settings(max_examples=10))
 # env = os.getenv(u'HYPOTHESIS_PROFILE', 'default')
@@ -140,16 +142,29 @@ def test_profile(client, admin_user):
     # Login
     client.login(username=admin_user.username, password='password')
 
-    # Profile not configured
-    response = client.get(url)
-    assert response.status_code == 404
-
-    # Create profile
-    profile = create_profile(admin_user)
-
-    # Profile configured
+    # Profile is configured as creation of user
     response = client.get(url)
     assert response.status_code == 200
+
+
+def test_profile_edit(client, admin_user):
+    """Test profile edit"""
+    url = '/accounts/edit/profile'
+
+    # Not logged in
+    response = client.get(url)
+    assert response.status_code == 302
+
+    # Login
+    client.login(username=admin_user.username, password='password')
+
+    # GET
+    response = client.get(url)
+    assert response.status_code == 200
+
+    # POST
+    response = client.post(url, {})
+    assert response.status_code == 302
 
 
 # -----------------------------------------------------------------------------
@@ -235,13 +250,6 @@ def test_game_sale(client, admin_user):
     # Login
     client.login(username=admin_user.username, password='password')
 
-    # Logged in, profile does not exist
-    response = client.get(url.format(user_id=admin_user.id))
-    assert response.status_code == 404
-
-    # Create profile
-    profile = create_profile(admin_user)
-
     # Logged in, profile does exists
     response = client.get(url.format(user_id=admin_user.id))
     assert response.status_code == 200
@@ -288,12 +296,9 @@ def test_upload(client, admin_user):
     # Login
     client.login(username=admin_user.username, password='password')
 
-    # Logged in but profile not found
-    response = client.get(url)
-    assert response.status_code == 404
-
     # Create profile
-    profile = create_profile(admin_user)
+    # profile = create_profile(admin_user)
+    profile = UserProfile.objects.get(user=admin_user)
     profile.developer_status = 1
     profile.save()
 

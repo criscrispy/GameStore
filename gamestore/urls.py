@@ -48,6 +48,8 @@ Developer
 
 """
 from django.conf.urls import url, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 import gamestore.views.accounts
 import gamestore.views.base
@@ -82,11 +84,18 @@ urlpatterns.extend([
 
 # Account views
 urlpatterns.extend([
-    url(r'^accounts/profile', gamestore.views.accounts.profile, name='profile'),
+    url(r'^accounts/profile',
+        gamestore.views.accounts.profile,
+        name='profile'),
+    url(r'^accounts/edit/profile',
+        gamestore.views.accounts.profile_edit,
+        name='profile.edit'),
     url(r'^history/(?P<user_id>[0-9]+)',
-        gamestore.views.accounts.user_history, name='user.history'),
+        gamestore.views.accounts.user_history,
+        name='user.history'),
     url(r'^apply/(?P<user_id>[0-9]+)',
-        gamestore.views.accounts.apply_developer, name='publisher.apply'),
+        gamestore.views.accounts.apply_developer,
+        name='publisher.apply'),
 ])
 
 # Player views
@@ -176,3 +185,7 @@ urlpatterns.extend([
     #   view to show the upload form
     url(r'^upload', developers.upload, name='games.upload'),
 ])
+
+# Static files for development use
+# https://docs.djangoproject.com/en/1.10/howto/static-files/#serving-files-uploaded-by-a-user-during-development
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
