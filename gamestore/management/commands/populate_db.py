@@ -2,10 +2,10 @@ import random
 
 from django.core.management.base import BaseCommand
 from django.db import IntegrityError
-
 from imagefactory import create_image
+
 from gamestore.tests.create_content import create_user, \
-    create_profile, create_game, create_score, create_game_sale, create_category
+    create_game, create_score, create_game_sale, create_category
 
 
 def populate(user_amount, game_amount, sales_amount, scores_amount):
@@ -34,7 +34,6 @@ def populate(user_amount, game_amount, sales_amount, scores_amount):
         except IntegrityError:
             # Tries to create new user with existing username
             continue
-        # create_profile(user, image=image_profile)
         users.append(user)
 
     if users:

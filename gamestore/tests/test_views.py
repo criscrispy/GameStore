@@ -35,9 +35,8 @@ from hypothesis import given
 from hypothesis import settings
 
 from gamestore.models import UserProfile
-from gamestore.tests.create_content import create_profile, create_game, \
+from gamestore.tests.create_content import create_game, \
     create_category, create_game_sale
-from gamestore.views.accounts import apply_developer
 
 settings.register_profile('dev', settings(max_examples=10))
 # env = os.getenv(u'HYPOTHESIS_PROFILE', 'default')

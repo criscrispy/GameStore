@@ -20,7 +20,7 @@ def uploads(request, user_id):
 
 @login_required
 def upload(request):
-    """Upload"""
+    """Upload new game of modify existing."""
     # if user is not a developer/publisher, yet redirect to profile page where
     # they can apply
     user_profile = get_object_or_404(UserProfile, user__id=request.user.id)

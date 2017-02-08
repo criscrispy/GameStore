@@ -20,6 +20,7 @@ from gamestore.models import UserProfile, Game, Score, GameSale, Category
 
 USERNAME_ALPHABET = string.ascii_letters + string.digits + "@.+-_"
 PASSWORD_ALPHABET = string.ascii_letters + string.digits + string.punctuation
+PASSWORD = "password"
 
 logger = logging.getLogger(__name__)
 fake = Faker()
@@ -45,10 +46,10 @@ def create_user(username=fake.user_name,
                 first_name=fake.first_name,
                 last_name=fake.last_name,
                 email=fake.email,
-                password="password",
+                password=PASSWORD,
+                picture=None,
                 superuser=False):
-    """
-    Create user
+    """Create new user. UserProfile by django signals by default.
 
     Args:
         username (str|Callable[str]):
@@ -57,6 +58,7 @@ def create_user(username=fake.user_name,
         first_name (str|Callable[str]):
         last_name (str|Callable[str]):
         superuser (boolean): Create superuser
+        picture (BytesIO, optional):
 
     Returns:
         User: Created user
@@ -68,32 +70,17 @@ def create_user(username=fake.user_name,
     else:
         _create_user = User.objects.create_user
 
-    return _create_user(_call(username),
+    user = _create_user(_call(username),
                         email=_call(email),
                         password=_call(password),
                         first_name=_call(first_name),
                         last_name=_call(last_name))
 
+    user_profile = UserProfile.objects.get(user=user)
+    if picture is not None:
+        user_profile.picture.save(picture.name, File(picture))
 
-def create_profile(user, image=None):
-    """
-    Create user profile.
-
-    Args:
-        user (User):
-        image (BytesIO, optional):
-
-    Returns:
-        UserProfile:
-    """
-    logger.info({'user': user, 'image': image})
-
-    user_profile = UserProfile.objects.create(user=user)
-
-    if image is not None:
-        user_profile.picture.save(image.name, File(image))
-
-    return user_profile
+    return user
 
 
 def create_category(category_title=fake.word,
