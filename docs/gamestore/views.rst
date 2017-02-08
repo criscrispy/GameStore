@@ -26,7 +26,7 @@ Developers
 ----------
 
 .. automodule:: gamestore.views.developers
-   :members
+   :members:
 
 
 Payments

@@ -1,29 +1,89 @@
+"""Gamestore Models
+
+Attributes:
+    DEVELOPER_STATUS_CHOICES:
+        - basic_user=not_developer,
+        - pending=user has applied to become a developer
+        - confirmed=user is a developer
+
+    GENDER_CHOICES:
+        - Other
+        - Male
+        - Female
+
+
+References:
+    Profile
+
+    - https://stackoverflow.com/questions/6085025/django-user-profile
+    - https://stackoverflow.com/questions/35030556/django-user-profile-in-1-9
+    - https://blog.khophi.co/extending-django-user-model-userprofile-like-a-pro/
+    - https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html
+    - http://bootsnipp.com/snippets/featured/simple-user-profile
+
+"""
 from django.contrib.auth.models import User
+from django.core.files import File
 from django.db import models
 from django.utils import timezone
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 from django.contrib.postgres.fields import JSONField
+from imagefactory import create_image
+
+DEVELOPER_STATUS_CHOICES = (
+    ('0', 'basic_user'),
+    ('1', 'pending'),
+    ('2', 'confirmed'),
+)
+
+GENDER_CHOICES = (
+    ('other', 'Other'),
+    ('male', 'Male'),
+    ('female', 'Female'),
+)
 
 
-class Profile(models.Model):
-    """User profile."""
-    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
-    image = models.ImageField("Profile image.", upload_to="profile")
+class UserProfile(models.Model):
+    """User profile.
 
-    developer_status_choices = (
-        ('0', 'basic_user'),
-        ('1', 'pending'),
-        ('2', 'confirmed'),
-    )
+    Todo:
+        - Picture constraints (size, ...) -> django-imagekit
+        - Picture default url
     """
-    - basic_user=not_developer,
-    - pending=user has applied to become a developer
-    - confirmed=user is a developer
-    """
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    picture = models.ImageField("Profile picture.", upload_to="profiles",
+                                null=True, blank=True)
+
+    gender = models.CharField(default='', max_length=140, blank=True,
+                              choices=GENDER_CHOICES)
+    website = models.URLField(default='', blank=True)
+    bio = models.TextField(default='', blank=True, max_length=500)
+    city = models.CharField(max_length=100, default='', blank=True)
+    country = models.CharField(max_length=100, default='', blank=True)
+    organization = models.CharField(max_length=100, default='', blank=True)
     developer_status = models.CharField(max_length=1, default='0',
-                                        choices=developer_status_choices)
+                                        choices=DEVELOPER_STATUS_CHOICES)
 
     def __str__(self):
         return str(self.user.first_name + " " + self.user.last_name)
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    """Create `Profile` for every `User` that is created."""
+    if created:
+        user_profile = UserProfile.objects.create(user=instance)
+
+        # Create profile picture for every profile
+        # image = create_image(name="profile", width=300, height=300)
+        # user_profile.picture.save(image.name, File(image))
+
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.userprofile.save()
 
 
 class Category(models.Model):
@@ -76,6 +136,7 @@ class GameSale(models.Model):
     date = models.DateTimeField("Date when game was bought", blank=False,
                                 default=timezone.now)
 
+
 class GamePayments(models.Model):
     """Model for saving data to communicate with payment API
     :param pid: payment identifier passed to API"""
@@ -92,6 +153,7 @@ class GameSettings(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE, blank=False)
     settings = models.CharField(default="", max_length=2000)
     # todo settings = JSONField(default="")
+
 
 class Configuration(models.Model):
     """Model for app configuration"""

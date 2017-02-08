@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block content %}
+
+<div class="col s12 m8 offset-m2">
+    <div class="card">
+        <div class="card-content">
+            <h2 class="flow-text">Edit Profile Information</h2>
+
+            <!-- Form for changing user & profile information -->
+            <form method="POST" class="padding">
+                {% csrf_token %}
+                {% bootstrap_form user_form layout='inline' %}
+                {% bootstrap_form profile_form layout='inline' %}
+
+                <div class="form-group">
+                    <input class="btn btn-default" type="submit" value="Submit"/>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

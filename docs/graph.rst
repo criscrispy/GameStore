@@ -1,0 +1,4 @@
+Graph
+=====
+
+.. graphviz:: graph.dot
