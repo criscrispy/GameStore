@@ -11,6 +11,7 @@ Web Software Development Project - Game Store
 
    project_plan
    development
+   graph
 
 .. toctree::
    :maxdepth: 2

@@ -17,11 +17,15 @@ formatters:
   plain:
     format: "%(asctime)s - %(levelname)s <%(funcName)s> %(message)s"
 
+  colored:
+    (): "colorlog.ColoredFormatter"
+    format: "%(log_color)s%(levelname)-8s%(reset)s %(blue)s%(message)s"
+
 
 handlers:
   console:
     class: "logging.StreamHandler"
-    formatter: plain
+    formatter: colored
     level: INFO
     stream: "ext://sys.stdout"
 

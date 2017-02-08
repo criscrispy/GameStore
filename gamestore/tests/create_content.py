@@ -1,6 +1,12 @@
-"""
+"""Create fake content for testing the django application
+
 Loading image to django model is adapted from:
 http://www.revsys.com/blog/2014/dec/03/loading-django-files-from-code/
+
+Attributes:
+    USERNAME_ALPHABET:
+    PASSWORD_ALPHABET:
+
 """
 import logging
 import string
@@ -10,14 +16,14 @@ from django.contrib.auth.models import User
 from django.core.files import File
 from faker import Faker
 
-from gamestore.models import Profile, Game, Score, GameSale, Category
+from gamestore.models import UserProfile, Game, Score, GameSale, Category
+
+USERNAME_ALPHABET = string.ascii_letters + string.digits + "@.+-_"
+PASSWORD_ALPHABET = string.ascii_letters + string.digits + string.punctuation
+PASSWORD = "password"
 
 logger = logging.getLogger(__name__)
-
 fake = Faker()
-
-username_alphabet = string.ascii_letters + string.digits + "@.+-_"
-password_alphabet = string.ascii_letters + string.digits + string.punctuation
 
 
 def _call(arg):
@@ -40,10 +46,10 @@ def create_user(username=fake.user_name,
                 first_name=fake.first_name,
                 last_name=fake.last_name,
                 email=fake.email,
-                password="password",
+                password=PASSWORD,
+                picture=None,
                 superuser=False):
-    """
-    Create user
+    """Create new user. UserProfile by django signals by default.
 
     Args:
         username (str|Callable[str]):
@@ -52,6 +58,7 @@ def create_user(username=fake.user_name,
         first_name (str|Callable[str]):
         last_name (str|Callable[str]):
         superuser (boolean): Create superuser
+        picture (BytesIO, optional):
 
     Returns:
         User: Created user
@@ -63,32 +70,17 @@ def create_user(username=fake.user_name,
     else:
         _create_user = User.objects.create_user
 
-    return _create_user(_call(username),
+    user = _create_user(_call(username),
                         email=_call(email),
                         password=_call(password),
                         first_name=_call(first_name),
                         last_name=_call(last_name))
 
+    user_profile = UserProfile.objects.get(user=user)
+    if picture is not None:
+        user_profile.picture.save(picture.name, File(picture))
 
-def create_profile(user, image=None):
-    """
-    Create user profile.
-
-    Args:
-        user (User):
-        image (BytesIO, optional):
-
-    Returns:
-        Profile:
-    """
-    logger.info({'user': user, 'image': image})
-
-    profile = Profile.objects.create(user=user)
-
-    if image is not None:
-        profile.image.save(image.name, File(image))
-
-    return profile
+    return user
 
 
 def create_category(category_title=fake.word,

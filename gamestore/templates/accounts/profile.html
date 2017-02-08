@@ -1,65 +1,105 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 
+{% comment %}
+http://bootsnipp.com/snippets/featured/simple-user-profile
+{% endcomment %}
 
 {% block content %}
-    <div class="col-sm-8">
-        <form class="form-horizontal">
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="exampleInputEmail1">Username</label>
-                <div class="col-sm-10">
-                <input  class="form-control" value="{{ user.username  }}" name="" type="text">
-                </div>
-            </div>
 
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="exampleInputEmail1">Email address</label>
-                <div class="col-sm-10">
-                <input class="form-control" value="{{ user.email }}" name="" type="email">
-                </div>
-            </div>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad">
+            <div class="panel panel-info">
 
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="exampleInputEmail1">First Name</label>
-                <div class="col-sm-10">
-                <input class="form-control" value="{{ user.first_name }}" name="" type="text">
+                <!-- Profile -->
+                <div class="panel-heading">
+                    <!-- Username -->
+                    <h3 class="panel-title">{{ user.username }}</h3>
                 </div>
-            </div>
+                <div class="panel-body">
+                    <div class="row">
 
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="exampleInputEmail1">Last Name</label>
-                <div class="col-sm-10">
-                <input class="form-control" value="{{ user.last_name }}" name="" type="text">
-                </div>
-            </div>
+                        <!-- Profile Picture -->
+                        <!-- FIXME: Handle profile.picture.url when it doesnt exist -->
+                        {% static 'images/profile_default.png' as profile_default %}
+                        <div class="col-md-3 col-lg-3 "
+                         align="center"><img
+                            alt="Profile Picture"
+{#                            src="{{ profile.picture.url }}"#}
+                            src="{{ profile_default }}"
+                            class="img-circle img-responsive">
+                        </div>
 
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-default">Save</button>
+                        <!-- User Information -->
+                        <div class=" col-md-9 col-lg-9 ">
+                            <!-- Table of user information -->
+                            <table class="table table-user-information">
+                                <tbody>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>{{ user.first_name }} {{ user.last_name }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Email</td>
+                                    <td><a href="mailto:info@support.com">{{ user.email }}</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Gender</td>
+                                    <td>{{ profile.gender }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Website</td>
+                                    <td>{{ profile.website }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Bio</td>
+                                    <td>{{ profile.bio }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Country</td>
+                                    <td>{{ profile.country }}</td>
+                                </tr>
+                                <tr>
+                                    <td>City</td>
+                                    <td>{{ profile.city }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Organization</td>
+                                    <td>{{ profile.organization }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Status</td>
+                                    {% if profile.developer_status == '2' %}
+                                        <td>Developer</td>
+                                    {% elif profile.developer_status == '1' %}
+                                        <td>Player. Developer application is pending.</td>
+                                    {% else %}
+                                        <td>Player</td>
+                                    {% endif %}
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        <!-- Buttons. Only for authenticated user for their own profiles. -->
+                        <!-- TODO: user.id == profile.user.id -->
+                        {% if user.is_authenticated %}
+                            <!-- Edit Profile -->
+                            <a href="{% url 'profile.edit' %}" class="btn btn-primary">Edit profile</a>
+
+                            <!-- Apply for becoming a developer -->
+                            {% if profile.developer_status == '0' %}
+                                <a href="{% url 'publisher.apply' %}" class="btn btn-primary">Apply to become a developer</a>
+                            {% endif %}
+                        {% endif %}
+                        </div>
+                    </div>
                 </div>
+
             </div>
-        </form>
+        </div>
     </div>
-
-    <div class="col-sm-4">
-        {% if profile.developer_status == '2' %}
-            <h4>
-                <p>You are a developer!</p>
-                <a  class="btn btn-default" href="{% url 'games.upload' %}">Upload games!</a>
-            </h4>
-        {% elif profile.developer_status == '1' %}
-            <h4>You have applied to become a developer!</h4>
-            <strong>
-                <p>Your application is pending!</p>
-                Meanwhile.. Go to <a href="{% url 'games.list' %}">Games</a>
-            </strong>
-
-        {% else %}
-            <h4>
-                <p>Become a developer!</p>
-                <p>Upload games!</p>
-               <a href="{% url 'publisher.apply' user_id=user.id %}" class="btn btn-primary">Apply now</a>
-            </h4>
-        {% endif  %}
-    </div>
+</div>
 
 {% endblock %}

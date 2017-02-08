@@ -135,7 +135,9 @@ STATIC_URL = '/static/'
 
 
 # Media (user uploads) files
+# https://docs.djangoproject.com/en/1.10/ref/settings/#std:setting-MEDIA_ROOT
 MEDIA_DIR = 'media'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, MEDIA_DIR)
 
 
@@ -146,6 +148,12 @@ REGISTRATION_AUTO_LOGIN = True
 
 
 # Setup logging config from `logging.yaml` file.
+try:
+    import colorama
+    colorama.init()
+except ImportError:
+    pass
+
 LOGGING_CONFIG = None
 LOGGING_FILE = os.path.join(BASE_DIR, 'logging.yaml')  # logging config file
 LOG_DIR = os.path.join(BASE_DIR, '.logs')  # Directory to save log files

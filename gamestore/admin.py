@@ -15,7 +15,7 @@ class GameAdmin(admin.ModelAdmin):
 
 # Register your models here.
 admin.site.register(Game, GameAdmin)
-admin.site.register(Profile)
+admin.site.register(UserProfile)
 admin.site.register(Score)
 admin.site.register(GameSale)
 admin.site.register(Category)

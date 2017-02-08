@@ -1,0 +1,9 @@
+digraph G {
+    /* Entities */
+    profile [label="Profile"];
+    edit [label="Profile Form"];
+
+    /* Relationships */
+    profile -> edit [label="edit"];
+    edit -> profile [label="is_valid"];
+}
