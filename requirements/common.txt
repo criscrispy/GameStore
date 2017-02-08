@@ -13,6 +13,8 @@ Pillow
 PyYAML
 
 simplejson
+##static files
+whitenoise
 
 ## Search engine
 django-haystack
@@ -21,3 +23,4 @@ whoosh
 ## PostgreSQL
 # Requires `python3.5-dev` installed
 psycopg2
+dj-database-url
