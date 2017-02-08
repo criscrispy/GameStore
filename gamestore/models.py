@@ -29,7 +29,6 @@ from django.utils import timezone
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.contrib.postgres.fields import JSONField
-from imagefactory import create_image
 
 DEVELOPER_STATUS_CHOICES = (
     ('0', 'basic_user'),
