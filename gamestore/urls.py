@@ -93,7 +93,7 @@ urlpatterns.extend([
     url(r'^history/(?P<user_id>[0-9]+)',
         gamestore.views.accounts.user_history,
         name='user.history'),
-    url(r'^apply/(?P<user_id>[0-9]+)',
+    url(r'^apply',
         gamestore.views.accounts.apply_developer,
         name='publisher.apply'),
 ])
