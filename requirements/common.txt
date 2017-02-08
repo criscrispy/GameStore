@@ -1,6 +1,9 @@
 ## Project Dependencies
 # https://pip.pypa.io/en/stable/reference/pip_install/#requirements-file-format
 
+colorama
+colorlog
+
 django
 django-registration-redux
 django-bootstrap3

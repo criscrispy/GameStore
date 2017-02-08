@@ -148,6 +148,12 @@ REGISTRATION_AUTO_LOGIN = True
 
 
 # Setup logging config from `logging.yaml` file.
+try:
+    import colorama
+    colorama.init()
+except ImportError:
+    pass
+
 LOGGING_CONFIG = None
 LOGGING_FILE = os.path.join(BASE_DIR, 'logging.yaml')  # logging config file
 LOG_DIR = os.path.join(BASE_DIR, '.logs')  # Directory to save log files
