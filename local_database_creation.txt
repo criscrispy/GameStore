@@ -1,0 +1,11 @@
+apt install pgadmin3
+psql
+## create db
+CREATE DATABASE gamestore;
+CREATE USER gameadmin WITH PASSWORD 'gameadmin';
+ALTER ROLE gameadmin SET client_encoding TO 'utf8';
+ALTER ROLE gameadmin SET default_transaction_isolation TO 'read committed';
+ALTER ROLE gameadmin SET timezone TO 'UTC';
+GRANT ALL PRIVILEGES ON DATABASE myproject TO gamestore;
+\q
+exit
