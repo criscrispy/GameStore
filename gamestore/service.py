@@ -3,6 +3,7 @@ import uuid
 from hashlib import md5
 from logging import error, debug
 
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 
 from gamestore.constants import *
@@ -95,7 +96,7 @@ def find_best_scores_for_game(game, number=10):
 
 def load_game_buy_context(game, request):
     """Prepare context for game buying view, load parameters needed by payment API"""
-    service_url = get_service_url()
+    service_url = get_service_url(request)
     sid = get_payment_sid()
     pid = generate_pid()
     save_payment(pid, game, request.user)
@@ -199,7 +200,6 @@ def remove_payment(game, user, pid):
 
 def find_saved_payment(game, user):
     payment = GamePayments.objects.get(game=game, buyer=user)
-
     return payment
 
 
@@ -220,7 +220,7 @@ def save_game_sale(user, game):
     game_sale.save()
 
 
-# TODO implement configuration
+# TODO implement configuration system properties
 
 def get_payment_sid():
     """Get payment sid from configuration"""
@@ -228,10 +228,11 @@ def get_payment_sid():
 
 
 def get_payment_secret():
-    """Get payment password from configuration"""
+    """ Get payment password from configuration"""
     return '873efc3f8f8ca2605de7a4101d3322ba'
 
 
-def get_service_url():
-    """Get game service URL from configuration"""
-    return 'http://localhost:8000'
+def get_service_url(request):
+    """Get game service URL from request"""
+    url = get_current_site(request).domain
+    return 'http://'+url
