@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <style>
+        canvas {
+            border: 0px;
+            background-color: #f1f1f1;
+        }
+    </style>
+    <script type="text/javascript" src="lib/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="game.js"></script>
+    <script type="text/javascript" src="message.js"></script>
+</head>
+<body onload="$('#save').hide();startGame();">
+
+<br>
+<ul id="actions">
+</ul>
+<button onmousedown="accelerate(-0.2)" onmouseup="accelerate(0.05)" style="background-color: red">UP</button>
+<button id="pause" onclick="pauseGame()">PAUSE</button>
+<button id="save" onclick="saveState()">SAVE STATE</button>
+</body>
+</html>
