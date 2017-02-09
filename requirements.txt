@@ -1,2 +1,4 @@
 -r requirements/prod.txt
+# Fake data creation
+faker
 imagefactory
