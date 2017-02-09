@@ -52,13 +52,14 @@ def save_game_state(request, game_id, state):
         valid_state = validate_json(state)
     except ValueError:
         error(COULD_NOT_SAVE_STATE)
-    try:
+    else:
         state = find_saved_state(game_id, request)
-        state.settings = valid_state
-    except ObjectDoesNotExist:
-        debug("creating new game state object")
-        state = GameSettings(game_id=game_id, player=request.user, settings=valid_state)
-    state.save()
+        if state:
+            state.settings = valid_state
+        else:
+            debug("creating new game state object")
+            state = GameSettings(game_id=game_id, player=request.user, settings=valid_state)
+        state.save()
 
 
 def save_game_score(request, game_id, score):
