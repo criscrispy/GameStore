@@ -9,7 +9,7 @@
             <h4 class="flow-text">Edit Profile Information</h4>
 
             <!-- Form for changing user & profile information -->
-            <form method="POST" class="padding">
+            <form method="POST" enctype="multipart/form-data" class="padding">
                 {% csrf_token %}
                 {% bootstrap_form user_form layout='inline' %}
                 {% bootstrap_form profile_form layout='inline' %}
