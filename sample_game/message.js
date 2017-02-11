@@ -5,7 +5,7 @@ $(document).ready(function () {
     $(window).on('message', function (evt) {
         //Get data from sent message
         var data = evt.originalEvent.data;
-        alert(data.messageType);
+        //alert(data.messageType);
         handleMessage(data);
 
     });
@@ -23,8 +23,9 @@ function handleMessage(data) {
             console.log("unsupported message" + data);
     }
 }
+
 function loadGame(gameState) {
-    alert("game loaded" + gameState);
+    displayMessage("<p>Game load received" + JSON.stringify(gameState) + " <br/> Loading not yet implemented on the game side</p>", false);
 }
 function showError(error) {
     //Create a new list item based on the data
