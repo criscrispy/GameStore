@@ -4,7 +4,7 @@ var myScore;
 var dimensions = {width: 480, height: 270};
 
 function startGame() {
-    settings = {width: dimensions.width + 50, height: dimensions.height + 100}
+    settings = {width: dimensions.width + 50, height: dimensions.height + 120}
     sendSetting(settings);
     myGamePiece = new component(30, 30, "red", 10, 120);
     myGamePiece.gravity = 0.05;
@@ -12,10 +12,18 @@ function startGame() {
     myGameArea.start();
 }
 function endGame() {
-    alert("game over");
+    displayMessage("<h2>game over</h2>", true);
     clearInterval(myGameArea.interval);
     sendScore(myGameArea.frameNo);
 }
+function displayMessage(message, showoverlay) {
+    $('#message').html(message);
+    if (showoverlay) {
+        $('#overlay').show();
+    }
+
+}
+
 function pauseGame() {
     $('#pause').text("RESUME");
     $("#pause").attr("onclick", "resumeGame()");
