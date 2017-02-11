@@ -22,6 +22,9 @@ References:
     - http://bootsnipp.com/snippets/featured/simple-user-profile
 
 """
+import os
+
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.files import File
 from django.db import models
@@ -42,6 +45,13 @@ GENDER_CHOICES = (
     ('female', 'Female'),
 )
 
+PROFILE_DEFAULT = os.path.join(
+    settings.STATIC_ROOT, 'images', 'profile_default.png')
+GAME_ICON_DEFAULT = os.path.join(
+    settings.STATIC_ROOT, 'images', 'game_image_default.png')
+GAME_IMAGE_DEFAULT = os.path.join(
+    settings.STATIC_ROOT, 'images', 'game_icon_default.png')
+
 
 class UserProfile(models.Model):
     """User profile.
@@ -51,10 +61,8 @@ class UserProfile(models.Model):
         - Picture default url
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-
     picture = models.ImageField("Profile picture.", upload_to="profiles",
                                 null=True, blank=True)
-
     gender = models.CharField(default='', max_length=140, blank=True,
                               choices=GENDER_CHOICES)
     website = models.URLField(default='', blank=True)
@@ -117,8 +125,8 @@ class Game(models.Model):
         max_digits=4, decimal_places=2, blank=False,
     )
     url = models.URLField("", blank=False)
-    icon = models.ImageField("", upload_to="games")
-    image = models.ImageField("", upload_to="games")
+    icon = models.ImageField("", null=True, blank=True, upload_to="games/icons")
+    image = models.ImageField("", null=True, blank=True, upload_to="games/image")
 
 
 class Score(models.Model):

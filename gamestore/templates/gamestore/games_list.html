@@ -1,20 +1,36 @@
+{% comment %}
+List of available games.
+
+Displays games
+- image
+- title
+- price
+
+{% endcomment %}
+{% load staticfiles %}
+
 {% for game in games %}
+
     <div class="col-sm-6 col-md-4 game-container">
         <a href="{% url 'games.detail' game_id=game.id  %}">
         <div class="game-grid">
-            {% with y=forloop.counter|stringformat:"s" %}
-            {% with width="200"|add:y %}
-               <img width="100%" src="//www.fillmurray.com/200/{{ width }}">
-            {% endwith %}
-            {% endwith %}
 
+            <!-- game.image -->
+            {% if not game.image %}
+                <img class="img-responsive" width="100%" src={% static 'images/game_image_default.png' %}>
+            {% else %}
+                <img class="img-responsive" width="100%" src={{ game.image.url }}>
+            {% endif %}
+
+            <!-- Info about the game -->
             <div class="game-info">
-                <p>{{ game.price }}</p>
                 <strong>{{ game.title }}</strong>
+                <p>{{ game.price }} €</p>
             </div>
         </div>
         </a>
     </div>
+
 {% empty %}
     <strong>No games found</strong>
 {% endfor %}

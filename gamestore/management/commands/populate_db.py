@@ -9,7 +9,7 @@ from gamestore.tests.create_content import create_user, \
 
 
 def populate(user_amount, game_amount, sales_amount, scores_amount):
-    image_game = create_image(name="image", width=128, height=128)
+    image_game = create_image(name="image", width=256, height=256)
     image_icon = create_image(name="icon", width=48, height=48)
     # image_profile = create_image(name="profile", width=300, height=300)
 
@@ -31,15 +31,18 @@ def populate(user_amount, game_amount, sales_amount, scores_amount):
     for i in range(user_amount):
         try:
             user = create_user()
+            users.append(user)
         except IntegrityError:
             # Tries to create new user with existing username
-            continue
-        users.append(user)
+            pass
 
     if users:
         for title in category_titles:
-            category = create_category(title)
-            categories.append(category)
+            try:
+                category = create_category(title)
+                categories.append(category)
+            except IntegrityError:
+                pass
 
     if users and categories:
         for i in range(game_amount):
@@ -87,8 +90,42 @@ class Command(BaseCommand):
     .. [1] http://eli.thegreenplace.net/2014/02/15/programmatically-populating-a-django-database
     """
     # TODO: Add arguments
-    args = '<amount>'
     help = 'Populates database with data for testing the website.'
 
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--users',
+            dest='user_amount',
+            default=10,
+            type=int,
+            help='Amount of users to create.'
+        )
+        parser.add_argument(
+            '--games',
+            dest='game_amount',
+            default=2,
+            type=int,
+            help='Amount of games to create.'
+        )
+        parser.add_argument(
+            '--sales',
+            dest='sales_amount',
+            default=10,
+            type=int,
+            help='Amount of sales to create.'
+        )
+        parser.add_argument(
+            '--scores',
+            dest='scores_amount',
+            default=20,
+            type=int,
+            help='Amount of scores to create.'
+        )
+
     def handle(self, *args, **options):
-        populate(10, 50, 10, 10)
+        populate(
+            options['user_amount'],
+            options['game_amount'],
+            options['sales_amount'],
+            options['scores_amount'],
+        )

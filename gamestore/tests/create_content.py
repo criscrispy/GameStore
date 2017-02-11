@@ -8,6 +8,8 @@ Attributes:
     PASSWORD_ALPHABET:
 
 """
+import functools
+import inspect
 import logging
 import string
 from functools import partial
@@ -26,6 +28,55 @@ logger = logging.getLogger(__name__)
 fake = Faker()
 
 
+class log_with(object):
+    """Logging decorator that allows you to log with a specific logger.
+
+    Todo:
+        - loglevel
+        - Pretty formatting
+        - function call stack level
+        - timer
+        - args & kwargs
+    """
+
+    def __init__(self, logger=None, entry_msg=None, exit_msg=None):
+        self.logger = logger
+        self.entry_msg = entry_msg
+        self.exit_msg = exit_msg
+
+    def __call__(self, function):
+        """Returns a wrapper that wraps func. The wrapper will log the entry
+        and exit points of the function with logging.INFO level.
+        """
+        if not self.logger:
+            # If logger is not set, set module's logger.
+            self.logger = logging.getLogger(function.__module__)
+
+        # Function signature
+        sig = inspect.signature(function)
+        arg_names = sig.parameters.keys()
+
+        def message(args, kwargs):
+            for i, name in enumerate(arg_names):
+                try:
+                    value = args[i]
+                except IndexError:
+                    # FIXME: Default values in kwargs
+                    try:
+                        value = kwargs[name]
+                    except KeyError:
+                        continue
+                yield str(name) + ': ' + str(value)
+
+        @functools.wraps(function)
+        def wrapper(*args, **kwargs):
+            self.logger.info('<' + function.__name__ + '>' + '\n' +
+                             '\n'.join(message(args, kwargs)))
+            result = function(*args, **kwargs)
+            return result
+        return wrapper
+
+
 def _call(arg):
     """
     Call arg if it is callable otherwise return.
@@ -42,6 +93,7 @@ def _call(arg):
         return arg
 
 
+@log_with(logger)
 def create_user(username=fake.user_name,
                 first_name=fake.first_name,
                 last_name=fake.last_name,
@@ -63,8 +115,6 @@ def create_user(username=fake.user_name,
     Returns:
         User: Created user
     """
-    logger.info("")
-
     if superuser:
         _create_user = User.objects.create_superuser
     else:
@@ -83,6 +133,7 @@ def create_user(username=fake.user_name,
     return user
 
 
+@log_with(logger)
 def create_category(category_title=fake.word,
                     description=fake.text):
     """
@@ -95,8 +146,6 @@ def create_category(category_title=fake.word,
     Returns:
         Category:
     """
-    logger.info("")
-
     category = Category.objects.create(
         title=_call(category_title),
         description=_call(description),
@@ -104,6 +153,7 @@ def create_category(category_title=fake.word,
     return category
 
 
+@log_with(logger)
 def create_game(user, category,
                 title=partial(fake.text, 30),
                 description=fake.text,
@@ -135,8 +185,6 @@ def create_game(user, category,
     Returns:
         Game: Instance of Game model.
     """
-    logger.info("")
-
     game = Game.objects.create(
         publisher=_call(user),
         category=_call(category),
@@ -155,6 +203,7 @@ def create_game(user, category,
     return game
 
 
+@log_with(logger)
 def create_score(user, game,
                  score=partial(fake.random_int, min=0)):
     """
@@ -167,8 +216,6 @@ def create_score(user, game,
     Returns:
         Score:
     """
-    logger.info("")
-
     score = Score.objects.create(
         game=game,
         player=user,
@@ -177,6 +224,7 @@ def create_score(user, game,
     return score
 
 
+@log_with(logger)
 def create_game_sale(user, game):
     """
 
@@ -187,7 +235,5 @@ def create_game_sale(user, game):
     Returns:
         GameSale:
     """
-    logger.info("")
-
     game_sale = GameSale.objects.create(buyer=user, game=game)
     return game_sale

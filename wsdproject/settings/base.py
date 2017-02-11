@@ -30,7 +30,10 @@ SECRET_KEY = '*5wm+_=gsjd@l@cbvx)bv!^78f*v)cvm=5hgju_p7u%%v2#c90'
 # Configured in dev.py and prod.py
 # DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'fast-ridge-53625.herokuapp.com']
+ALLOWED_HOSTS = [
+    'localhost',
+    'fast-ridge-53625.herokuapp.com'
+]
 
 # Application definition
 
@@ -87,7 +90,6 @@ WSGI_APPLICATION = 'wsdproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
-# PostgreSQL
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -97,11 +99,6 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '',
     },
-    # todo keeping here old sqlite change it to default if don't have postgre
-    'sqlite': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
 }
 
 # Password validation
@@ -135,7 +132,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
 
 # Media (user uploads) files
 # https://docs.djangoproject.com/en/1.10/ref/settings/#std:setting-MEDIA_ROOT
@@ -143,18 +140,15 @@ MEDIA_DIR = 'media'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, MEDIA_DIR)
 
+
 # Registration
 # https://django-registration-redux.readthedocs.io/en/latest/quickstart.html
 ACCOUNT_ACTIVATION_DAYS = 3
 REGISTRATION_AUTO_LOGIN = True
 
 # Setup logging config from `logging.yaml` file.
-try:
-    import colorama
-
-    colorama.init()
-except ImportError:
-    pass
+import colorama
+colorama.init()
 
 LOGGING_CONFIG = None
 LOGGING_FILE = os.path.join(BASE_DIR, 'logging.yaml')  # logging config file
@@ -180,8 +174,3 @@ HAYSTACK_CONNECTIONS = {
         'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
     },
 }
-
-import dj_database_url
-
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
