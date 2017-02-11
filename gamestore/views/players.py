@@ -7,6 +7,7 @@ from django.template.loader import render_to_string
 from gamestore.models import UserProfile
 from gamestore.service import *
 
+
 def game_detail(request, game_id):
     """
     Details about the game.

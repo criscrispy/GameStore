@@ -28,7 +28,13 @@ Desription should include
         </iframe>
     {% else %}
         <div class="col-lg-9 col-md-9 col-sm-9">
-        <img class="img-responsive" src={{ game.image.url }}>
+
+        <!-- game.image -->
+        {% if not game.image %}
+            <img class="img-responsive" width="100%" src={% static 'images/game_image_default.png' %}>
+        {% else %}
+            <img class="img-responsive" width="100%" src={{ game.image.url }}>
+        {% endif %}
 
     {% endif %}
 <div id="response">

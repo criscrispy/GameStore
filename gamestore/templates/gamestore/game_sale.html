@@ -1,27 +1,34 @@
 {% extends "base.html" %}
-
+{% load staticfiles %}
 
 {% block content %}
 
     <div class="col-sm-12">
         <h4>Games i bought..</h4>
+
         {% for game_sale in game_sales %}
+
             <div class="col-sm-6 col-md-4 game-container">
                 <a href="{% url 'games.detail' game_id=game_sale.game.id  %}">
                 <div class="game-grid">
-                    {% with y=forloop.counter|stringformat:"s" %}
-                    {% with width="200"|add:y %}
-                       <img width="100%" src="//www.fillmurray.com/200/{{ width }}">
-                    {% endwith %}
-                    {% endwith %}
 
+                    <!-- game.image -->
+                    {% if not game_sale.game.image %}
+                        <img class="img-responsive" width="100%" src={% static 'images/game_image_default.png' %}>
+                    {% else %}
+                        <img class="img-responsive" width="100%" src={{ game_sale.game.image.url }}>
+                    {% endif %}
+
+                    <!-- Info about the game -->
                     <div class="game-info">
-                        <p>{{ game_sale.game.price }}</p>
                         <strong>{{ game_sale.game.title }}</strong>
+                        <p>{{ game_sale.game.price }}</p>
                     </div>
+
                 </div>
                 </a>
             </div>
+
         {% empty %}
             <strong>You have not bought any games yet. Go to <a href="{% url 'games.list' %}">Games</a></strong>
         {% endfor %}
@@ -32,23 +39,30 @@
             <h4>Games i uploaded..
                 <span><a href="{% url 'games.upload' %}">Upload more</a></span>
             </h4>
+
             {% for game_upload in game_uploads %}
+
                 <div class="col-sm-6 col-md-4 game-container">
                     <a href="{% url 'games.detail' game_id=game_upload.id  %}">
                     <div class="game-grid">
-                        {% with y=forloop.counter|stringformat:"s" %}
-                        {% with width="200"|add:y %}
-                           <img width="100%" src="//www.fillmurray.com/200/{{ width }}">
-                        {% endwith %}
-                        {% endwith %}
 
+                        <!-- game.image -->
+                        {% if not game_upload.game.image %}
+                            <img class="img-responsive" width="100%" src={% static 'images/game_image_default.png' %}>
+                        {% else %}
+                            <img class="img-responsive" width="100%" src={{ game_upload.game.image.url }}>
+                        {% endif %}
+
+                        <!-- Info about the game -->
                         <div class="game-info">
                             <p>{{ game_upload.price }}</p>
                             <strong>{{ game_upload.title }}</strong>
                         </div>
+
                     </div>
                     </a>
                 </div>
+
             {% empty %}
                 <strong>You have not uploaded any games yet. Go to <span><a href="{% url 'games.upload' %}">Upload</a></span></strong>
             {% endfor %}
