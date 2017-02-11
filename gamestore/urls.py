@@ -53,6 +53,7 @@ from django.conf.urls.static import static
 
 import gamestore.views.accounts
 import gamestore.views.base
+import gamestore.views.search
 from gamestore.views import base, players, developers, payments
 
 #   /profile
@@ -78,7 +79,7 @@ urlpatterns = [
 
 # Search
 urlpatterns.extend([
-    url(r'^search/(?P<keyword>\w+)', base.search, name='search'),
+    url(r'^search/(?P<keyword>\w+)', gamestore.views.search.search, name='search'),
     url(r'^search/', include('haystack.urls')),
 ])
 

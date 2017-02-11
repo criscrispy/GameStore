@@ -1,9 +1,9 @@
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
 
 from gamestore.forms import GameForm
-from gamestore.models import Game, UserProfile
+from gamestore.models import Game
 from gamestore.views.accounts import profile
 
 
@@ -18,20 +18,30 @@ def uploads(request, user_id):
 
 @login_required
 def upload(request):
-    """Upload new game of modify existing."""
-    # if user is not a developer/publisher yet redirect to profile page where
-    # they can apply
-    user_profile = get_object_or_404(UserProfile, user__id=request.user.id)
-    if user_profile.developer_status != '2':
+    """Upload new game of modify existing.
+
+    - Let developers add new games.
+    - Redirect non developers to request developer status.
+
+    Todo:
+        - publisher: request.user
+        - modify existing game
+    """
+    if not request.user.userprofile.is_developer():
         return profile(request)
 
     if request.method == 'POST':
         form = GameForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/upload', {'status': 'success'})
 
-    return render(request, "gamestore/upload_form.html", {'status': 'pending'})
+        if form.is_valid():
+            new_game = form.save(commit=False)
+            new_game.publisher = request.user
+            new_game.save()
+            return HttpResponseRedirect('/games/user')
+    else:
+        form = GameForm()
+
+    return render(request, "gamestore/upload_game.html", {'form': form})
 
 
 def upload_detail(request, game_id):

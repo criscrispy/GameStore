@@ -54,16 +54,13 @@ def profile_edit(request):
     """Edit user profile information"""
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=request.user)
-        profile_form = UserProfileForm(request.POST,
+        profile_form = UserProfileForm(request.POST, request.FILES,
                                        instance=request.user.userprofile)
         if user_form.is_valid() and profile_form.is_valid():
             # Update was successful
             user_form.save()
             profile_form.save()
             return redirect("/accounts/profile/")
-        else:
-            # Error
-            pass
     else:
         user_form = UserForm(instance=request.user)
         profile_form = UserProfileForm(instance=request.user.userprofile)

@@ -56,6 +56,10 @@ GAME_IMAGE_DEFAULT = os.path.join(
 class UserProfile(models.Model):
     """User profile.
 
+    Image sizes
+
+    - picture: 300x300
+
     Todo:
         - Picture constraints (size, ...) -> django-imagekit
         - Picture default url
@@ -72,6 +76,10 @@ class UserProfile(models.Model):
     organization = models.CharField(max_length=100, default='', blank=True)
     developer_status = models.CharField(max_length=1, default='0',
                                         choices=DEVELOPER_STATUS_CHOICES)
+
+    def is_developer(self):
+        """Is user a developer."""
+        return self.developer_status == '2'
 
     def __str__(self):
         return str(self.user.first_name + " " + self.user.last_name)
@@ -110,23 +118,30 @@ class Category(models.Model):
 class Game(models.Model):
     """Model for a game added into the gamestore.
 
+    Image sizes
+
+    - icon:  48x48
+    - image: 256x256
+
     Todo:
         - Unique title?
         - Price using django-money module?
         - Validate image size
     """
+    publisher = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
     title = models.CharField(max_length=30, blank=False)
     description = models.TextField("Description of the game.", blank=False)
-    publisher = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
     category = models.ForeignKey(Category, on_delete=models.CASCADE,
                                  blank=False)
     price = models.DecimalField(
         "Price for the game. Value can be between 0 and 100.",
         max_digits=4, decimal_places=2, blank=False,
     )
-    url = models.URLField("", blank=False)
-    icon = models.ImageField("", null=True, blank=True, upload_to="games/icons")
-    image = models.ImageField("", null=True, blank=True, upload_to="games/image")
+    url = models.URLField("Game url", blank=False)
+    icon = models.ImageField("Game icon", null=True, blank=True,
+                             upload_to="games/icons")
+    image = models.ImageField("Game image", null=True, blank=True,
+                              upload_to="games/image")
 
 
 class Score(models.Model):
