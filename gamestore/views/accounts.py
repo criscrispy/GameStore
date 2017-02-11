@@ -33,7 +33,7 @@ from django.db import transaction
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 
-from gamestore.forms import UserProfileForm, UserForm
+from gamestore.forms import UserProfileForm, UserForm, ApplicationForm
 from gamestore.models import UserProfile
 
 
@@ -57,10 +57,9 @@ def profile_edit(request):
         profile_form = UserProfileForm(request.POST, request.FILES,
                                        instance=request.user.userprofile)
         if user_form.is_valid() and profile_form.is_valid():
-            # Update was successful
             user_form.save()
             profile_form.save()
-            return redirect("/accounts/profile/")
+            return redirect('/accounts/profile/')
     else:
         user_form = UserForm(instance=request.user)
         profile_form = UserProfileForm(instance=request.user.userprofile)
@@ -74,11 +73,21 @@ def profile_edit(request):
 @login_required()
 def apply_developer(request):
     """Apply for developer status."""
-    # TODO: replace with better implementation
-    user_profile = get_object_or_404(UserProfile, user__id=request.user.id)
-    user_profile.developer_status = '1'
-    user_profile.save()
-    return profile(request)
+    if request.method == 'POST':
+        form = ApplicationForm(request.POST)
+        if form.is_valid():
+            application = form.save(commit=False)
+            application.user = request.user
+            application.save()
+            request.user.userprofile.developer_status = '1'
+            request.user.userprofile.save()
+            return redirect('/accounts/profile/')
+    else:
+        form = ApplicationForm()
+
+    return render(request, 'gamestore/developer_apply.html', {
+        'form': form
+    })
 
 
 def user_history(request, user_id):

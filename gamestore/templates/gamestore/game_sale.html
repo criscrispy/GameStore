@@ -4,7 +4,8 @@
 {% block content %}
 
     <div class="col-sm-12">
-        <h4>Games i bought..</h4>
+
+        <h4>My Games</h4>
 
         {% for game_sale in game_sales %}
 
@@ -34,14 +35,14 @@
         {% endfor %}
 
         <hr>
+
         <div class="row"></div>
         {% if profile.developer_status == '2' %}
-            <h4>Games i uploaded..
+            <h4>My uploads
                 <span><a href="{% url 'games.upload' %}">Upload more</a></span>
             </h4>
 
             {% for game_upload in game_uploads %}
-
                 <div class="col-sm-6 col-md-4 game-container">
                     <a href="{% url 'games.detail' game_id=game_upload.id  %}">
                     <div class="game-grid">
@@ -62,17 +63,16 @@
                     </div>
                     </a>
                 </div>
-
             {% empty %}
                 <strong>You have not uploaded any games yet. Go to <span><a href="{% url 'games.upload' %}">Upload</a></span></strong>
             {% endfor %}
-    {% elif profile.developer_status == '1' %}
-        <h4>You have applied to become a developer. Your application is pending..</h4>
-    {% else %}
-        <h4>Apply to become a developer..
-            <span><a href="{% url 'profile' %}">click here</a></span>
-        </h4>
-    {% endif %}
+
+        {% elif profile.developer_status == '1' %}
+            <h4>You have applied to become a developer. Your application is pending..</h4>
+        {% else %}
+            <h4><span><a href="{% url 'profile' %}">Apply to become a developer</a></span></h4>
+        {% endif %}
+
     </div>
 
 {% endblock %}
