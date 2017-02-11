@@ -65,7 +65,7 @@ class UserProfile(models.Model):
         - Picture default url
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    picture = models.ImageField("Profile picture.", upload_to="profiles",
+    picture = models.ImageField("Profile picture", upload_to="profiles",
                                 null=True, blank=True)
     gender = models.CharField(default='', max_length=140, blank=True,
                               choices=GENDER_CHOICES)
@@ -187,8 +187,9 @@ class Configuration(models.Model):
 
 class Application(models.Model):
     """Developer application model"""
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    text = models.TextField('', max_length=500, blank=False)
-    date = models.DateTimeField('', blank=False, default=timezone.now)
-    accepted = models.BooleanField('Accepted/Rejected', default=None,
-                                   blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
+    text = models.TextField('Why you want to become a developer',
+                            max_length=500, blank=False)
+    date = models.DateTimeField(blank=False, default=timezone.now)
+    accepted = models.NullBooleanField('NotProcesses/Accepted/Rejected',
+                                       default=None, blank=False)
