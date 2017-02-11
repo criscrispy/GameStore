@@ -2,7 +2,9 @@
 {% block content %}
    <div class="col-sm-12">
         <h4>Upload a new game</h4>
+
         <form class="form-horizontal" action="{% url 'games.upload'  %}" enctype="multipart/form-data" method="POST">
+
         {% csrf_token %}
             <div class="form-group">
                 <label class="col-sm-2 control-label" for="exampleInputEmail1">Game title</label>

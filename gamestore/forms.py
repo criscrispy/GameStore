@@ -2,7 +2,7 @@
 from django import forms
 from django.contrib.auth.models import User
 
-from gamestore.models import Game, UserProfile
+from gamestore.models import Game, UserProfile, Application
 
 
 class UserForm(forms.ModelForm):
@@ -27,12 +27,13 @@ class GameForm(forms.ModelForm):
 
     class Meta:
         model = Game
-        fields = [
-            'title',
-            'description',
-            'category',
-            'price',
-            'url',
-            'icon',
-            'image',
-        ]
+        fields = ['title', 'description', 'category', 'price', 'url', 'icon',
+                  'image', ]
+
+
+class ApplicationForm(forms.ModelForm):
+    """Form for applying to become a developer"""
+
+    class Meta:
+        model = Application
+        fields = ['text']

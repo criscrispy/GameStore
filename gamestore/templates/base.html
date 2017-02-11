@@ -45,16 +45,16 @@
                 </button>
 
                 <!-- Logo / Brand -->
-                <a class="navbar-brand" href="{% url 'index' %}"><i class="fa fa-home" aria-hidden="true"></i> GameStore</a>
+                <a class="navbar-brand" href="{% url 'index' %}"></i> GameStore</a>
             </div>
 
             <!-- Nav -->
             <div id="navbar" class="navbar-collapse collapse">
                 <!-- Left -->
                 <ul class="nav navbar-nav">
-                    <li><a href="{% url 'games.list' %}">Games</a></li>
-                    <li><a href="{% url 'categories.list' %}">Categories</a></li>
-                    <li><a href="{% url 'publishers.list' %}">Publishers</a></li>
+                    <li><a href="{% url 'games.list' %}"><i class="fa fa-gamepad" aria-hidden="true"></i> Games</a></li>
+{#                    <li><a href="{% url 'categories.list' %}">Categories</a></li>#}
+{#                    <li><a href="{% url 'publishers.list' %}">Publishers</a></li>#}
                     {% if user.is_authenticated %}
                         <li><a href="{% url 'games.sale' %}">My games</a></li>
                     {% endif %}

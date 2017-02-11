@@ -100,11 +100,13 @@ class Category(models.Model):
 
 
 class Game(models.Model):
-    """Model for a game added into the gamestore."""
-    # TODO: Unique title?
-    # TODO: Price using django-money module?
-    # TODO: Validate image size
+    """Model for a game added into the gamestore.
 
+    Todo:
+        - Unique title?
+        - Price using django-money module?
+        - Validate image size
+    """
     title = models.CharField(max_length=30, blank=False)
     description = models.TextField("Description of the game.", blank=False)
     publisher = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
@@ -158,3 +160,12 @@ class Configuration(models.Model):
     """Model for app configuration"""
     key = models.CharField(max_length=30, blank=False)
     value = models.CharField(max_length=100, blank=False)
+
+
+class Application(models.Model):
+    """Developer application model"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    text = models.TextField('', max_length=500, blank=False)
+    date = models.DateTimeField('', blank=False, default=timezone.now)
+    accepted = models.BooleanField('Accepted/Rejected', default=None,
+                                   blank=True)
