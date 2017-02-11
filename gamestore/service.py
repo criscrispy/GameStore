@@ -157,16 +157,23 @@ def validate_payment_feedback_parameters(request, expected_result):
     """Validate that all needed payment feedback parameters are present in GET request and satisfy expected format"""
     if request.method != METHOD_GET:
         return ValidationError(GET_REQUEST_EXPECTED)
-    pid = request.GET[PID]
+    try:
+        pid = request.GET[PID]
+        result = request.GET[RESULT]
+        checksum = request.GET[CHECKSUM]
+        ref = request.GET[REF]
+    except KeyError:
+        raise ValidationError(REQUEST_PARAMETER_MISSING)
+
     if not pid or not pid.isalnum() or len(pid) != PID_LENGHT:
         raise ValidationError(PID_INVALID_FORMAT)
-    result = request.GET[RESULT]
+
     if not result or result != expected_result:
         raise ValidationError(RESULT_INVALID_FORMAT)
-    checksum = request.GET[CHECKSUM]
+
     if not checksum or not checksum.isalnum() or len(checksum) != CHECKSUM_LENGHT:
         raise ValidationError(CHECKSUM_INVALID_FORMAT)
-    ref = request.GET[REF]
+
     if not ref or not ref.isalnum():
         raise ValidationError(REF_INVALID_FORMAT)
     return pid, checksum, ref
@@ -190,6 +197,9 @@ def validate_user(request, user):
 
 
 def remove_payment(game, user, pid):
+    """
+    Removing payment details after finished transaction. If details not found error ignored.
+    """
     try:
         payment = GamePayments.objects.get(game=game, pid=pid, buyer=user)
     except ObjectDoesNotExist:
@@ -199,6 +209,9 @@ def remove_payment(game, user, pid):
 
 
 def find_saved_payment(game, user):
+    """
+    Finding payment details ObjectDoesNotExist exception should be handled outside this method.
+    """
     payment = GamePayments.objects.get(game=game, buyer=user)
     return payment
 
@@ -235,4 +248,4 @@ def get_payment_secret():
 def get_service_url(request):
     """Get game service URL from request"""
     url = get_current_site(request).domain
-    return 'http://'+url
+    return 'http://' + url
