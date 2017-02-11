@@ -9,7 +9,7 @@
             <h4 class="flow-text">Upload a new game</h4>
 
             <!-- Form for changing uploading new game -->
-            <form method="POST" class="padding">
+            <form method="POST" enctype="multipart/form-data" class="padding">
                 {% csrf_token %}
                 {% bootstrap_form form layout='inline' %}
 
