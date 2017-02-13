@@ -35,12 +35,12 @@ function handleMessage(data) {
 
 /* Implement loadGameState(stateJson) method to load game state received from service */
 function loadGame(gameState) {
-    displayMessage("<p>Game load received" + JSON.stringify(gameState) + " <br/> Loading not yet implemented on the game side</p>", false);
+    loadGameState(gameState);
 }
 
 /* Implement showErrorMessage(errorString) to show error received from service*/
 function showError(error) {
-    displayMessage("<p>" + error + "</p>", false);
+    showErrorMessage(error);
 }
 
 /* Call to send score to service */ 

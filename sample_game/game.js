@@ -11,11 +11,13 @@ function startGame() {
     myScore = new component("30px", "Consolas", "black", 280, 40, "text");
     myGameArea.start();
 }
+
 function endGame() {
     displayMessage("<h2>game over</h2>", true);
     clearInterval(myGameArea.interval);
     sendScore(myGameArea.frameNo);
 }
+
 function displayMessage(message, showoverlay) {
     $('#message').html(message);
     if (showoverlay) {
@@ -37,7 +39,6 @@ function resumeGame() {
     $("#save").toggle()
     myGameArea.interval = setInterval(updateGameArea, 20);
 }
-
 
 var myGameArea = {
     canvas: document.createElement("canvas"),
@@ -155,4 +156,12 @@ function accelerate(n) {
 function saveState() {
     var state = JSON.stringify(this.myGameArea);
     sendSaveState(state);
+}
+
+function showErrorMessage(error) {
+    displayMessage("<p>" + error + "</p>", false);
+}
+
+function loadGameState(gameState) {
+    displayMessage("<p>Game load received" + JSON.stringify(gameState) + " <br/> Loading not yet implemented on the game side</p>", false);
 }
