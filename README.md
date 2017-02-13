@@ -18,6 +18,24 @@ Tollander de Balsch | Jaan       | <de.tollander@aalto.fi>
 Sulina              | Julia      | <julia.sulina@aalto.fi>
 Awono               | Mekbib     | <mekbib.awono@aalto.fi>
 
+## Project implementation
+
+### Heroku URL
+
+http://fast-ridge-53625.herokuapp.com/
+
+### Game service communication protocol
+
+Game and service exchange 5 message types listed in the following table
+
+Message | Message type attribute  | Content attribute name | Expected content attribute value | Sender  | Action triggered
+--------|-------------------------|------------------------|----------------------|---------|----------------------
+SETTING | "messageType":"SETTING" |"options"               | object containing attributes "width" and "height" with integer values | game    | service adjust game iframe size to fit game dimensions
+SCORE   | "messageType":"SCORE"   |"score"                 | integer | game    | service saves player's game score
+SAVE    | "messageType":"SAVE"    |"gameState"             | json | game    | service saves player's game state
+LOAD    | "messageType":"LOAD"    |"gameState"             | json | service | game loads player's game state
+ERROR   | "messageType":"ERROR"   |"info"                  | string | service | game shows error message
+
 
 ## Project Plan
 
