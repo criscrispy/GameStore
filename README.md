@@ -26,18 +26,24 @@ http://fast-ridge-53625.herokuapp.com/
 
 ### Implemented features
 
-**Authentication **
+
+**Authentication**
  - Register 
  - Log in
  - Logout
 
+Every user is a player, can apply to become developer. TODO application handling
+
 **Basic player functionalities**
  - Payment
  - Play
-
+ - TODO search
+  
 **Basic developer functionalities**
  - Add game
  - Update game
+ - TODO delete
+ - TODO statistics
 
 **Game/service interaction**
  - See [protocol](#game-service-communication-protocol)
@@ -45,7 +51,8 @@ http://fast-ridge-53625.herokuapp.com/
 **Other**
  - Tests
  - Adjusting simple JavaScript game from [source](http://www.w3schools.com/graphics/game_intro.asp) to communicate with service.
-
+ - Save/load and resolution feature 
+ - 
 ### Game service communication protocol
 
 Game and service exchange 5 message types listed in the following table
