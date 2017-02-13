@@ -24,13 +24,35 @@ Awono               | Mekbib     | <mekbib.awono@aalto.fi>
 
 http://fast-ridge-53625.herokuapp.com/
 
+### Implemented features
+
+**Authentication **
+ - Register 
+ - Log in
+ - Logout
+
+**Basic player functionalities**
+ - Payment
+ - Play
+
+**Basic developer functionalities**
+ - Add game
+ - Update game
+
+**Game/service interaction**
+ - See [protocol](#game-service-communication-protocol)
+
+**Other**
+ - Tests
+ - Adjusting simple JavaScript game from [source](http://www.w3schools.com/graphics/game_intro.asp) to communicate with service.
+
 ### Game service communication protocol
 
 Game and service exchange 5 message types listed in the following table
 
 Message | Message type attribute  | Content attribute name | Expected content attribute value | Sender  | Action triggered
 --------|-------------------------|------------------------|----------------------|---------|----------------------
-SETTING | "messageType":"SETTING" |"options"               | object containing attributes "width" and "height" with integer values | game    | service adjust game iframe size to fit game dimensions
+SETTING | "messageType":"SETTING" |"options"               | object containing attributes "width" and "height" with integer values | game    | service adjusts game iframe size to fit game dimensions
 SCORE   | "messageType":"SCORE"   |"score"                 | integer | game    | service saves player's game score
 SAVE    | "messageType":"SAVE"    |"gameState"             | json | game    | service saves player's game state
 LOAD    | "messageType":"LOAD"    |"gameState"             | json | service | game loads player's game state
