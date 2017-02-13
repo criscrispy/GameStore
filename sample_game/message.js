@@ -5,9 +5,7 @@ $(document).ready(function () {
     $(window).on('message', function (evt) {
         //Get data from sent message
         var data = evt.originalEvent.data;
-        //alert(data.messageType);
         handleMessage(data);
-
     });
 });
 
@@ -28,10 +26,7 @@ function loadGame(gameState) {
     displayMessage("<p>Game load received" + JSON.stringify(gameState) + " <br/> Loading not yet implemented on the game side</p>", false);
 }
 function showError(error) {
-    //Create a new list item based on the data
-    var newItem = '\n\t<li>' + (error || '') + '</li>';
-    //Add the item to the beginning of the actions list
-    $('#actions').prepend(newItem);
+    displayMessage("<p>" + error + "</p>", false);
 }
 
 function sendMessage(message) {
