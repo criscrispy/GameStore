@@ -1,5 +1,5 @@
+/* Message types */
 var messageTypes = {
-    START: "START",
     SCORE: "SCORE",
     SAVE: "SAVE",
     LOAD: "LOAD",
@@ -7,6 +7,7 @@ var messageTypes = {
     SETTING: "SETTING"
 };
 
+/* Listen to the messages from game */
 $(document).ready(function () {
 
     /* Listen to post messages */
@@ -21,48 +22,8 @@ $(document).ready(function () {
     });
 });
 
-function renderResponse(html) {
-    $("#response").html(html);
-}
-function postData(url, data) {
-    $.post(url, data, function (data) {
-        renderResponse(data);
-    });
-}
-function saveScore(score) {
-    var csrftoken = $("input[name=csrfmiddlewaretoken]").val();
-    var data = {
-        gameScore: score,
-        csrfmiddlewaretoken: csrftoken
-    };
-    postData('score', data);
-}
 
-function saveState(gameState) {
-    var csrftoken = $("input[name=csrfmiddlewaretoken]").val();
-    var data = {gameState: gameState, csrfmiddlewaretoken: csrftoken};
-    postData('state', data);
-}
-
-function sendState(data) {
-    var message = {messageType: messageTypes.LOAD, gameState: data};
-    sendMessage(message);
-}
-
-function sendMessage(message) {
-    var game_url = $("#game_container").attr('src');
-    iframe = document.getElementById('game_container').contentWindow;
-    iframe.postMessage(message, game_url);
-}
-
-function adjustIframe(options) {
-    if (options.width && options.height) {
-        var gameContainer = $("#game_container");
-        gameContainer.height(options.height);
-        gameContainer.width(options.width);
-    }
-
-}
+/* Handle game messages */
 function handleMessage(data) {
     switch (data.messageType) {
         case messageTypes.SCORE:
@@ -78,3 +39,51 @@ function handleMessage(data) {
             console.log("unsupported message" + data);
     }
 }
+
+function saveScore(score) {
+    var csrftoken = $("input[name=csrfmiddlewaretoken]").val();
+    var data = {
+        gameScore: score,
+        csrfmiddlewaretoken: csrftoken
+    };
+    postData('score', data);
+}
+
+function saveState(gameState) {
+    var csrftoken = $("input[name=csrfmiddlewaretoken]").val();
+    var data = {gameState: gameState, csrfmiddlewaretoken: csrftoken};
+    postData('state', data);
+}
+
+function adjustIframe(options) {
+    if (options.width && options.height) {
+        var gameContainer = $("#game_container");
+        gameContainer.height(options.height);
+        gameContainer.width(options.width);
+    }
+}
+
+/*Make ajax request*/
+function postData(url, data) {
+    $.post(url, data, function (data) {
+        renderResponse(data);
+    });
+}
+
+/*Render ajax response*/
+function renderResponse(html) {
+    $("#response").html(html);
+}
+
+/* Send game */
+function sendState(data) {
+    var message = {messageType: messageTypes.LOAD, gameState: data};
+    sendMessage(message);
+}
+
+function sendMessage(message) {
+    var game_url = $("#game_container").attr('src');
+    iframe = document.getElementById('game_container').contentWindow;
+    iframe.postMessage(message, game_url);
+}
+
