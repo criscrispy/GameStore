@@ -28,16 +28,22 @@ http://fast-ridge-53625.herokuapp.com/
 
 
 **Authentication**
+ Authentication features implemented using registration-redux
  - Register 
  - Log in
  - Logout
+ - Email validation?
 
-Every user is a player, can apply to become developer. TODO application handling
+Authorization:
+- Every user is a player, can apply to become developer. TODO application handling
+- Players can only play only bought games
+- Developers can modify only own games
 
 **Basic player functionalities**
- - Payment
- - Play
+ - Payment integration with payment backend (not secure)
+ - Play - game/service interaction using [protocol](#game-service-communication-protocol)
  - TODO search
+ - Game scores, states and sales stored in database
   
 **Basic developer functionalities**
  - Add game
@@ -51,8 +57,10 @@ Every user is a player, can apply to become developer. TODO application handling
 **Other**
  - Tests
  - Adjusting simple JavaScript game from [source](http://www.w3schools.com/graphics/game_intro.asp) to communicate with service.
- - Save/load and resolution feature 
- - 
+ - Save/load and resolution feature
+ - Postgre database
+
+
 ### Game service communication protocol
 
 Game and service exchange 5 message types listed in the following table
