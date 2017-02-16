@@ -24,8 +24,13 @@ Awono               | Mekbib     | <mekbib.awono@aalto.fi>
 
 http://fast-ridge-53625.herokuapp.com/
 
-### Implemented features
+### Accounts/passwords to use the game
+TODO
 
+### Work division
+TODO
+
+### Implemented features
 
 **Authentication**
  Authentication features implemented using registration-redux
@@ -60,6 +65,8 @@ Authorization:
  - Save/load and resolution feature
  - Postgre database
 
+### Self-assessment, successes, problems
+TODO
 
 ### Game service communication protocol
 
@@ -73,6 +80,8 @@ SAVE    | "messageType":"SAVE"    |"gameState"             | json | game    | se
 LOAD    | "messageType":"LOAD"    |"gameState"             | json | service | game loads player's game state
 ERROR   | "messageType":"ERROR"   |"info"                  | string | service | game shows error message
 
+### Other documentation
+TODO
 
 ## Project Plan
 
