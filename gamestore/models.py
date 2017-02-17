@@ -94,6 +94,18 @@ class UserProfile(models.Model):
         else:
             return ''
 
+    def change_status_player(self):
+        self.developer_status = 0
+        self.save()
+
+    def change_status_pending(self):
+        self.developer_status = 1
+        self.save()
+
+    def change_status_developer(self):
+        self.developer_status = 2
+        self.save()
+
     def __str__(self):
         return str(self.user.first_name + " " + self.user.last_name)
 
@@ -205,3 +217,14 @@ class Application(models.Model):
     date = models.DateTimeField(blank=False, default=timezone.now)
     accepted = models.NullBooleanField('NotProcesses/Accepted/Rejected',
                                        default=None, blank=False)
+
+
+@receiver(post_save, sender=Application)
+def handle_application(sender, instance, **kwargs):
+    """Django signal for handling applications. Changes developer status
+    depending on whether application is accepted or rejected."""
+    if instance.accepted is not None:
+        if instance.accepted:
+            instance.user.userprofile.change_status_developer()
+        else:
+            instance.user.userprofile.change_status_player()

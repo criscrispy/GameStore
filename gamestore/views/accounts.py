@@ -73,7 +73,9 @@ def profile_edit(request):
 @login_required()
 def apply_developer(request):
     """Apply for developer status."""
-    if not request.user.userprofile.can_apply_for_developer():
+    profile = request.user.userprofile
+
+    if not profile.can_apply_for_developer():
         return redirect('/accounts/profile/')
 
     if request.method == 'POST':
@@ -82,8 +84,7 @@ def apply_developer(request):
             application = form.save(commit=False)
             application.user = request.user
             application.save()
-            request.user.userprofile.developer_status = 1
-            request.user.userprofile.save()
+            profile.change_status_pending()
             return redirect('/accounts/profile/')
     else:
         form = ApplicationForm()
