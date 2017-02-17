@@ -37,7 +37,7 @@
         <hr>
 
         <div class="row"></div>
-        {% if profile.developer_status == '2' %}
+        {% if profile.is_developer %}
             <h4>My uploads
                 <span><a href="{% url 'games.upload' %}">Upload more</a></span>
             </h4>
@@ -66,10 +66,7 @@
             {% empty %}
                 <strong>You have not uploaded any games yet. Go to <span><a href="{% url 'games.upload' %}">Upload</a></span></strong>
             {% endfor %}
-
-        {% elif profile.developer_status == '1' %}
-            <h4>You have applied to become a developer. Your application is pending..</h4>
-        {% else %}
+        {% elif profile.can_apply_for_developer %}
             <h4><span><a href="{% url 'profile' %}">Apply to become a developer</a></span></h4>
         {% endif %}
 

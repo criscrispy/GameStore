@@ -84,6 +84,16 @@ class UserProfile(models.Model):
         """Is user a developer."""
         return self.developer_status == 2
 
+    def get_status_string(self):
+        if self.developer_status == 0:
+            return 'Player'
+        elif self.developer_status == 1:
+            return 'Developer application pending.'
+        elif self.developer_status == 2:
+            return 'Developer'
+        else:
+            return ''
+
     def __str__(self):
         return str(self.user.first_name + " " + self.user.last_name)
 
