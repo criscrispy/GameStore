@@ -37,7 +37,7 @@ TODO
  - Register 
  - Log in
  - Logout
- - Email validation?
+ - Email validation, console email?
 
 Authorization:
 - Every user is a player, can apply to become developer. TODO application handling
@@ -47,13 +47,13 @@ Authorization:
 **Basic player functionalities**
  - Payment integration with payment backend (not secure)
  - Play - game/service interaction using [protocol](#game-service-communication-protocol)
- - TODO search
+ - Game search
  - Game scores, states and sales stored in database
   
 **Basic developer functionalities**
  - Add game
  - Update game
- - TODO delete
+ - TODO delete 
  - TODO statistics
 
 **Game/service interaction**
@@ -82,6 +82,7 @@ ERROR   | "messageType":"ERROR"   |"info"                  | string | service | 
 
 ### Other documentation
 TODO
+Sphinx?
 
 ## Project Plan
 
