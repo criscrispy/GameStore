@@ -88,7 +88,7 @@ class UserProfile(models.Model):
         if self.developer_status == 0:
             return 'Player'
         elif self.developer_status == 1:
-            return 'Developer application pending.'
+            return 'Developer application is pending'
         elif self.developer_status == 2:
             return 'Developer'
         else:

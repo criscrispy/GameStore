@@ -82,7 +82,7 @@ def apply_developer(request):
             application = form.save(commit=False)
             application.user = request.user
             application.save()
-            request.user.userprofile.developer_status = '1'
+            request.user.userprofile.developer_status = 1
             request.user.userprofile.save()
             return redirect('/accounts/profile/')
     else:
