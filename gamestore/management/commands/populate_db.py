@@ -4,29 +4,34 @@ from django.core.management.base import BaseCommand
 from django.db import IntegrityError
 from imagefactory import create_image
 
+from gamestore.models import Category
 from gamestore.tests.create_content import create_user, \
     create_game, create_score, create_game_sale, create_category
+
+
+def create_categories(*titles):
+    for title in titles:
+        try:
+            yield create_category(title)
+        except IntegrityError:
+            yield Category.objects.get(title=title)
 
 
 def populate(user_amount, game_amount, sales_amount, scores_amount):
     image_game = create_image(name="image", width=256, height=256)
     image_icon = create_image(name="icon", width=48, height=48)
-    # image_profile = create_image(name="profile", width=300, height=300)
+    category_titles = (
+        '3D', 'Action', 'Adventure', 'Alien', 'Arcade', 'Card', 'Dress Up',
+        'Fantasy', 'Fighting', 'Flying', 'Football', 'Golf', 'Holidays', 'Kids',
+        'Multiplayer', 'Pool', 'Puzzle', 'Racing', 'Simulation', 'Sports',
+        'Strategy', 'Winter', 'Word', 'Zombie'
+    )
 
+    categories = list(create_categories(*category_titles))
     users = []
-    categories = []
     games = []
     sales = []
     sales_dict = {}
-    category_titles = [
-        '3D', 'Action', 'Adventure', 'Alien', 'Arcade',
-        'Card', 'Dress Up', 'Fantasy', 'Fighting', 'Flying',
-        'Football',
-        'Golf', 'Holidays', 'Kids', 'Multiplayer', 'Pool',
-        'Puzzle',
-        'Racing', 'Simulation', 'Sports', 'Strategy',
-        'Winter', 'Word', 'Zombie'
-    ]
 
     for i in range(user_amount):
         try:
@@ -35,14 +40,6 @@ def populate(user_amount, game_amount, sales_amount, scores_amount):
         except IntegrityError:
             # Tries to create new user with existing username
             pass
-
-    if users:
-        for title in category_titles:
-            try:
-                category = create_category(title)
-                categories.append(category)
-            except IntegrityError:
-                pass
 
     if users and categories:
         for i in range(game_amount):
@@ -89,7 +86,6 @@ class Command(BaseCommand):
 
     .. [1] http://eli.thegreenplace.net/2014/02/15/programmatically-populating-a-django-database
     """
-    # TODO: Add arguments
     help = 'Populates database with data for testing the website.'
 
     def add_arguments(self, parser):

@@ -26,12 +26,11 @@ import os
 
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.core.files import File
 from django.db import models
-from django.utils import timezone
-from django.dispatch import receiver
 from django.db.models.signals import post_save
-from django.contrib.postgres.fields import JSONField
+from django.dispatch import receiver
+from django.utils import timezone
+# from django.contrib.postgres.fields import JSONField
 
 DEVELOPER_STATUS_CHOICES = (
     ('0', 'basic_user'),
@@ -91,10 +90,6 @@ def create_user_profile(sender, instance, created, **kwargs):
     if created:
         user_profile = UserProfile.objects.create(user=instance)
 
-        # Create profile picture for every profile
-        # image = create_image(name="profile", width=300, height=300)
-        # user_profile.picture.save(image.name, File(image))
-
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
@@ -103,7 +98,6 @@ def save_user_profile(sender, instance, **kwargs):
 
 class Category(models.Model):
     """Model for categories"""
-
     title = models.CharField(max_length=30, blank=False, unique=True)
     description = models.TextField("Description of the category.", blank=False)
 
@@ -143,6 +137,9 @@ class Game(models.Model):
     image = models.ImageField("Game image", null=True, blank=True,
                               upload_to="games/image")
 
+    def __str__(self):
+        return str(self.title)
+
 
 class Score(models.Model):
     """Model for individual game score."""
@@ -172,7 +169,8 @@ class GamePayments(models.Model):
 
 
 class GameSettings(models.Model):
-    """Model for saving game states, settings of the game are saved as json string"""
+    """Model for saving game states, settings of the game are saved as json
+    string"""
     player = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
     game = models.ForeignKey(Game, on_delete=models.CASCADE, blank=False)
     settings = models.CharField(default="", max_length=2000)
