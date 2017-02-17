@@ -24,15 +24,20 @@ Awono               | Mekbib     | <mekbib.awono@aalto.fi>
 
 http://fast-ridge-53625.herokuapp.com/
 
-### Implemented features
+### Accounts/passwords to use the game
+TODO
 
+### Work division
+TODO
+
+### Implemented features
 
 **Authentication**
  Authentication features implemented using registration-redux
  - Register 
  - Log in
  - Logout
- - Email validation?
+ - Email validation, console email?
 
 Authorization:
 - Every user is a player, can apply to become developer. TODO application handling
@@ -42,13 +47,13 @@ Authorization:
 **Basic player functionalities**
  - Payment integration with payment backend (not secure)
  - Play - game/service interaction using [protocol](#game-service-communication-protocol)
- - TODO search
+ - Game search
  - Game scores, states and sales stored in database
   
 **Basic developer functionalities**
  - Add game
  - Update game
- - TODO delete
+ - TODO delete 
  - TODO statistics
 
 **Game/service interaction**
@@ -60,6 +65,8 @@ Authorization:
  - Save/load and resolution feature
  - Postgre database
 
+### Self-assessment, successes, problems
+TODO
 
 ### Game service communication protocol
 
@@ -73,6 +80,9 @@ SAVE    | "messageType":"SAVE"    |"gameState"             | json | game    | se
 LOAD    | "messageType":"LOAD"    |"gameState"             | json | service | game loads player's game state
 ERROR   | "messageType":"ERROR"   |"info"                  | string | service | game shows error message
 
+### Other documentation
+TODO
+Sphinx?
 
 ## Project Plan
 
