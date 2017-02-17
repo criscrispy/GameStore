@@ -6,6 +6,10 @@ import logging
 class log_with(object):
     """Logging decorator that allows you to log with a specific logger.
 
+    Attributes:
+        logger (Logger, optional):
+            Instance of a logger
+
     Todo:
         - loglevel
         - Pretty formatting
@@ -32,22 +36,17 @@ class log_with(object):
 
         def message(args, kwargs):
             for i, name in enumerate(arg_names):
-                try:
-                    value = args[i]
-                except IndexError:
-                    # FIXME: Default values in kwargs
-                    try:
-                        value = kwargs[name]
-                    except KeyError:
-                        continue
-                yield str(name) + ': ' + str(value)
+                if i < len(args):
+                    yield name, args[i]
+                elif name in kwargs:
+                    yield name, kwargs[name]
 
         @functools.wraps(function)
         def wrapper(*args, **kwargs):
-            self.logger.info('<' + function.__name__ + '>' + '\n' +
-                             '\n'.join(message(args, kwargs)))
-
+            d = ', '.join('{}: {}'.format(name, value) for name, value in message(args, kwargs))
+            msg = '<' + function.__name__ + '>' + ' ' + '{' + d + '}'
+            self.logger.info(msg)
             result = function(*args, **kwargs)
-
             return result
+
         return wrapper
