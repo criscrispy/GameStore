@@ -30,13 +30,16 @@ def index(request):
 
 
 def games(request):
-    """Display all games
+    """Search and display games
 
     Searchable fields
 
     - game.title
-    - game.publisher
-    - game.category
+    - game.publisher.username
+    - game.category.title
+
+    This is very simple implementation of search, but not very scalable. Sould
+    be replaced with whoosh or elasticsearch for bigger apps.
 
     References:
         http://stackoverflow.com/questions/2584502/simple-search-in-django

@@ -30,12 +30,13 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
+
 # from django.contrib.postgres.fields import JSONField
 
 DEVELOPER_STATUS_CHOICES = (
-    ('0', 'basic_user'),
-    ('1', 'pending'),
-    ('2', 'confirmed'),
+    (0, 'basic_user'),
+    (1, 'pending'),
+    (2, 'confirmed'),
 )
 
 GENDER_CHOICES = (
@@ -73,12 +74,15 @@ class UserProfile(models.Model):
     city = models.CharField(max_length=100, default='', blank=True)
     country = models.CharField(max_length=100, default='', blank=True)
     organization = models.CharField(max_length=100, default='', blank=True)
-    developer_status = models.CharField(max_length=1, default='0',
-                                        choices=DEVELOPER_STATUS_CHOICES)
+    developer_status = models.IntegerField(default=0,
+                                           choices=DEVELOPER_STATUS_CHOICES)
+
+    def can_apply_for_developer(self):
+        return self.developer_status == 0
 
     def is_developer(self):
         """Is user a developer."""
-        return self.developer_status == '2'
+        return self.developer_status == 2
 
     def __str__(self):
         return str(self.user.first_name + " " + self.user.last_name)
