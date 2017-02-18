@@ -105,7 +105,7 @@ def create_category(category_title=fake.word,
 
 @log_with(logger)
 def create_game(user, category,
-                title=partial(fake.text, 30),
+                title=fake.word,
                 description=fake.text,
                 price=partial(fake.pydecimal, 2, 2, True),
                 url=fake.url,

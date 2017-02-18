@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% comment %}
+List of available games.
+{% endcomment %}
+
+{% block content %}
+
+    <div class="col-sm-12">
+        <h1>GameStore</h1>
+
+        {% for game in games %}
+            {% include 'gamestore/thumbnail/game.html' with style='main-list' %}
+        {% empty %}
+            <strong>No games found</strong>
+        {% endfor %}
+
+    </div>
+
+{% endblock %}

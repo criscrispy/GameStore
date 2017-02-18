@@ -82,6 +82,7 @@ def game_id_strategy():
 # -----------------------------------------------------------------------------
 
 
+@pytest.mark.django_db
 def test_index(client):
     """Test index page."""
     response = client.get('/')
