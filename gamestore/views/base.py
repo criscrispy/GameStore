@@ -24,8 +24,7 @@ def index(request):
     Returns:
         HttpResponse:
     """
-    # context = {}
-    # return render(request, 'gamestore/index.html', context)
+    # return render(request, 'gamestore/index.html', {})
     return games(request)
 
 
@@ -54,7 +53,7 @@ def games(request):
     else:
         games = Game.objects.all()[:50]
 
-    return render(request, "gamestore/game.html", {'games': games})
+    return render(request, "gamestore/games.html", {'games': games})
 
 
 def categories(request):
@@ -78,7 +77,7 @@ def category_detail(request, category_name):
 
 def publishers(request):
     """Show all publishers"""
-    publishers_list = User.objects.filter(userprofile__developer_status='2')
+    publishers_list = User.objects.filter(userprofile__developer_status=2)
 
     context = {
         'publishers': publishers_list

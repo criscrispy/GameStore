@@ -1,0 +1,26 @@
+{% load staticfiles %}
+
+<div class="col-sm-6 col-md-4 game-container">
+    <div class="thumbnail">
+        <div class="game-grid {{ style }}">
+            <!-- game.image -->
+            {% if not game.image %}
+                <img class="img-responsive" width="100%" src={% static 'images/game_image_default.png' %}>
+            {% else %}
+                <img class="img-responsive" width="100%" src={{ game.image.url }}>
+            {% endif %}
+
+            <!-- Info about the game -->
+{#                <div class="game-info {{ style }}"></div>#}
+            <!-- FIXME: game info style -> fix height -->
+            <div class="caption">
+                <h4 class="pull-right">{{ game.price }} €</h4>
+                <h4><a href="{% url 'games.detail' game_id=game.id  %}">
+                    {{ game.title|title }}
+                </a></h4>
+                <p>Category: {{ game.category.title }}</p>
+                <p>Publisher: {{ game.publisher.username }}</p>
+            </div>
+        </div>
+    </div>
+</div>
