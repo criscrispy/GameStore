@@ -1,6 +1,5 @@
 @import "../../bower_components/bourbon/app/assets/stylesheets/bourbon";
 
-
 /* Sticky footer styles
  https://getbootstrap.com/examples/sticky-footer/
 */
@@ -8,10 +7,12 @@ html {
   position: relative;
   min-height: 100%;
 }
+
 body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
 }
+
 .footer {
   position: absolute;
   bottom: 0;
@@ -36,20 +37,46 @@ body > .content {
   margin-bottom: 40px;
   padding: 0px 29px !important;
 
-  .game-grid{
+  .game-grid {
     border: 10px solid #491820;
   }
 
-  .game-info{
+  .game-info {
     height: 80px;
     background: #491820;
     padding: 10px;
-    color: #BFAC40;
-    img{
+    color: #999e0c;
+    img {
       width: 100%;
     }
-    a{
-      color: #BFAC40;
+    a {
+      color: #999e0c;
     }
   }
+
+  .game-grid.bought {
+    border: 10px solid #164273;
+  }
+  .game-info.bought {
+    background: #164273;
+  }
+  .game-grid.uploads {
+    border: 10px solid #0b747f;
+  }
+  .game-info.uploads {
+    background: #0b747f;
+  }
+  .game-grid.category {
+    border: 10px solid #3c763d;
+  }
+  .game-info.category {
+    background: #3c763d;
+  }
+  .game-grid.publisher {
+    border: 10px solid #652287;
+  }
+  .game-info.publisher {
+    background: #652287;
+  }
+
 }
