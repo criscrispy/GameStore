@@ -42,6 +42,7 @@ PROJECT_APPS = [
     'gamestore',
     'django_extensions',
     'haystack',
+    'chartit',
 ]
 
 PREREQ_APPS = [

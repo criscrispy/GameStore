@@ -168,7 +168,7 @@ urlpatterns.extend([
 
     #   /uploads/supermario/stats OR /uploads/1234/stats
     #   view the stats of the uploaded game with gameId=1234
-    url(r'^uploads/(?P<game_id>[0-9]+)/stats', developers.upload_stat,
+    url(r'^uploads/stats', developers.sale_stat,
         name='games.upload.stat'),
 
     #   /uploads/supermario/delete
@@ -185,6 +185,7 @@ urlpatterns.extend([
     #   /upload
     #   view to show the upload form
     url(r'^upload', developers.upload, name='games.upload'),
+
 ])
 
 # Static files for development use

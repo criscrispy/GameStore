@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+{% block script %}
+    <script src={% static 'js/highcharts.js' %}></script>
+    {% load chartit %}
+    {% if salechart %}
+    {{ salechart|load_charts:"container" }}
+    {% endif %}
+{% endblock %}
+{% block content %}
+    <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-lg-8 col-md-8 col-sm-8">
+    <div id='container'> <h5> Chart will be rendered here. No statistics yet available.</h5></div>
+    </div>
+{% endblock %}
+
