@@ -65,12 +65,20 @@ def upload_delete(request, game_id):
 
 @login_required
 def sale_stat(request):
+    '''
+    Display chart with sale statistics for developer.
+    Calculate amount of sold games and profit.
+    '''
     if not request.user.userprofile.is_developer():
         return profile(request)
     user = request.user
-    sale = GameSale.objects.filter(game__publisher=user).annotate(date_no_time=TruncDate('date')).values('date_no_time').annotate(
+    # query amount and profit
+    sale = GameSale.objects.annotate(date_no_time=TruncDate('date')).values('date_no_time').annotate(
         amount=Count('date_no_time')).annotate(profit=Sum('game__price'))
-    sale_chart = create_chart(sale)
+    if sale:
+        sale_chart = create_chart(sale)
+    else:
+        sale_chart = False
     # Step 3: Send the chart object to the template.
     return render(request, "gamestore/sale_chart.html", {'salechart': sale_chart})
 
