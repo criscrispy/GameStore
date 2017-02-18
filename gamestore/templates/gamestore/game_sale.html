@@ -11,7 +11,7 @@
 
             <div class="col-sm-6 col-md-4 game-container">
                 <a href="{% url 'games.detail' game_id=game_sale.game.id  %}">
-                <div class="game-grid">
+                <div class="game-grid bought">
 
                     <!-- game.image -->
                     {% if not game_sale.game.image %}
@@ -21,7 +21,7 @@
                     {% endif %}
 
                     <!-- Info about the game -->
-                    <div class="game-info">
+                    <div class="game-info bought">
                         <strong>{{ game_sale.game.title }}</strong>
                         <p>{{ game_sale.game.price }}</p>
                     </div>
@@ -37,7 +37,7 @@
         <hr>
 
         <div class="row"></div>
-        {% if profile.developer_status == '2' %}
+        {% if profile.is_developer %}
             <h4>My uploads
                 <span><a href="{% url 'games.upload' %}">Upload more</a></span>
             </h4>
@@ -45,7 +45,7 @@
             {% for game_upload in game_uploads %}
                 <div class="col-sm-6 col-md-4 game-container">
                     <a href="{% url 'games.detail' game_id=game_upload.id  %}">
-                    <div class="game-grid">
+                    <div class="game-grid uploads">
 
                         <!-- game.image -->
                         {% if not game_upload.game.image %}
@@ -55,7 +55,7 @@
                         {% endif %}
 
                         <!-- Info about the game -->
-                        <div class="game-info">
+                        <div class="game-info uploads">
                             <p>{{ game_upload.price }}</p>
                             <strong>{{ game_upload.title }}</strong>
                         </div>
@@ -66,10 +66,7 @@
             {% empty %}
                 <strong>You have not uploaded any games yet. Go to <span><a href="{% url 'games.upload' %}">Upload</a></span></strong>
             {% endfor %}
-
-        {% elif profile.developer_status == '1' %}
-            <h4>You have applied to become a developer. Your application is pending..</h4>
-        {% else %}
+        {% elif profile.can_apply_for_developer %}
             <h4><span><a href="{% url 'profile' %}">Apply to become a developer</a></span></h4>
         {% endif %}
 

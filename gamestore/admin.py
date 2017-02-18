@@ -5,7 +5,8 @@ from .models import *
 
 class GameAdmin(admin.ModelAdmin):
     model = Game
-    list_display = ('publisher', 'title', 'description', 'price', 'url',  'get_category_title')
+    list_display = ('publisher', 'title', 'description', 'price', 'url',
+                    'get_category_title')
 
     def get_category_title(self, obj):
         return obj.category.title
@@ -19,3 +20,4 @@ admin.site.register(UserProfile)
 admin.site.register(Score)
 admin.site.register(GameSale)
 admin.site.register(Category)
+admin.site.register(Application)

@@ -1,16 +1,25 @@
+/**
+ * Interface to handle communication of the game with service.
+ * On the game side following methods should be implemented:
+ * - showErrorMessage(errorString)
+ * - loadGameState(stateJson)
+*/
+
+/* Message types */
 var messageTypes = {SCORE: "SCORE", SAVE: "SAVE", LOAD: "LOAD", ERROR: "ERROR", SETTING: "SETTING"};
 var service_url = "*";
+
+/* Listen to the messages from service */
 $(document).ready(function () {
 
     $(window).on('message', function (evt) {
         //Get data from sent message
         var data = evt.originalEvent.data;
-        //alert(data.messageType);
         handleMessage(data);
-
     });
 });
 
+/* Handle messages of the type LOAD and ERROR */
 function handleMessage(data) {
     switch (data.messageType) {
         case messageTypes.LOAD:
@@ -24,29 +33,35 @@ function handleMessage(data) {
     }
 }
 
+/* Implement loadGameState(stateJson) method to load game state received from service */
 function loadGame(gameState) {
-    displayMessage("<p>Game load received" + JSON.stringify(gameState) + " <br/> Loading not yet implemented on the game side</p>", false);
-}
-function showError(error) {
-    //Create a new list item based on the data
-    var newItem = '\n\t<li>' + (error || '') + '</li>';
-    //Add the item to the beginning of the actions list
-    $('#actions').prepend(newItem);
+    loadGameState(gameState);
 }
 
-function sendMessage(message) {
-    window.parent.postMessage(message, service_url);
+/* Implement showErrorMessage(errorString) to show error received from service*/
+function showError(error) {
+    showErrorMessage(error);
 }
+
+/* Call to send score to service */ 
 function sendScore(score) {
     var message = {"messageType": messageTypes.SCORE, "score": score};
     sendMessage(message);
 }
+
+/* Call to send game state to service */ 
 function sendSaveState(state) {
     var message = {"messageType": messageTypes.SAVE, "gameState": state};
     sendMessage(message);
 }
+
+/* Call to send game settings (width and height) to service */ 
 function sendSetting(settings) {
     var message = {"messageType": messageTypes.SETTING, "options": settings};
     sendMessage(message);
+}
+
+function sendMessage(message) {
+    window.parent.postMessage(message, service_url);
 }
 

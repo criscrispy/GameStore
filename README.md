@@ -18,6 +18,71 @@ Tollander de Balsch | Jaan       | <de.tollander@aalto.fi>
 Sulina              | Julia      | <julia.sulina@aalto.fi>
 Awono               | Mekbib     | <mekbib.awono@aalto.fi>
 
+## Project implementation
+
+### Heroku URL
+
+http://fast-ridge-53625.herokuapp.com/
+
+### Accounts/passwords to use the game
+TODO
+
+### Work division
+TODO
+
+### Implemented features
+
+**Authentication**
+ Authentication features implemented using registration-redux
+ - Register 
+ - Log in
+ - Logout
+ - Email validation, console email?
+
+Authorization:
+- Every user is a player, can apply to become developer. TODO application handling
+- Players can only play only bought games
+- Developers can modify only own games
+
+**Basic player functionalities**
+ - Payment integration with payment backend (not secure)
+ - Play - game/service interaction using [protocol](#game-service-communication-protocol)
+ - Game search
+ - Game scores, states and sales stored in database
+  
+**Basic developer functionalities**
+ - Add game
+ - Update game
+ - TODO delete 
+ - TODO statistics
+
+**Game/service interaction**
+ - See [protocol](#game-service-communication-protocol)
+
+**Other**
+ - Tests
+ - Adjusting simple JavaScript game from [source](http://www.w3schools.com/graphics/game_intro.asp) to communicate with service.
+ - Save/load and resolution feature
+ - Postgre database
+
+### Self-assessment, successes, problems
+TODO
+
+### Game service communication protocol
+
+Game and service exchange 5 message types listed in the following table
+
+Message | Message type attribute  | Content attribute name | Expected content attribute value | Sender  | Action triggered
+--------|-------------------------|------------------------|----------------------|---------|----------------------
+SETTING | "messageType":"SETTING" |"options"               | object containing attributes "width" and "height" with integer values | game    | service adjusts game iframe size to fit game dimensions
+SCORE   | "messageType":"SCORE"   |"score"                 | integer | game    | service saves player's game score
+SAVE    | "messageType":"SAVE"    |"gameState"             | json | game    | service saves player's game state
+LOAD    | "messageType":"LOAD"    |"gameState"             | json | service | game loads player's game state
+ERROR   | "messageType":"ERROR"   |"info"                  | string | service | game shows error message
+
+### Other documentation
+TODO
+Sphinx?
 
 ## Project Plan
 

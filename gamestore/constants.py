@@ -33,6 +33,7 @@ COULD_NOT_SAVE_SCORE = "Service error: Could not save game score"
 COULD_NOT_SAVE_STATE = "Service error: Could not save game state"
 GAME_SCORE_INVALID = "Validation error: score received from the game invalid"
 GAME_STATE_INVALID = "Validation error: state received from the game invalid"
+REQUEST_PARAMETER_MISSING = "Validation error: request parameter missing"
 
 PAYMENT_WAS_CANCELLED = 'Payment was cancelled'
 ERROR_PERFORMING_PAYMENT = 'Error when performing payment'

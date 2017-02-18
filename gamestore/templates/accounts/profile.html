@@ -79,13 +79,7 @@ http://bootsnipp.com/snippets/featured/simple-user-profile
                                 </tr>
                                 <tr>
                                     <td>Status</td>
-                                    {% if profile.developer_status == '2' %}
-                                        <td>Developer</td>
-                                    {% elif profile.developer_status == '1' %}
-                                        <td>Player. Developer application is pending.</td>
-                                    {% else %}
-                                        <td>Player</td>
-                                    {% endif %}
+                                    <td>{{ profile.get_status_string }}</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -97,7 +91,7 @@ http://bootsnipp.com/snippets/featured/simple-user-profile
                             <a href="{% url 'profile.edit' %}" class="btn btn-primary">Edit profile</a>
 
                             <!-- Apply for becoming a developer -->
-                            {% if profile.developer_status == '0' %}
+                            {% if profile.can_apply_for_developer %}
                                 <a href="{% url 'publisher.apply' %}" class="btn btn-primary">Apply to become a developer</a>
                             {% endif %}
                         {% endif %}

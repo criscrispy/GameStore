@@ -5,7 +5,7 @@
         <h5><a href="{% url 'categories.list' %}">Categories</a> /  {{ category_name }}</h5>
         <h4>Games in category : {{ category_name }}</h4>
 
-        {% include "gamestore/games_list.html" with games=games %}
+        {% include "gamestore/games_list.html" with games=games style="category"%}
 
     </div>
 

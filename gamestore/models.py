@@ -26,17 +26,17 @@ import os
 
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.core.files import File
 from django.db import models
-from django.utils import timezone
-from django.dispatch import receiver
 from django.db.models.signals import post_save
-from django.contrib.postgres.fields import JSONField
+from django.dispatch import receiver
+from django.utils import timezone
+
+# from django.contrib.postgres.fields import JSONField
 
 DEVELOPER_STATUS_CHOICES = (
-    ('0', 'basic_user'),
-    ('1', 'pending'),
-    ('2', 'confirmed'),
+    (0, 'basic_user'),
+    (1, 'pending'),
+    (2, 'confirmed'),
 )
 
 GENDER_CHOICES = (
@@ -74,12 +74,37 @@ class UserProfile(models.Model):
     city = models.CharField(max_length=100, default='', blank=True)
     country = models.CharField(max_length=100, default='', blank=True)
     organization = models.CharField(max_length=100, default='', blank=True)
-    developer_status = models.CharField(max_length=1, default='0',
-                                        choices=DEVELOPER_STATUS_CHOICES)
+    developer_status = models.IntegerField(default=0,
+                                           choices=DEVELOPER_STATUS_CHOICES)
+
+    def can_apply_for_developer(self):
+        return self.developer_status == 0
 
     def is_developer(self):
         """Is user a developer."""
-        return self.developer_status == '2'
+        return self.developer_status == 2
+
+    def get_status_string(self):
+        if self.developer_status == 0:
+            return 'Player'
+        elif self.developer_status == 1:
+            return 'Developer application is pending'
+        elif self.developer_status == 2:
+            return 'Developer'
+        else:
+            return ''
+
+    def change_status_player(self):
+        self.developer_status = 0
+        self.save()
+
+    def change_status_pending(self):
+        self.developer_status = 1
+        self.save()
+
+    def change_status_developer(self):
+        self.developer_status = 2
+        self.save()
 
     def __str__(self):
         return str(self.user.first_name + " " + self.user.last_name)
@@ -91,10 +116,6 @@ def create_user_profile(sender, instance, created, **kwargs):
     if created:
         user_profile = UserProfile.objects.create(user=instance)
 
-        # Create profile picture for every profile
-        # image = create_image(name="profile", width=300, height=300)
-        # user_profile.picture.save(image.name, File(image))
-
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
@@ -103,7 +124,6 @@ def save_user_profile(sender, instance, **kwargs):
 
 class Category(models.Model):
     """Model for categories"""
-
     title = models.CharField(max_length=30, blank=False, unique=True)
     description = models.TextField("Description of the category.", blank=False)
 
@@ -143,6 +163,9 @@ class Game(models.Model):
     image = models.ImageField("Game image", null=True, blank=True,
                               upload_to="games/image")
 
+    def __str__(self):
+        return str(self.title)
+
 
 class Score(models.Model):
     """Model for individual game score."""
@@ -172,7 +195,8 @@ class GamePayments(models.Model):
 
 
 class GameSettings(models.Model):
-    """Model for saving game states, settings of the game are saved as json string"""
+    """Model for saving game states, settings of the game are saved as json
+    string"""
     player = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
     game = models.ForeignKey(Game, on_delete=models.CASCADE, blank=False)
     settings = models.CharField(default="", max_length=2000)
@@ -193,3 +217,14 @@ class Application(models.Model):
     date = models.DateTimeField(blank=False, default=timezone.now)
     accepted = models.NullBooleanField('NotProcesses/Accepted/Rejected',
                                        default=None, blank=False)
+
+
+@receiver(post_save, sender=Application)
+def handle_application(sender, instance, **kwargs):
+    """Django signal for handling applications. Changes developer status
+    depending on whether application is accepted or rejected."""
+    if instance.accepted is not None:
+        if instance.accepted:
+            instance.user.userprofile.change_status_developer()
+        else:
+            instance.user.userprofile.change_status_player()
