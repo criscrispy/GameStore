@@ -39,7 +39,8 @@
         <div class="row"></div>
         {% if profile.is_developer %}
             <h4>My uploads
-                <span><a href="{% url 'games.upload' %}">Upload more</a></span>
+                <span><a class="btn btn-primary" href="{% url 'games.upload' %}">Upload more</a></span>
+                <span><a class="btn btn-success" href="{% url 'games.upload.stat' %}">See statistics</a></span>
             </h4>
 
             {% for game_upload in game_uploads %}

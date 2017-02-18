@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+    {% block script %}
+        <script src={% static 'js/highcharts.js' %}></script>
+    {% load chartit %}
+    {{ salechart|load_charts:"container" }}
+{% endblock %}
+{% block content %}
+    <div id='container'> Chart will be rendered here </div>
+{% endblock %}

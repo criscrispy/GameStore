@@ -27,3 +27,6 @@ dj-database-url
 
 ##heroku
 gunicorn
+
+##charts
+django_chartit
