@@ -78,18 +78,18 @@ class UserProfile(models.Model):
                                            choices=DEVELOPER_STATUS_CHOICES)
 
     def can_apply_for_developer(self):
-        return self.developer_status == 0
+        return int(self.developer_status) == 0
 
     def is_developer(self):
         """Is user a developer."""
-        return self.developer_status == 2
+        return int(self.developer_status) == 2
 
     def get_status_string(self):
-        if self.developer_status == 0:
+        if int(self.developer_status) == 0:
             return 'Player'
-        elif self.developer_status == 1:
+        elif int(self.developer_status) == 1:
             return 'Developer application is pending'
-        elif self.developer_status == 2:
+        elif int(self.developer_status) == 2:
             return 'Developer'
         else:
             return ''
