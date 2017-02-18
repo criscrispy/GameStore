@@ -73,7 +73,7 @@ def sale_stat(request):
         return profile(request)
     user = request.user
     # query amount and profit
-    sale = GameSale.objects.annotate(date_no_time=TruncDate('date')).values('date_no_time').annotate(
+    sale = GameSale.objects.filter(game__publisher=user).annotate(date_no_time=TruncDate('date')).values('date_no_time').annotate(
         amount=Count('date_no_time')).annotate(profit=Sum('game__price'))
     if sale:
         sale_chart = create_chart(sale)
