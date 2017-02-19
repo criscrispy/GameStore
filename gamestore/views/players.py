@@ -25,14 +25,14 @@ def game_detail(request, game_id):
     # TODO delete line javascript testing
     js_test(game)
     user = request.user
-    play = is_user_allowed_to_play(game, user)
+    play, edit_delete = is_user_allowed_to_play_edit(game, user)
     scores = find_best_scores_for_game(game)
     if play:
         last_saved = find_saved_state(game_id, request)
     else:
         last_saved = False
     context = {'game': game, 'play': play, 'buy': not play, 'saved': last_saved,
-               'scores': scores}
+               'scores': scores, 'edit_delete':edit_delete}
     return render(request, GAME_DESCRIPTION_HTML, context)
 
 
@@ -66,7 +66,7 @@ def load_game_context(game_id, request):
     game = get_object_or_404(Game, pk=game_id)
     # TODO delete line javascript testing
     js_test(game)
-    start_game = is_user_allowed_to_play(game, request.user)
+    start_game = is_user_allowed_to_play_edit(game, request.user)
     context = {'game': game, 'start_game': start_game, 'buy': not start_game}
     return context
 

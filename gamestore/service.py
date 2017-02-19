@@ -15,18 +15,20 @@ def js_test(game):
     game.url = 'http://users.metropolia.fi/~nikolaid/game/index.html'
 
 
-def is_user_allowed_to_play(game, user):
+def is_user_allowed_to_play_edit(game, user):
     """
     Check if user has right to play a game, right is granted if:
     - user bought a game
     - user published a game
     """
     play = False
+    edit_delete = False
     if user.is_authenticated():
         sale = GameSale.objects.filter(buyer=user, game=game).count()
         dev = Game.objects.filter(publisher=user, id=game.id).count()
         play = sale > 0 or dev > 0
-    return play
+        edit_delete = dev > 0
+    return play, edit_delete
 
 
 def find_saved_state(game_id, request):
