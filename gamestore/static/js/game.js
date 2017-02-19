@@ -20,6 +20,10 @@ $(document).ready(function () {
         var data = event.originalEvent.data;
         handleMessage(data);
     });
+$('[data-toggle=confirmation]').confirmation({
+    rootSelector: '[data-toggle=confirmation]',
+    container: 'body'
+  });
 });
 
 

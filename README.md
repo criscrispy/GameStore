@@ -24,37 +24,70 @@ Awono               | Mekbib     | <mekbib.awono@aalto.fi>
 
 http://fast-ridge-53625.herokuapp.com/
 
+Application works only using http.
+
 ### Accounts/passwords to use the game
-TODO
+#### **Existing accounts:**
+
+**Admin account**
+
+- Username: gameadmin
+- Password: gameadmin
+
+**Player accounts**
+ - cookclifford
+ - sanchezmichael
+ - stephaniepadilla
+ - kyledixon
+ - andrewsullivan
+ - jennifermarshall
+ - oanderson
+ - martinezjessica
+ - ncampbell
+ 
+ and other
+
+**Developer accounts**
+- umorse
+- ysmith
+- ubernard
+- aromero
+
+All player and developer users have 
+password: password
 
 ### Work division
-TODO
+Name                     | Features
+-------------------------|----------------------------------------
+Jaan Tollander de Balsch | Project setup, authentification, authorisation, game search, game upload, profile, developer application handling, tests, sphinx.
+Julia Sulina             | Heroku setup, Postgres setup, game/service interaction, payment integration, game state/scores saving, update/delete game, sample game, statistics. 
+Mekbib Awono             | Game lists, game categories, forms, admin interface, sass.
+
 
 ### Implemented features
 
 **Authentication**
- Authentication features implemented using registration-redux
+ Authentication features implemented using [registration-redux](https://django-registration-redux.readthedocs.io/en/latest/).
  - Register 
  - Log in
  - Logout
- - Email validation, console email?
 
 Authorization:
-- Every user is a player, can apply to become developer. TODO application handling
-- Players can only play only bought games
-- Developers can modify only own games
+- Every user is a player, can apply to become developer. Application handling is done from admin interface. See [image](#Screenshots).
+- Players can play only bought games.
+- Developers can modify only own games.
 
 **Basic player functionalities**
- - Payment integration with payment backend (not secure)
+ - Payment integration with payment backend (not secure).
  - Play - game/service interaction using [protocol](#game-service-communication-protocol)
- - Game search
- - Game scores, states and sales stored in database
+ - Game search by keyword: searchable fields are game title, category and publisher.
+ - Game scores, states and sales stored in database.
   
 **Basic developer functionalities**
  - Add game
  - Update game
- - TODO delete 
- - TODO statistics
+ - Delete game
+ - Statistics of the games sales uploaded by developer are presented as a graph, using [chartit library](http://chartit.shutupandship.com/).
 
 **Game/service interaction**
  - See [protocol](#game-service-communication-protocol)
@@ -63,10 +96,36 @@ Authorization:
  - Tests
  - Adjusting simple JavaScript game from [source](http://www.w3schools.com/graphics/game_intro.asp) to communicate with service.
  - Save/load and resolution feature
- - Postgre database
+ - PostgreSQL database
+
+### Screenshots
+Image 1. Developer application initialization on profile page.
+
+![image1](http://users.metropolia.fi/~nikolaid/images/profile.png)
+
+Image 2. Developer application processing in admin interface.
+
+ ![image2](http://users.metropolia.fi/~nikolaid/images/application.png)
+
 
 ### Self-assessment, successes, problems
-TODO
+
+Problems:
+- Database migration from SQLite to PostgreSQL - at least one datatype cause unexpected bug.
+- Heroku missing ssl database access on free account.
+- Switching between production and development accounts.
+
+Known issues:
+- Email validation not implemented 
+- Game data edit for developer malfunctioning, loads data from existing game, however does not update it creating new - now functions like copy not edit.
+- All games use one sample game to be able to demo game play (hosted [here](http://users.metropolia.fi/~nikolaid/game/index.html)).
+- In sample game state loading not implemented.
+- Game rating shown in a list, but not implemented.
+- Search functions only on main page.
+- Files upload does not work on Heroku, time limits did not allow to setup backend for it.
+
+Successes:
+ - Functionality listed in implemented features list function as planned.
 
 ### Game service communication protocol
 
@@ -81,8 +140,7 @@ LOAD    | "messageType":"LOAD"    |"gameState"             | json | service | ga
 ERROR   | "messageType":"ERROR"   |"info"                  | string | service | game shows error message
 
 ### Other documentation
-TODO
-Sphinx?
+Sphinx code documentation hosted [here](http://users.metropolia.fi/~nikolaid/sphinx/index.html)
 
 ## Project Plan
 

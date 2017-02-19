@@ -19,6 +19,8 @@ CHECKSUM_REQUEST_FORMAT = "pid={}&sid={}&amount={}&token={}"
 CHECKSUM_RESPONSE_FORMAT = "pid={}&ref={}&result={}&token={}"
 CHECKSUM_LENGHT = 32
 PID_LENGHT = 8
+PAYMENT_SECRET = '873efc3f8f8ca2605de7a4101d3322ba'
+PAYMENT_SID = '57b91FDFa2Sy'
 
 # errors and messages
 PID_WAS_NOT_FOUND = "Validation error: No payment with this identifier was found"
@@ -35,6 +37,7 @@ GAME_SCORE_INVALID = "Validation error: score received from the game invalid"
 GAME_STATE_INVALID = "Validation error: state received from the game invalid"
 REQUEST_PARAMETER_MISSING = "Validation error: request parameter missing"
 GAME_INVALID = "Validation error: game not found"
+NOT_A_VALID_JSON = "Validation error: not valid json"
 
 PAYMENT_WAS_CANCELLED = 'Payment was cancelled'
 ERROR_PERFORMING_PAYMENT = 'Error when performing payment'
@@ -46,3 +49,4 @@ GAME_DESCRIPTION_HTML = "gamestore/game_description.html"
 
 PAYMENTS_FAIL_HTML = "gamestore/payments_fail.html"
 PAYMENTS_SUCCESS_HTML = "gamestore/payments_success.html"
+SALE_CHART_HTML = "gamestore/sale_chart.html"

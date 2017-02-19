@@ -1,15 +1,14 @@
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Count, Sum
 from django.db.models.functions import TruncDate
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, render_to_response
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
 
+from gamestore.constants import SALE_CHART_HTML, METHOD_POST
 from gamestore.forms import GameForm
 from gamestore.models import Game, GameSale
-from gamestore.service import validate_user, GAME_INVALID
+from gamestore.service import validate_user, find_game_by_id, delete_game, create_chart
 from gamestore.views.accounts import profile
-from chartit import DataPool, Chart
 
 
 def uploads(request, user_id):
@@ -35,7 +34,7 @@ def upload(request, instance = None):
     if not request.user.userprofile.is_developer():
         return profile(request, request.user.id)
 
-    if request.method == 'POST':
+    if request.method == METHOD_POST:
         form = GameForm(request.POST, request.FILES)
 
         if form.is_valid():
@@ -48,13 +47,11 @@ def upload(request, instance = None):
 
     return render(request, "gamestore/upload_game.html", {'form': form})
 
-@login_required
-def upload_detail(request, game_id):
 
-    return HttpResponse()
 
 @login_required
 def upload_edit(request, game_id):
+    """Modify existing game"""
     if not request.user.userprofile.is_developer():
         return profile(request)
     game = find_game_by_id(game_id)
@@ -62,21 +59,9 @@ def upload_edit(request, game_id):
     return upload(request, game)
 
 
-def find_game_by_id(game_id):
-    try:
-        game = Game.objects.get(id=game_id)
-    except ObjectDoesNotExist:
-        raise ValidationError(GAME_INVALID)
-    return game
-
-
-def delete_game(game):
-    Game.objects.delete(game)
-
-
-
 @login_required
 def upload_delete(request, game_id):
+    """Delete uploaded game"""
     if not request.user.userprofile.is_developer():
         return profile(request)
     game = find_game_by_id(game_id)
@@ -102,37 +87,5 @@ def sale_stat(request):
     else:
         sale_chart = False
     # Step 3: Send the chart object to the template.
-    return render(request, "gamestore/sale_chart.html", {'salechart': sale_chart})
+    return render(request, SALE_CHART_HTML, {'salechart': sale_chart})
 
-
-def create_chart(sale):
-    # http://chartit.shutupandship.com/docs/#how-to-create-charts
-    # Step 1: Create a DataPool with the data we want to retrieve.
-    sale_data = \
-        DataPool(
-            series=
-            [{'options': {
-                'source': sale},
-                'terms': [
-                    'amount',
-                    'date_no_time',
-                    'profit']}
-            ])
-    # Step 2: Create the Chart object
-    sale_chart = Chart(
-        datasource=sale_data,
-        series_options=
-        [{'options': {
-            'type': 'line',
-            'stacking': False},
-            'terms': {
-                'date_no_time': [
-                    'amount', 'profit']
-            }}],
-        chart_options=
-        {'title': {
-            'text': 'Games bought'},
-            'xAxis': {
-                'title': {
-                    'text': 'Date'}}})
-    return sale_chart

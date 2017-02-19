@@ -1,34 +1,26 @@
 {% extends "base.html" %}
-{% load staticfiles %}
+
 {% block content %}
-    {% if not game.image %}
-        <img class="img-responsive" width="25%" src={% static 'images/game_image_default.png' %}>
-    {% else %}
-        <img class="img-responsive" width="25%" src={{ game.image.url }}>
-    {% endif %}
 
-    {% include "gamestore/game_detail.html" with game=game %}
-    <form class="form-inline" action="http://payments.webcourse.niksula.hut.fi/pay/" method="POST">
-        <input type="hidden" name="pid" value={{ pid }}/>
-        <input type="hidden" name="sid" value={{ sid }}/>
-        <input type="hidden" name="success_url"
-               value="{{ service_url }}/payment/success"/>
-        <input type="hidden" name="cancel_url"
-               value="{{ service_url }}/payment/cancel"/>
-        <input type="hidden" name="error_url"
-               value="{{ service_url }}/payment/error"/>
-        <input type="hidden" name="checksum"
-               value="{{ checksum }}"/>
+{% include "gamestore/game_detail.html" with game=game %}
+<form class="form-inline" action="http://payments.webcourse.niksula.hut.fi/pay/" method="POST">
+    <input type="hidden" name="pid" value={{ pid }} />
+    <input type="hidden" name="sid" value={{ sid }} />
+    <input type="hidden" name="success_url"
+            value="{{ service_url  }}/payment/success" />
+    <input type="hidden" name="cancel_url"
+            value="{{ service_url }}/payment/cancel" />
+    <input type="hidden" name="error_url"
+            value="{{ service_url }}/payment/error" />
+    <input type="hidden" name="checksum"
+            value="{{ checksum }}" />
 
-        <label for="id_amount">Amount</label>
-        <div class="input-group">
-            <input class="form-control" type="text" id="id_amount" name="amount" value={{ game.price }} readonly/>
-            <div class="input-group-addon">&euro;</div>
+    <label for="id_amount">Amount</label>
+    <div class="input-group" >
+    <input class="form-control" type="text" id="id_amount" name="amount" value={{ game.price }} readonly/>
+    <div class="input-group-addon">&euro;</div>
         </div>
-        <input class="btn btn-primary" type="submit" value="Accept Payment"/>
+    <input class="btn btn-primary" type="submit" value="Accept Payment"/>
 
-    </form>
-
-    <br/>
-    <br/>
+</form>
 {% endblock %}

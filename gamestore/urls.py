@@ -88,6 +88,9 @@ urlpatterns.extend([
     url(r'^accounts/profile/(?P<user_id>[0-9]+)',
         gamestore.views.accounts.profile,
         name='profile'),
+    url(r'^accounts/profile',
+        gamestore.views.accounts.profile,
+        name='profile'),
     url(r'^accounts/edit/profile',
         gamestore.views.accounts.profile_edit,
         name='profile.edit'),
@@ -166,13 +169,13 @@ urlpatterns.extend([
     url(r'^uploads/stats$', developers.sale_stat,
         name='games.upload.stat'),
 
-    #   /uploads/supermario/delete
+    #   /upload/supermario/delete
     #   edit one of the uploaded games
     #   the post request could save the updated info
     url(r'^upload/(?P<game_id>[0-9]+)/edit$', developers.upload_edit,
         name='games.upload.edit'),
 
-    #   /uploads/supermario/edit
+    #   /upload/supermario/edit
     #   edit one of the uploaded games (change picture, name etc)
     url(r'^upload/(?P<game_id>[0-9]+)/delete$', developers.upload_delete,
         name='games.upload.delete'),
@@ -186,3 +189,4 @@ urlpatterns.extend([
 # Static files for development use
 # https://docs.djangoproject.com/en/1.10/howto/static-files/#serving-files-uploaded-by-a-user-during-development
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

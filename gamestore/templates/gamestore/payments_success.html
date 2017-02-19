@@ -1,10 +1,14 @@
 {% extends "base.html" %}
-
+{% load staticfiles %}
 {% block content %}
     <div class="alert alert-success">
         <p>Thank you for buying <b>{{ game.title }}</b>! </p>
     </div>
-    <img class="img-responsive" src={{ game.image }}>
+    {% if not game.image %}
+            <img class="img-responsive" width="25%" src={% static 'images/game_image_default.png' %}>
+    {% else %}
+            <img class="img-responsive" width="25%" src={{ game.image.url }}>
+    {% endif %}
 
     {% include "gamestore/game_detail.html" with game=game %}
 
