@@ -1,53 +1,39 @@
 import random
 
 from django.core.management.base import BaseCommand
-from django.db import IntegrityError
 from imagefactory import create_image
 
-from gamestore.models import Category
 from gamestore.tests.create_content import create_user, \
-    create_game, create_score, create_game_sale, create_category
+    create_game, create_score, create_game_sale, create_category, GAME_TITLES, \
+    CATEGORY_TITLES
 
 
-def create_categories(*titles):
-    for title in titles:
-        try:
-            yield create_category(title)
-        except IntegrityError:
-            yield Category.objects.get(title=title)
+def create_users(amount):
+    for _ in range(amount):
+        yield create_user()
+
+
+def create_games(amount, users, categories):
+    image_game = create_image(name='image', width=256, height=256)
+    image_icon = create_image(name='icon', width=48, height=48)
+    # TODO: Better titles
+    if users and categories:
+        for _ in range(amount):
+            yield create_game(
+                user=random.choice(users),
+                category=random.choice(categories),
+                title=random.choice(GAME_TITLES),
+                icon=image_icon,
+                image=image_game
+            )
 
 
 def populate(user_amount, game_amount, sales_amount, scores_amount):
-    image_game = create_image(name="image", width=256, height=256)
-    image_icon = create_image(name="icon", width=48, height=48)
-    category_titles = (
-        '3D', 'Action', 'Adventure', 'Alien', 'Arcade', 'Card', 'Dress Up',
-        'Fantasy', 'Fighting', 'Flying', 'Football', 'Golf', 'Holidays', 'Kids',
-        'Multiplayer', 'Pool', 'Puzzle', 'Racing', 'Simulation', 'Sports',
-        'Strategy', 'Winter', 'Word', 'Zombie'
-    )
-
-    categories = list(create_categories(*category_titles))
-    users = []
-    games = []
+    categories = tuple(map(create_category, CATEGORY_TITLES))
+    users = tuple(create_users(user_amount))
+    games = tuple(create_games(game_amount, users, categories))
     sales = []
     sales_dict = {}
-
-    for i in range(user_amount):
-        try:
-            user = create_user()
-            users.append(user)
-        except IntegrityError:
-            # Tries to create new user with existing username
-            pass
-
-    if users and categories:
-        for i in range(game_amount):
-            user = random.choice(users)
-            rand_category = random.choice(categories)
-            game = create_game(user, rand_category, icon=image_icon,
-                               image=image_game)
-            games.append(game)
 
     if users and games:
         for i in range(sales_amount):
@@ -67,8 +53,7 @@ def populate(user_amount, game_amount, sales_amount, scores_amount):
 
     if sales:
         for i in range(scores_amount):
-            user, game = random.choice(sales)
-            create_score(user, game)
+            create_score(*random.choice(sales))
 
 
 class Command(BaseCommand):

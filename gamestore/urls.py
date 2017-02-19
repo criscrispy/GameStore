@@ -69,12 +69,12 @@ from gamestore.views import base, players, developers, payments
 urlpatterns = [
     url(r'^$', base.index, name='index'),
     url(r'^games$', gamestore.views.base.games, name='games.list'),
-    url(r'^categories/(?P<category_name>\w+)', base.category_detail,
-        name='categories.detail'),
-    url(r'^categories', base.categories, name='categories.list'),
-    url(r'^publishers/(?P<user_id>[0-9]+)', base.publisher_detail,
-        name='publisher.detail'),
-    url(r'^publishers', base.publishers, name='publishers.list'),
+    # url(r'^categories/(?P<category_name>\w+)', base.category_detail,
+    #     name='categories.detail'),
+    # url(r'^categories', base.categories, name='categories.list'),
+    # url(r'^publishers/(?P<user_id>[0-9]+)', base.publisher_detail,
+    #     name='publisher.detail'),
+    # url(r'^publishers', base.publishers, name='publishers.list'),
 ]
 
 # Search
@@ -85,7 +85,7 @@ urlpatterns.extend([
 
 # Account views
 urlpatterns.extend([
-    url(r'^accounts/profile',
+    url(r'^accounts/profile/(?P<user_id>[0-9]+)',
         gamestore.views.accounts.profile,
         name='profile'),
     url(r'^accounts/edit/profile',
@@ -158,33 +158,28 @@ urlpatterns.extend([
 urlpatterns.extend([
     #   /uploads/1234
     #   games user 1234 uploaded
-    url(r'^uploads/(?P<user_id>[0-9]+)', developers.uploads,
+    url(r'^uploads/(?P<user_id>[0-9]+)$', developers.uploads,
         name='games.uploads'),
-
-    #   /uploads/supermario OR /uploads/1234
-    #   details of one of the uploaded games : visible to the uploader
-    url(r'^uploads/(?P<game_id>[0-9]+)', developers.upload_detail,
-        name='games.upload.detail'),
 
     #   /uploads/supermario/stats OR /uploads/1234/stats
     #   view the stats of the uploaded game with gameId=1234
-    url(r'^uploads/stats', developers.sale_stat,
+    url(r'^uploads/stats$', developers.sale_stat,
         name='games.upload.stat'),
 
     #   /uploads/supermario/delete
     #   edit one of the uploaded games
     #   the post request could save the updated info
-    url(r'^uploads/(?P<game_id>[0-9]+)/edit', developers.upload_edit,
+    url(r'^upload/(?P<game_id>[0-9]+)/edit$', developers.upload_edit,
         name='games.upload.edit'),
 
     #   /uploads/supermario/edit
     #   edit one of the uploaded games (change picture, name etc)
-    url(r'^uploads/(?P<game_id>[0-9]+)/delete', developers.upload_delete,
+    url(r'^upload/(?P<game_id>[0-9]+)/delete$', developers.upload_delete,
         name='games.upload.delete'),
 
     #   /upload
     #   view to show the upload form
-    url(r'^upload', developers.upload, name='games.upload'),
+    url(r'^upload$', developers.upload, name='games.upload'),
 
 ])
 

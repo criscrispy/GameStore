@@ -7,7 +7,10 @@ a game.
 {% load staticfiles %}
 {% load bootstrap3 %}
 {% block script %}
-    <script src="{% static 'js/game.js' %}"></script>{% endblock %}
+ <script src="{% static 'js/bootstrap-confirmation.min.js' %}"></script>
+    <script src="{% static 'js/game.js' %}"></script>
+
+{% endblock %}
 {% block title %}Game{% endblock %}
 
 {% block content %}
@@ -22,7 +25,6 @@ a game.
         </iframe>
     {% else %}
         <div class="col-lg-9 col-md-9 col-sm-9">
-
         <!-- game.image -->
         {% if not game.image %}
             <img class="img-responsive" width="50%" src={% static 'images/game_image_default.png' %}>
@@ -49,8 +51,8 @@ a game.
             <a class="btn btn-primary" href="get_state">Play saved</a>
         {% endif %}
         {% if edit_delete %}
-            <a class="btn btn-info" href="/uploads/{{ game.id }}/edit">Edit</a>
-            <a class="btn btn-warning" href="/uploads/{{ game.id }}/delete">Delete</a>
+            <a class="btn btn-info" href="/upload/{{ game.id }}/edit">Edit</a>
+            <a class="btn btn-warning" data-toggle="confirmation" data-placement="top" href="/upload/{{ game.id }}/delete">Delete</a>
         {% endif %}
     </div>
 </div>
