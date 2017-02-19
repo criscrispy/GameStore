@@ -7,16 +7,17 @@ http://samara.computer/531_adaptive/startbootstrap-master/startbootstrap-master/
     <div class="thumbnail">
         <div class="game-grid {{ style }}">
             <!-- game.image -->
-            {% if not game.image %}
-                <img class="img-responsive" width="100%" src={% static 'images/game_image_default.png' %}>
-            {% else %}
-                <img class="img-responsive" width="100%" src={{ game.image.url }}>
-            {% endif %}
-
+            <a href="{% url 'games.detail' game_id=game.id %}">
+                {% if not game.image %}
+                    <img class="img-responsive" width="100%" src={% static 'images/game_image_default.png' %}>
+                {% else %}
+                    <img class="img-responsive" width="100%" src={{ game.image.url }}>
+                {% endif %}
+            </a>
             <!-- Info about the game -->
             <div class="caption">
                 <h4 class="pull-right">{{ game.price }} €</h4>
-                <h4><a href="{% url 'games.detail' game_id=game.id  %}">
+                <h4><a href="{% url 'games.detail' game_id=game.id %}">
                     {{ game.title|title }}
                 </a></h4>
 
