@@ -24,14 +24,15 @@ Awono               | Mekbib     | <mekbib.awono@aalto.fi>
 
 http://fast-ridge-53625.herokuapp.com/
 
+App works only using http.
+
 ### Accounts/passwords to use the game
 #### **Existing accounts:**
 
 **Admin account**
 
-username: gameadmin
-
-password: gameadmin
+- Username: gameadmin
+- Password: gameadmin
 
 **Player accounts**
  - cookclifford
@@ -76,14 +77,14 @@ Mekbib Awono             | Game lists, game categories, forms, admin interface,
 
 Authorization:
 - Every user is a player, can apply to become developer. Application handling is done from admin interface. See image.
-- Players can only play only bought games
-- Developers can modify only own games
+- Players can play only bought games.
+- Developers can modify only own games.
 
 **Basic player functionalities**
  - Payment integration with payment backend (not secure)
  - Play - game/service interaction using [protocol](#game-service-communication-protocol)
- - Game search
- - Game scores, states and sales stored in database
+ - Game search by keyword: searchable fields are game title, category and publisher.
+ - Game scores, states and sales stored in database.
   
 **Basic developer functionalities**
  - Add game
@@ -100,6 +101,8 @@ Authorization:
  - Save/load and resolution feature
  - Postgre database
  
+Image 1. Developer application processing.
+ ![](http://users.metropolia.fi/~nikolaid/images/application.png)
 
 ### Self-assessment, successes, problems
 
