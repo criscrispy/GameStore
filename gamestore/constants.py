@@ -19,6 +19,8 @@ CHECKSUM_REQUEST_FORMAT = "pid={}&sid={}&amount={}&token={}"
 CHECKSUM_RESPONSE_FORMAT = "pid={}&ref={}&result={}&token={}"
 CHECKSUM_LENGHT = 32
 PID_LENGHT = 8
+PAYMENT_SECRET = '873efc3f8f8ca2605de7a4101d3322ba'
+PAYMENT_SID = '57b91FDFa2Sy'
 
 # errors and messages
 PID_WAS_NOT_FOUND = "Validation error: No payment with this identifier was found"
@@ -47,3 +49,4 @@ GAME_DESCRIPTION_HTML = "gamestore/game_description.html"
 
 PAYMENTS_FAIL_HTML = "gamestore/payments_fail.html"
 PAYMENTS_SUCCESS_HTML = "gamestore/payments_success.html"
+SALE_CHART_HTML = "gamestore/sale_chart.html"

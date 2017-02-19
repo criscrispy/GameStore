@@ -166,13 +166,13 @@ urlpatterns.extend([
     url(r'^uploads/stats$', developers.sale_stat,
         name='games.upload.stat'),
 
-    #   /uploads/supermario/delete
+    #   /upload/supermario/delete
     #   edit one of the uploaded games
     #   the post request could save the updated info
     url(r'^upload/(?P<game_id>[0-9]+)/edit$', developers.upload_edit,
         name='games.upload.edit'),
 
-    #   /uploads/supermario/edit
+    #   /upload/supermario/edit
     #   edit one of the uploaded games (change picture, name etc)
     url(r'^upload/(?P<game_id>[0-9]+)/delete$', developers.upload_delete,
         name='games.upload.delete'),
