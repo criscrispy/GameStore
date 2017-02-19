@@ -38,14 +38,10 @@ from gamestore.models import UserProfile
 
 
 @login_required
-def profile(request):
+def profile(request, user_id):
     """Show User's profile view"""
-    user_profile = get_object_or_404(UserProfile, user__id=request.user.id)
-    context = {
-        'user': request.user,
-        'profile': user_profile
-    }
-    return render(request, "accounts/profile.html", context)
+    user_profile = get_object_or_404(UserProfile, user__id=user_id)
+    return render(request, "accounts/profile.html", {'profile': user_profile})
 
 
 @login_required

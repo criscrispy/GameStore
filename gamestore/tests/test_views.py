@@ -99,36 +99,6 @@ def test_games(client):
     assert response.status_code == 200
 
 
-@pytest.mark.django_db
-def test_categories(client):
-    url = '/categories'
-    response = client.get(url)
-    assert response.status_code == 200
-
-
-@given(game_id=game_id_strategy())
-@pytest.mark.django_db
-def test_categories_detail(client, game_id):
-    url = '/categories/{game_id}'
-    response = client.get(url.format(game_id=game_id))
-    assert response.status_code == 200
-
-
-@pytest.mark.django_db
-def test_publishers(client):
-    url = '/publishers'
-    response = client.get(url)
-    assert response.status_code == 200
-
-
-@given(game_id=game_id_strategy())
-@pytest.mark.django_db
-def test_publisher_detail(client, game_id):
-    url = '/publishers/{user_id}'
-    response = client.get(url.format(user_id=game_id))
-    assert response.status_code == 200
-
-
 # -----------------------------------------------------------------------------
 # Accounts
 # -----------------------------------------------------------------------------
@@ -136,7 +106,7 @@ def test_publisher_detail(client, game_id):
 
 def test_profile(client, admin_user):
     """Test profile."""
-    url = '/accounts/profile'
+    url = '/accounts/profile/1'
 
     # Not logged in
     response = client.get(url)

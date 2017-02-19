@@ -42,6 +42,13 @@ def games(request):
 
     References:
         http://stackoverflow.com/questions/2584502/simple-search-in-django
+
+    Todo:
+        - Order the results by something
+        - Search by category
+        - Games in the category
+        - Search by publisher
+        - Games by publisher
     """
     query = request.GET.get('q')
     if query:
@@ -54,44 +61,3 @@ def games(request):
         games = Game.objects.all()[:50]
 
     return render(request, "gamestore/games.html", {'games': games})
-
-
-def categories(request):
-    """Show all categories."""
-    context = {'categories': Category.objects.all()[:50]}
-    return render(request, "gamestore/categories.html", context)
-
-
-def category_detail(request, category_name):
-    """Show all games under some category."""
-    category = Category.objects.filter(title=category_name)
-    games_in_category = Game.objects.filter(category_id=category)
-
-    context = {
-        'category_name': category_name,
-        'games': games_in_category
-    }
-
-    return render(request, "gamestore/category_detail.html", context)
-
-
-def publishers(request):
-    """Show all publishers"""
-    publishers_list = User.objects.filter(userprofile__developer_status=2)
-
-    context = {
-        'publishers': publishers_list
-    }
-
-    return render(request, "gamestore/publishers.html", context)
-
-
-def publisher_detail(request, user_id):
-    """Show all games under some publisher."""
-    publishers_games = Game.objects.filter(publisher=user_id)
-    context = {
-        'games': publishers_games,
-        'user': request.user
-    }
-
-    return render(request, "gamestore/publisher_detail.html", context)

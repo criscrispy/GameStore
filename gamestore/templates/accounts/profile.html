@@ -15,7 +15,7 @@ http://bootsnipp.com/snippets/featured/simple-user-profile
                 <!-- Profile -->
                 <div class="panel-heading">
                     <!-- Username -->
-                    <h3 class="panel-title">{{ user.username }}</h3>
+                    <h3 class="panel-title">{{ profile.user.username }}</h3>
                 </div>
                 <div class="panel-body">
                     <div class="row">
@@ -46,11 +46,11 @@ http://bootsnipp.com/snippets/featured/simple-user-profile
                                 <tbody>
                                 <tr>
                                     <td>Name</td>
-                                    <td>{{ user.first_name }} {{ user.last_name }}</td>
+                                    <td>{{ profile.user.first_name }} {{ profile.user.last_name }}</td>
                                 </tr>
                                 <tr>
                                     <td>Email</td>
-                                    <td><a href="mailto:info@support.com">{{ user.email }}</a>
+                                    <td><a href="mailto:info@support.com">{{ profile.user.email }}</a>
                                     </td>
                                 </tr>
                                 <tr>
@@ -85,8 +85,7 @@ http://bootsnipp.com/snippets/featured/simple-user-profile
                             </table>
 
                         <!-- Buttons. Only for authenticated user for their own profiles. -->
-                        <!-- TODO: user.id == profile.user.id -->
-                        {% if user.is_authenticated %}
+                        {% if user.is_authenticated and user.id == profile.user.id %}
                             <!-- Edit Profile -->
                             <a href="{% url 'profile.edit' %}" class="btn btn-primary">Edit profile</a>
 

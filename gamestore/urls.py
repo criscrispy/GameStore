@@ -69,12 +69,12 @@ from gamestore.views import base, players, developers, payments
 urlpatterns = [
     url(r'^$', base.index, name='index'),
     url(r'^games$', gamestore.views.base.games, name='games.list'),
-    url(r'^categories/(?P<category_name>\w+)', base.category_detail,
-        name='categories.detail'),
-    url(r'^categories', base.categories, name='categories.list'),
-    url(r'^publishers/(?P<user_id>[0-9]+)', base.publisher_detail,
-        name='publisher.detail'),
-    url(r'^publishers', base.publishers, name='publishers.list'),
+    # url(r'^categories/(?P<category_name>\w+)', base.category_detail,
+    #     name='categories.detail'),
+    # url(r'^categories', base.categories, name='categories.list'),
+    # url(r'^publishers/(?P<user_id>[0-9]+)', base.publisher_detail,
+    #     name='publisher.detail'),
+    # url(r'^publishers', base.publishers, name='publishers.list'),
 ]
 
 # Search
@@ -85,7 +85,7 @@ urlpatterns.extend([
 
 # Account views
 urlpatterns.extend([
-    url(r'^accounts/profile',
+    url(r'^accounts/profile/(?P<user_id>[0-9]+)',
         gamestore.views.accounts.profile,
         name='profile'),
     url(r'^accounts/edit/profile',

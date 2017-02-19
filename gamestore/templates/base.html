@@ -81,7 +81,7 @@
                         <li><a href="{% url 'registration_register' %}"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</a></li>
                     {% else %}
                         <li><a href="{% url 'auth_logout' %}">{% bootstrap_icon 'log-out' %} Logout</a></li>
-                        <li><a href="{% url 'profile' %}">{% bootstrap_icon 'user' %} Profile</a></li>
+                        <li><a href="{% url 'profile' user_id=user.id %}">{% bootstrap_icon 'user' %} Profile</a></li>
                     {% endif %}
                 </ul>
             </div>
