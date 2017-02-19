@@ -1,19 +1,11 @@
 import random
 
 from django.core.management.base import BaseCommand
-from django.db import IntegrityError
 from imagefactory import create_image
 
-from gamestore.models import Category
 from gamestore.tests.create_content import create_user, \
-    create_game, create_score, create_game_sale, create_category
-
-CATEGORY_TITLES = (
-    '3D', 'Action', 'Adventure', 'Alien', 'Arcade', 'Card', 'Dress Up',
-    'Fantasy', 'Fighting', 'Flying', 'Football', 'Golf', 'Holidays', 'Kids',
-    'Multiplayer', 'Pool', 'Puzzle', 'Racing', 'Simulation', 'Sports',
-    'Strategy', 'Winter', 'Word', 'Zombie'
-)
+    create_game, create_score, create_game_sale, create_category, GAME_TITLES, \
+    CATEGORY_TITLES
 
 
 def create_users(amount):
@@ -28,10 +20,12 @@ def create_games(amount, users, categories):
     if users and categories:
         for _ in range(amount):
             yield create_game(
-                random.choice(users),
-                random.choice(categories),
+                user=random.choice(users),
+                category=random.choice(categories),
+                title=random.choice(GAME_TITLES),
                 icon=image_icon,
-                image=image_game)
+                image=image_game
+            )
 
 
 def populate(user_amount, game_amount, sales_amount, scores_amount):

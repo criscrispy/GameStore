@@ -9,6 +9,7 @@ Attributes:
 
 """
 import logging
+import os
 import string
 from functools import partial
 
@@ -23,6 +24,15 @@ from gamestore.utils import log_with
 USERNAME_ALPHABET = string.ascii_letters + string.digits + "@.+-_"
 PASSWORD_ALPHABET = string.ascii_letters + string.digits + string.punctuation
 PASSWORD = "password"
+BASE_DIR = os.path.dirname(__file__)
+
+
+with open(os.path.join(BASE_DIR, 'category_titles.txt')) as file:
+    CATEGORY_TITLES = file.read().split('\n')
+
+with open(os.path.join(BASE_DIR, 'game_titles.txt')) as file:
+    GAME_TITLES = file.read().split('\n')
+
 
 # Faker instance for creating fake data.
 fake = Faker()
