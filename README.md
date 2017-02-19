@@ -66,18 +66,18 @@ Mekbib Awono             | Game/publisher lists, game categories, forms, admin 
 
 **Authentication**
  Authentication features implemented using [registration-redux](https://django-registration-redux.readthedocs.io/en/latest/).
- - Register 
- - Log in
- - Logout
+ - Register user. 
+ - Log in.
+ - Logout.
 
 Authorization:
-- Every user is a player, can apply to become developer. Application handling is done from admin interface. See [images](#screenshots) 1-2.
+- Every user is a player, can apply to become developer. Application handling is done from admin interface. See [figures](#figures) 1-2.
 - Players can play only bought games.
 - Developers can modify only own games.
 
 **Basic player functionalities**
  - Payment integration with payment backend (not secure).
- - Play - game/service interaction using [protocol](#game-service-communication-protocol)
+ - Play - game/service interaction using [protocol](#game-service-communication-protocol).
  - Game search by keyword: searchable fields are game title, category and publisher.
  - Game scores, states and sales stored in database.
   
@@ -88,24 +88,14 @@ Authorization:
  - Statistics of the games sales uploaded by developer are presented as a graph, using [chartit library](http://chartit.shutupandship.com/).
 
 **Game/service interaction**
- - See [protocol](#game-service-communication-protocol)
+ - See [protocol](#game-service-communication-protocol).
 
 **Other**
- - Tests
+ - Tests.
  - Adjusting simple JavaScript game from [source](http://www.w3schools.com/graphics/game_intro.asp) to communicate with service.
- - Save/load and resolution feature
- - PostgreSQL database
- - Bootstrap framework - scalable views
-
-### Screenshots
-Image 1. Developer application initialization on profile page.
-
-![image1](http://users.metropolia.fi/~nikolaid/images/profile.png)
-
-Image 2. Developer application processing in admin interface.
-
- ![image2](http://users.metropolia.fi/~nikolaid/images/application.png)
-
+ - Save/load and resolution feature.
+ - PostgreSQL database.
+ - Bootstrap framework - scalable views.
 
 ### Self-assessment, successes, problems
 
@@ -141,7 +131,16 @@ LOAD    | "messageType":"LOAD"    |"gameState"             | json | service | ga
 ERROR   | "messageType":"ERROR"   |"info"                  | string | service | game shows error message
 
 ### Other documentation
-Sphinx code documentation hosted [here](http://users.metropolia.fi/~nikolaid/sphinx/index.html)
+Sphinx code [documentation](http://users.metropolia.fi/~nikolaid/sphinx/index.html).
+
+### Figures
+Figure 1. Developer application initialization on profile page.
+
+![image1](http://users.metropolia.fi/~nikolaid/images/profile.png)
+
+Figure 2. Developer application processing in admin interface.
+
+ ![image2](http://users.metropolia.fi/~nikolaid/images/application.png)
 
 ## Project Plan
 
