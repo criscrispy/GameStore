@@ -25,7 +25,7 @@ Awono               | Mekbib     | <mekbib.awono@aalto.fi>
 http://fast-ridge-53625.herokuapp.com/
 
 ### Accounts/passwords to use the game
-Existing accounts:
+#### **Existing accounts:**
 
 **Admin account**
 
@@ -34,9 +34,29 @@ username: gameadmin
 password: gameadmin
 
 **Player accounts**
+ - cookclifford
+ - sanchezmichael
+ - stephaniepadilla
+ - kyledixon
+ - andrewsullivan
+ - jennifermarshall
+ - oanderson
+ - martinezjessica
+ - ncampbell
+ - rhodesvincent
+ - nelsonarthur
+ - jacoberickson
+ 
+ and other
 
 **Developer accounts**
+- umorse
+- ysmith
+- ubernard
+- aromero
 
+All player and developer users have 
+password: password
 
 ### Work division
 Name                     | Features
@@ -53,10 +73,9 @@ Mekbib Awono             | Game lists, game categories, forms, admin interface,
  - Register 
  - Log in
  - Logout
- - Email validation, console email?
 
 Authorization:
-- Every user is a player, can apply to become developer. Application handling is done from admin interface.
+- Every user is a player, can apply to become developer. Application handling is done from admin interface. See image.
 - Players can only play only bought games
 - Developers can modify only own games
 
@@ -70,7 +89,7 @@ Authorization:
  - Add game
  - Update game
  - Delete game
- - Statistics of the games sales uploaded by developer as a graph
+ - Statistics of the games sales uploaded by developer as a graph, using graphit library.
 
 **Game/service interaction**
  - See [protocol](#game-service-communication-protocol)
@@ -80,9 +99,27 @@ Authorization:
  - Adjusting simple JavaScript game from [source](http://www.w3schools.com/graphics/game_intro.asp) to communicate with service.
  - Save/load and resolution feature
  - Postgre database
+ 
 
 ### Self-assessment, successes, problems
-TODO
+
+Problems:
+- Database migration from sqlite to Postgres - at least one datatype cause unexpected bug.
+- Heroku missing ssl database access on free account.
+- Switching between production and development accounts.
+
+Known issues:
+- Email validation not implemented 
+- Game data edit for developer malfunctioning, loads data from existing game, however does not update it creating new - now functions like copy not edit.
+- All games use one sample game to be able to demo game play (hosted [here](http://users.metropolia.fi/~nikolaid/game/index.html)).
+- In sample game state loading not implemented.
+- Game rating shown in a list, but not implemented.
+- Search functions only on main page.
+
+Successes:
+
+ - Features listed above function as planned.
+
 
 ### Game service communication protocol
 
