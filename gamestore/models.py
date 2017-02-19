@@ -78,18 +78,18 @@ class UserProfile(models.Model):
                                            choices=DEVELOPER_STATUS_CHOICES)
 
     def can_apply_for_developer(self):
-        return self.developer_status == 0
+        return int(self.developer_status) == 0
 
     def is_developer(self):
         """Is user a developer."""
-        return self.developer_status == 2
+        return int(self.developer_status) == 2
 
     def get_status_string(self):
-        if self.developer_status == 0:
+        if int(self.developer_status) == 0:
             return 'Player'
-        elif self.developer_status == 1:
+        elif int(self.developer_status) == 1:
             return 'Developer application is pending'
-        elif self.developer_status == 2:
+        elif int(self.developer_status) == 2:
             return 'Developer'
         else:
             return ''
@@ -177,7 +177,6 @@ class Score(models.Model):
 
 class GameSale(models.Model):
     """Model for individual game sale"""
-    # TODO: user should only be able to buy the game once
     buyer = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
     game = models.ForeignKey(Game, on_delete=models.CASCADE, blank=False)
     date = models.DateTimeField("Date when game was bought", blank=False,
@@ -200,7 +199,7 @@ class GameSettings(models.Model):
     player = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
     game = models.ForeignKey(Game, on_delete=models.CASCADE, blank=False)
     settings = models.CharField(default="", max_length=2000)
-    # todo settings = JSONField(default="")
+    #settings = JSONField(default="") does not work on local sqllite
 
 
 class Configuration(models.Model):
