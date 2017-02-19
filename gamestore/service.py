@@ -228,6 +228,7 @@ def save_payment(pid, game, user):
 
 
 def save_game_sale(user, game):
+    # TODO: user should only be able to buy the game once
     """Save entry game sold"""
     game_sale = GameSale(buyer=user, game=game)
     game_sale.save()

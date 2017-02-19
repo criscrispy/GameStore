@@ -177,7 +177,6 @@ class Score(models.Model):
 
 class GameSale(models.Model):
     """Model for individual game sale"""
-    # TODO: user should only be able to buy the game once
     buyer = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
     game = models.ForeignKey(Game, on_delete=models.CASCADE, blank=False)
     date = models.DateTimeField("Date when game was bought", blank=False,
@@ -200,7 +199,7 @@ class GameSettings(models.Model):
     player = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
     game = models.ForeignKey(Game, on_delete=models.CASCADE, blank=False)
     settings = models.CharField(default="", max_length=2000)
-    # todo settings = JSONField(default="")
+    #settings = JSONField(default="") does not work on local sqllite
 
 
 class Configuration(models.Model):
