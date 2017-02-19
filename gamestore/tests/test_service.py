@@ -5,7 +5,7 @@ from django.test import RequestFactory
 from hypothesis import settings
 
 from gamestore.models import GameSettings
-from gamestore.service import is_user_allowed_to_play, save_game_state, validate_payment_feedback, \
+from gamestore.service import is_user_allowed_to_play_edit, save_game_state, validate_payment_feedback, \
     validate_payment_feedback_parameters, PID_INVALID_FORMAT, REQUEST_PARAMETER_MISSING, CHECKSUM_INVALID_FORMAT, \
     REF_INVALID_FORMAT, RESULT_INVALID_FORMAT
 from gamestore.tests.create_content import create_user, create_game, create_game_sale, create_category
@@ -24,15 +24,15 @@ settings.load_profile('dev')
 @pytest.mark.django_db
 def test_is_user_allowed_to_play():
     game, user = create_user_game()
-    result = is_user_allowed_to_play(game, user)
+    result = is_user_allowed_to_play_edit(game, user)
     assert result is False
 
     sale = create_game_sale(user, game)
-    result = is_user_allowed_to_play(game, user)
+    result = is_user_allowed_to_play_edit(game, user)
     assert result
 
     dev_user = game.publisher
-    result = is_user_allowed_to_play(game, dev_user)
+    result = is_user_allowed_to_play_edit(game, dev_user)
     assert result
 
 
