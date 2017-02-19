@@ -25,10 +25,26 @@ Awono               | Mekbib     | <mekbib.awono@aalto.fi>
 http://fast-ridge-53625.herokuapp.com/
 
 ### Accounts/passwords to use the game
-TODO
+Existing accounts:
+
+**Admin account**
+
+username: gameadmin
+
+password: gameadmin
+
+**Player accounts**
+
+**Developer accounts**
+
 
 ### Work division
-TODO
+Name                     | Features
+-------------------------|----------------------------------------
+Jaan Tollander de Balsch | Project setup, authentification, authorisation, game search, game upload, profile, developer application handling, tests, sphinx.
+Julia Sulina             | Heroku setup, Postgres setup, game/service interaction, payment integration, game state/scores saving, update/delete game, sample game, statistics. 
+Mekbib Awono             | Game lists, game categories, forms, admin interface, sass.
+
 
 ### Implemented features
 
@@ -40,7 +56,7 @@ TODO
  - Email validation, console email?
 
 Authorization:
-- Every user is a player, can apply to become developer. TODO application handling
+- Every user is a player, can apply to become developer. Application handling is done from admin interface.
 - Players can only play only bought games
 - Developers can modify only own games
 
@@ -53,8 +69,8 @@ Authorization:
 **Basic developer functionalities**
  - Add game
  - Update game
- - TODO delete 
- - TODO statistics
+ - Delete game
+ - Statistics of the games sales uploaded by developer as a graph
 
 **Game/service interaction**
  - See [protocol](#game-service-communication-protocol)
@@ -82,7 +98,7 @@ ERROR   | "messageType":"ERROR"   |"info"                  | string | service | 
 
 ### Other documentation
 TODO
-Sphinx?
+Sphinx url: 
 
 ## Project Plan
 

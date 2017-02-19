@@ -44,9 +44,12 @@ def find_saved_state(game_id, request):
 
 
 def validate_json(state, string=False):
-    # Todo escape javascript validate json
     """Validates json, if :param string provided json is returned in dictionary as value of string"""
-    val_state = json.loads(state)
+    try:
+        val_state = json.loads(state)
+    except ValueError:
+        error(NOT_A_VALID_JSON)
+        raise ValidationError(NOT_A_VALID_JSON)
     if string:
         val_state = {string: val_state}
     return json.dumps(val_state)
@@ -233,13 +236,10 @@ def save_payment(pid, game, user):
 
 
 def save_game_sale(user, game):
-    # TODO: user should only be able to buy the game once
     """Save entry game sold"""
     game_sale = GameSale(buyer=user, game=game)
     game_sale.save()
 
-
-# TODO implement configuration system properties
 
 def get_payment_sid():
     """Get payment sid from configuration"""
