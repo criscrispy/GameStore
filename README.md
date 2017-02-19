@@ -24,7 +24,7 @@ Awono               | Mekbib     | <mekbib.awono@aalto.fi>
 
 http://fast-ridge-53625.herokuapp.com/
 
-App works only using http.
+Application works only using http.
 
 ### Accounts/passwords to use the game
 #### **Existing accounts:**
@@ -44,9 +44,6 @@ App works only using http.
  - oanderson
  - martinezjessica
  - ncampbell
- - rhodesvincent
- - nelsonarthur
- - jacoberickson
  
  and other
 
@@ -70,18 +67,18 @@ Mekbib Awono             | Game lists, game categories, forms, admin interface,
 ### Implemented features
 
 **Authentication**
- Authentication features implemented using registration-redux
+ Authentication features implemented using [registration-redux](https://django-registration-redux.readthedocs.io/en/latest/).
  - Register 
  - Log in
  - Logout
 
 Authorization:
-- Every user is a player, can apply to become developer. Application handling is done from admin interface. See image.
+- Every user is a player, can apply to become developer. Application handling is done from admin interface. See [image](#Screenshots).
 - Players can play only bought games.
 - Developers can modify only own games.
 
 **Basic player functionalities**
- - Payment integration with payment backend (not secure)
+ - Payment integration with payment backend (not secure).
  - Play - game/service interaction using [protocol](#game-service-communication-protocol)
  - Game search by keyword: searchable fields are game title, category and publisher.
  - Game scores, states and sales stored in database.
@@ -90,7 +87,7 @@ Authorization:
  - Add game
  - Update game
  - Delete game
- - Statistics of the games sales uploaded by developer as a graph, using graphit library.
+ - Statistics of the games sales uploaded by developer are presented as a graph, using [chartit library](http://chartit.shutupandship.com/).
 
 **Game/service interaction**
  - See [protocol](#game-service-communication-protocol)
@@ -99,15 +96,22 @@ Authorization:
  - Tests
  - Adjusting simple JavaScript game from [source](http://www.w3schools.com/graphics/game_intro.asp) to communicate with service.
  - Save/load and resolution feature
- - Postgre database
- 
-Image 1. Developer application processing.
- ![](http://users.metropolia.fi/~nikolaid/images/application.png)
+ - PostgreSQL database
+
+### Screenshots
+Image 1. Developer application initialization on profile page.
+
+![image1](http://users.metropolia.fi/~nikolaid/images/profile.png)
+
+Image 2. Developer application processing in admin interface.
+
+ ![image2](http://users.metropolia.fi/~nikolaid/images/application.png)
+
 
 ### Self-assessment, successes, problems
 
 Problems:
-- Database migration from sqlite to Postgres - at least one datatype cause unexpected bug.
+- Database migration from SQLite to PostgreSQL - at least one datatype cause unexpected bug.
 - Heroku missing ssl database access on free account.
 - Switching between production and development accounts.
 
@@ -118,11 +122,10 @@ Known issues:
 - In sample game state loading not implemented.
 - Game rating shown in a list, but not implemented.
 - Search functions only on main page.
+- Files upload does not work on Heroku, time limits did not allow to setup backend for it.
 
 Successes:
-
- - Features listed above function as planned.
-
+ - Functionality listed in implemented features list function as planned.
 
 ### Game service communication protocol
 
@@ -137,8 +140,7 @@ LOAD    | "messageType":"LOAD"    |"gameState"             | json | service | ga
 ERROR   | "messageType":"ERROR"   |"info"                  | string | service | game shows error message
 
 ### Other documentation
-TODO
-Sphinx url: 
+Sphinx code documentation hosted [here](http://users.metropolia.fi/~nikolaid/sphinx/index.html)
 
 ## Project Plan
 
