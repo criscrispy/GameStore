@@ -35,6 +35,7 @@ GAME_SCORE_INVALID = "Validation error: score received from the game invalid"
 GAME_STATE_INVALID = "Validation error: state received from the game invalid"
 REQUEST_PARAMETER_MISSING = "Validation error: request parameter missing"
 GAME_INVALID = "Validation error: game not found"
+NOT_A_VALID_JSON = "Validation error: not valid json"
 
 PAYMENT_WAS_CANCELLED = 'Payment was cancelled'
 ERROR_PERFORMING_PAYMENT = 'Error when performing payment'
