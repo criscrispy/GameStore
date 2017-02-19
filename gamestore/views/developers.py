@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Count, Sum
 from django.db.models.functions import TruncDate
 from django.http import HttpResponse, HttpResponseRedirect
@@ -6,6 +7,7 @@ from django.shortcuts import render, render_to_response
 
 from gamestore.forms import GameForm
 from gamestore.models import Game, GameSale
+from gamestore.service import validate_user, GAME_INVALID
 from gamestore.views.accounts import profile
 from chartit import DataPool, Chart
 
@@ -20,7 +22,7 @@ def uploads(request, user_id):
 
 
 @login_required
-def upload(request):
+def upload(request, instance = None):
     """Upload new game of modify existing.
 
     - Let developers add new games.
@@ -42,25 +44,45 @@ def upload(request):
             new_game.save()
             return HttpResponseRedirect('/games/user')
     else:
-        form = GameForm()
+        form = GameForm(instance=instance)
 
     return render(request, "gamestore/upload_game.html", {'form': form})
 
-
+@login_required
 def upload_detail(request, game_id):
+
     return HttpResponse()
 
-
-def upload_stat(request, game_id):
-    return HttpResponse()
-
-
+@login_required
 def upload_edit(request, game_id):
-    return HttpResponse()
+    if not request.user.userprofile.is_developer():
+        return profile(request)
+    game = find_game_by_id(game_id)
+    validate_user(request, game.publisher)
+    return upload(request, game)
 
 
+def find_game_by_id(game_id):
+    try:
+        game = Game.objects.get(id=game_id)
+    except ObjectDoesNotExist:
+        raise ValidationError(GAME_INVALID)
+    return game
+
+
+def delete_game(game):
+    Game.objects.delete(game)
+
+
+
+@login_required
 def upload_delete(request, game_id):
-    return HttpResponse()
+    if not request.user.userprofile.is_developer():
+        return profile(request)
+    game = find_game_by_id(game_id)
+    validate_user(request, game.publisher)
+    delete_game(game)
+    return render(request, "gamestore/upload_game_deleted.html", {'game': game})
 
 
 @login_required
