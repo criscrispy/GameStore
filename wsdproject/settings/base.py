@@ -14,6 +14,7 @@ import logging.config
 import os
 
 import yaml
+import colorama
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.abspath(__file__)
@@ -148,7 +149,6 @@ ACCOUNT_ACTIVATION_DAYS = 3
 REGISTRATION_AUTO_LOGIN = True
 
 # Setup logging config from `logging.yaml` file.
-import colorama
 colorama.init()
 
 LOGGING_CONFIG = None

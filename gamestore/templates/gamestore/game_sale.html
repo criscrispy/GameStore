@@ -30,7 +30,7 @@
                 <strong>You have not uploaded any games yet. Go to <span><a href="{% url 'games.upload' %}">Upload</a></span></strong>
             {% endfor %}
         {% elif profile.can_apply_for_developer %}
-            <h4><span><a href="{% url 'profile' %}">Apply to become a developer</a></span></h4>
+            <h4><span><a href="{% url 'profile' user_id=user.id %}">Apply to become a developer</a></span></h4>
         {% endif %}
 
     </div>

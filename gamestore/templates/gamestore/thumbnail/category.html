@@ -1,0 +1,21 @@
+{% load staticfiles %}
+{% comment %}
+Category thumbnail
+- Title
+- Description
+- Games in this category
+{% endcomment %}
+
+<div class="col-sm-6 col-md-4 game-container">
+    <div class="thumbnail">
+        <div class="game-grid {{ style }}">
+            <div class="caption">
+                <h4>{{ category.title|title }}</h4>
+                <dl>
+                    <dt>Description:</dt>
+                    <dd>{{ category.description }}</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>

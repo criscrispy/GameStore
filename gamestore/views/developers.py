@@ -33,7 +33,7 @@ def upload(request, instance = None):
         - modify existing game
     """
     if not request.user.userprofile.is_developer():
-        return profile(request)
+        return profile(request, request.user.id)
 
     if request.method == 'POST':
         form = GameForm(request.POST, request.FILES)

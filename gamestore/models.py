@@ -148,9 +148,9 @@ class Game(models.Model):
         - Price using django-money module?
         - Validate image size
     """
-    publisher = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
-    title = models.CharField(max_length=30, blank=False)
+    title = models.CharField(max_length=30, unique=True)
     description = models.TextField("Description of the game.", blank=False)
+    publisher = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
     category = models.ForeignKey(Category, on_delete=models.CASCADE,
                                  blank=False)
     price = models.DecimalField(
