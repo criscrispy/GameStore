@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    
+
 {% include "gamestore/game_detail.html" with game=game %}
 <form class="form-inline" action="http://payments.webcourse.niksula.hut.fi/pay/" method="POST">
     <input type="hidden" name="pid" value={{ pid }} />
