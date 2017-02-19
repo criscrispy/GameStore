@@ -64,6 +64,7 @@ def game_play_saved(request, game_id, last_saved):
 
 
 def load_game_context(game_id, request):
+    """Load game context for play"""
     game = get_object_or_404(Game, pk=game_id)
     # TODO delete line javascript testing
     js_test(game)
