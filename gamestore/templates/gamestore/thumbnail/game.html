@@ -1,4 +1,7 @@
 {% load staticfiles %}
+{% comment %}
+http://samara.computer/531_adaptive/startbootstrap-master/startbootstrap-master/shop-homepage.php
+{% endcomment %}
 
 <div class="col-sm-6 col-md-4 game-container">
     <div class="thumbnail">
@@ -24,6 +27,18 @@
                     <dt>Publisher:</dt>
                     <dd><a href="{% url 'profile' user_id=game.publisher.id %}">{{ game.publisher.username }}</a></dd>
                 </dl>
+
+                <!-- TODO: ratings -->
+                <div class="ratings">
+                    <p class="pull-right">0 reviews</p>
+                    <p>
+                        <span class="glyphicon glyphicon-star"></span>
+                        <span class="glyphicon glyphicon-star"></span>
+                        <span class="glyphicon glyphicon-star"></span>
+                        <span class="glyphicon glyphicon-star"></span>
+                        <span class="glyphicon glyphicon-star-empty"></span>
+                    </p>
+                </div>
             </div>
         </div>
     </div>
