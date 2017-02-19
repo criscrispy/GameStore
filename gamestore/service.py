@@ -33,8 +33,9 @@ def is_user_allowed_to_play(game, user):
 def is_user_allowed_to_edit_delete(game, user):
     edit_delete = False
     if user.is_authenticated():
-        dev = Game.objects.filter(publisher=user, id=game.id).count()
-        edit_delete = dev > 0
+        if user.userprofile.is_developer():
+            dev = Game.objects.filter(publisher=user, id=game.id).count()
+            edit_delete = dev > 0
     return edit_delete
 
 def find_saved_state(game_id, request):
