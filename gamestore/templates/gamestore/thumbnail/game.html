@@ -18,8 +18,12 @@
                 <h4><a href="{% url 'games.detail' game_id=game.id  %}">
                     {{ game.title|title }}
                 </a></h4>
-                <p>Category: {{ game.category.title }}</p>
-                <p>Publisher: {{ game.publisher.username }}</p>
+                <dl>
+                    <dt>Category:</dt>
+                    <dd>{{ game.category.title }}</dd>
+                    <dt>Publisher:</dt>
+                    <dd>{{ game.publisher.username }}</dd>
+                </dl>
             </div>
         </div>
     </div>
