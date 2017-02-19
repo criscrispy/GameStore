@@ -23,7 +23,7 @@
                 <span><a class="btn btn-primary" href="{% url 'games.upload' %}">Upload more</a></span>
                 <span><a class="btn btn-success" href="{% url 'games.upload.stat' %}">See statistics</a></span>
             </div>
-
+            <br/>
             {% for game in game_uploads %}
                 {% include 'gamestore/thumbnail/game.html' with style='main-list' %}
             {% empty %}

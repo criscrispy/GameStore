@@ -3,10 +3,13 @@ import uuid
 from hashlib import md5
 from logging import error, debug
 
+from chartit import DataPool, Chart
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.shortcuts import get_object_or_404
 
 from gamestore.constants import *
+from gamestore.constants import GAME_INVALID, PAYMENT_SECRET, PAYMENT_SID
 from gamestore.models import GameSettings, GameSale, Score, GamePayments, Game
 
 
@@ -243,15 +246,73 @@ def save_game_sale(user, game):
 
 def get_payment_sid():
     """Get payment sid from configuration"""
-    return '57b91FDFa2Sy'
+    return PAYMENT_SID
 
 
 def get_payment_secret():
     """ Get payment password from configuration"""
-    return '873efc3f8f8ca2605de7a4101d3322ba'
+    return PAYMENT_SECRET
 
 
 def get_service_url(request):
     """Get game service URL from request"""
     url = get_current_site(request).domain
     return 'http://' + url
+
+
+def find_game_by_id(game_id):
+    """Find game by id"""
+    try:
+        game = Game.objects.get(id=game_id)
+    except ObjectDoesNotExist:
+        raise ValidationError(GAME_INVALID)
+    return game
+
+
+def delete_game(game):
+    """Delete game"""
+    game.delete()
+
+
+def create_chart(sale):
+    """ Create chart for statistics """
+    # http://chartit.shutupandship.com/docs/#how-to-create-charts
+    # Step 1: Create a DataPool with the data we want to retrieve.
+    sale_data = \
+        DataPool(
+            series=
+            [{'options': {
+                'source': sale},
+                'terms': [
+                    'amount',
+                    'date_no_time',
+                    'profit']}
+            ])
+    # Step 2: Create the Chart object
+    sale_chart = Chart(
+        datasource=sale_data,
+        series_options=
+        [{'options': {
+            'type': 'line',
+            'stacking': False},
+            'terms': {
+                'date_no_time': [
+                    'amount', 'profit']
+            }}],
+        chart_options=
+        {'title': {
+            'text': 'Games bought'},
+            'xAxis': {
+                'title': {
+                    'text': 'Date'}}})
+    return sale_chart
+
+
+def load_game_context(game_id, request):
+    """Load game context for play"""
+    game = get_object_or_404(Game, pk=game_id)
+    # TODO delete line javascript testing
+    js_test(game)
+    start_game = is_user_allowed_to_play(game, request.user)
+    context = {'game': game, 'start_game': start_game, 'buy': not start_game}
+    return context

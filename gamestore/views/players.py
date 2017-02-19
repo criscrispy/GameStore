@@ -1,11 +1,12 @@
 import simplejson
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from django.template.loader import render_to_string
 
 from gamestore.models import UserProfile
 from gamestore.service import *
+from gamestore.service import load_game_context
 
 
 def game_detail(request, game_id):
@@ -61,16 +62,6 @@ def game_play_saved(request, game_id, last_saved):
     if context['start_game']:
         context['last_saved'] = last_saved
     return render(request, GAME_DESCRIPTION_HTML, context)
-
-
-def load_game_context(game_id, request):
-    """Load game context for play"""
-    game = get_object_or_404(Game, pk=game_id)
-    # TODO delete line javascript testing
-    js_test(game)
-    start_game = is_user_allowed_to_play(game, request.user)
-    context = {'game': game, 'start_game': start_game, 'buy': not start_game}
-    return context
 
 
 @login_required
