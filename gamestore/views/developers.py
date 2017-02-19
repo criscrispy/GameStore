@@ -71,7 +71,7 @@ def find_game_by_id(game_id):
 
 
 def delete_game(game):
-    Game.objects.delete(game)
+    game.delete()
 
 
 
