@@ -23,9 +23,9 @@ a game.
 
         <!-- game.image -->
         {% if not game.image %}
-            <img class="img-responsive" width="100%" src={% static 'images/game_image_default.png' %}>
+            <img class="img-responsive" width="50%" src={% static 'images/game_image_default.png' %}>
         {% else %}
-            <img class="img-responsive" width="100%" src={{ game.image.url }}>
+            <img class="img-responsive" width="50%" src={{ game.image.url }}>
         {% endif %}
 
     {% endif %}

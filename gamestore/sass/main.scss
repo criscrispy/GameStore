@@ -38,12 +38,11 @@ body > .content {
   padding: 0px 29px !important;
 
   .game-grid {
-    border: 10px solid #491820;
+   border: 8px solid #333;
   }
 
   .game-info {
     height: 80px;
-    background: #491820;
     padding: 10px;
     color: #999e0c;
     img {
@@ -57,8 +56,8 @@ body > .content {
   .game-grid.bought {
     border: 10px solid #164273;
   }
-  .game-info.bought {
-    background: #164273;
+  .thumbnail{
+    background: #333;
   }
   .game-grid.uploads {
     border: 10px solid #0b747f;
